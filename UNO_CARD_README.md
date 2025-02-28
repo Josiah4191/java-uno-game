@@ -3,7 +3,7 @@ Date: 2/28/2025
 
 Comments have been added to each class file if you want to view the code. If you notice anything that I might have overlooked, or if something doesn't work properly, please let me know, and feel free to edit.
 
-For the Uno card classes, the important classes that you need to know about are:
+The important classes that you need to know about are:
   - UnoDeck
   - UnoCardMachine
   - UnoCardImageManager
