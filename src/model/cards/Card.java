@@ -1,6 +1,6 @@
 package model.cards;
 /*
-    1. This is a generic which that represents a card in a card game.
+    1. This is a generic class that represents a card in a card game.
     2. The first generic type S extends Enum<S> means the class type must be an Enum type. The S represents a card Suit.
     3. The second generic type V extends Enum<V> also means the class type must be an Enum type. The V represents a card Value.
 
