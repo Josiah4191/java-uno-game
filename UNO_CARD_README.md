@@ -14,7 +14,7 @@ The UnoCardMachine is our controller to manage the piles of cards (the deck, dra
 
 The UnoDeck creates the deck of cards.
 
-The UnoCardImageManager retreives card images and sets the card theme.
+The UnoCardImageManager retrieves card images and sets the card theme.
 
 The UnoEdition enum gets the editions.
 
