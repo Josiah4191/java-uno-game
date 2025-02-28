@@ -14,7 +14,7 @@ import model.cards.Card;
 
 public class UnoCard extends Card<UnoSuit, UnoValue> {
     // The constructor is protected so we don't have people adding cards to the game once the deck has been created
-    protected UnoCard(UnoSuit suit, UnoValue value) {
+    public UnoCard(UnoSuit suit, UnoValue value) {
         super(suit, value);
     }
 }
