@@ -20,7 +20,7 @@ The UnoEdition enum gets the editions.
 
 The UnoCardTheme enum gets the themes.
 
-All other class are not meant for our use in the program. They include:
+All other classes are not meant for our use in the program. They include:
   - UnoCard
   - UnoDeckFactory
   - UnoDiscardPile
