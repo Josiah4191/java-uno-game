@@ -10,7 +10,7 @@ The important classes that you need to know about are:
   - UnoEdition
   - UnoCardTheme
 
-The UnoCardMachine is our controller to manage the piles of cards (the deck, draw pile, discard pile).
+The UnoCardMachine is our controller to manage the piles of cards (the deck, draw pile, discard pile). It also handles drawing cards.
 
 The UnoDeck creates the deck of cards.
 
