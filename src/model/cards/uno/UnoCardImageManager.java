@@ -3,6 +3,7 @@ package model.cards.uno;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Map.entry;
 import static model.cards.uno.UnoSuit.*;
 import static model.cards.uno.UnoValue.*;
 
@@ -36,7 +37,7 @@ public class UnoCardImageManager {
     // Create and initialize the theme to classic
     private UnoCardTheme theme = UnoCardTheme.CLASSIC;
 
-    public UnoCardImageManager( ) {
+    public UnoCardImageManager() {
     }
 
     // Returns the Image. Accepts a UnoCard card object for the parameter
@@ -63,69 +64,68 @@ public class UnoCardImageManager {
        The inner map keys correspond to the card values in their suit.
        The inner map values are the images for that value.
      */
+
+    // @formatter:off
     private static Map<UnoSuit, Map<UnoValue, String>> classicImages = new HashMap<>(Map.of(
-            RED, new HashMap<UnoValue, String>(Map.ofEntries(
-                    Map.entry(ZERO, "RED ZERO IMAGE"),
-                    Map.entry(ONE, "RED ONE IMAGE"),
-                    Map.entry(TWO, "RED TWO IMAGE"),
-                    Map.entry(THREE, "RED THREE IMAGE"),
-                    Map.entry(FOUR, "RED FOUR IMAGE"),
-                    Map.entry(FIVE, "RED FIVE IMAGE"),
-                    Map.entry(SIX, "RED SIX IMAGE"),
-                    Map.entry(SEVEN, "RED SEVEN IMAGE"),
-                    Map.entry(EIGHT, "RED EIGHT IMAGE"),
-                    Map.entry(NINE, "RED NINE IMAGE"),
-                    Map.entry(SKIP, "RED SKIP IMAGE"),
-                    Map.entry(REVERSE, "RED REVERSE IMAGE"),
-                    Map.entry(DRAW_TWO, "RED DRAW TWO IMAGE"))),
-            GREEN, new HashMap<UnoValue, String>(Map.ofEntries(
-                    Map.entry(ZERO, "GREEN ZERO IMAGE"),
-                    Map.entry(ONE, "GREEN ONE IMAGE"),
-                    Map.entry(TWO, "GREEN TWO IMAGE"),
-                    Map.entry(THREE, "GREEN THREE IMAGE"),
-                    Map.entry(FOUR, "GREEN FOUR IMAGE"),
-                    Map.entry(FIVE, "GREEN FIVE IMAGE"),
-                    Map.entry(SIX, "GREEN SIX IMAGE"),
-                    Map.entry(SEVEN, "GREEN SEVEN IMAGE"),
-                    Map.entry(EIGHT, "GREEN EIGHT IMAGE"),
-                    Map.entry(NINE, "GREEN NINE IMAGE"),
-                    Map.entry(SKIP, "GREEN SKIP IMAGE"),
-                    Map.entry(REVERSE, "GREEN REVERSE IMAGE"),
-                    Map.entry(DRAW_TWO, "GREEN DRAW TWO IMAGE"))),
-            BLUE, new HashMap<UnoValue, String>(Map.ofEntries(
-                    Map.entry(ZERO, "BLUE ZERO IMAGE"),
-                    Map.entry(ONE, "BLUE ONE IMAGE"),
-                    Map.entry(TWO, "BLUE TWO IMAGE"),
-                    Map.entry(THREE, "BLUE THREE IMAGE"),
-                    Map.entry(FOUR, "BLUE FOUR IMAGE"),
-                    Map.entry(FIVE, "BLUE FIVE IMAGE"),
-                    Map.entry(SIX, "BLUE SIX IMAGE"),
-                    Map.entry(SEVEN, "BLUE SEVEN IMAGE"),
-                    Map.entry(EIGHT, "BLUE EIGHT IMAGE"),
-                    Map.entry(NINE, "BLUE NINE IMAGE"),
-                    Map.entry(SKIP, "BLUE SKIP IMAGE"),
-                    Map.entry(REVERSE, "BLUE REVERSE IMAGE"),
-                    Map.entry(DRAW_TWO, "BLUE DRAW TWO IMAGE"))),
-            YELLOW, new HashMap<UnoValue, String>(Map.ofEntries(
-                    Map.entry(ZERO, "YELLOW ZERO IMAGE"),
-                    Map.entry(ONE, "YELLOW ONE IMAGE"),
-                    Map.entry(TWO, "YELLOW TWO IMAGE"),
-                    Map.entry(THREE, "YELLOW THREE IMAGE"),
-                    Map.entry(FOUR, "YELLOW FOUR IMAGE"),
-                    Map.entry(FIVE, "YELLOW FIVE IMAGE"),
-                    Map.entry(SIX, "YELLOW SIX IMAGE"),
-                    Map.entry(SEVEN, "YELLOW SEVEN IMAGE"),
-                    Map.entry(EIGHT, "YELLOW EIGHT IMAGE"),
-                    Map.entry(NINE, "YELLOW NINE IMAGE"),
-                    Map.entry(SKIP, "YELLOW SKIP IMAGE"),
-                    Map.entry(REVERSE, "YELLOW REVERSE IMAGE"),
-                    Map.entry(DRAW_TWO, "YELLOW DRAW TWO IMAGE"))),
-            UnoSuit.WILD, new HashMap<UnoValue, String>(Map.ofEntries(
-                    Map.entry(UnoValue.WILD, "WILD IMAGE"),
-                    Map.entry(UnoValue.WILD_DRAW_FOUR, "WILD DRAW FOUR IMAGE")))
+            RED, new HashMap<>(Map.ofEntries(
+                    entry(ZERO, "RED ZERO IMAGE"),
+                    entry(ONE, "RED ONE IMAGE"),
+                    entry(TWO, "RED TWO IMAGE"),
+                    entry(THREE, "RED THREE IMAGE"),
+                    entry(FOUR, "RED FOUR IMAGE"),
+                    entry(FIVE, "RED FIVE IMAGE"),
+                    entry(SIX, "RED SIX IMAGE"),
+                    entry(SEVEN, "RED SEVEN IMAGE"),
+                    entry(EIGHT, "RED EIGHT IMAGE"),
+                    entry(NINE, "RED NINE IMAGE"),
+                    entry(SKIP, "RED SKIP IMAGE"),
+                    entry(REVERSE, "RED REVERSE IMAGE"),
+                    entry(DRAW_TWO, "RED DRAW TWO IMAGE"))),
+            GREEN, new HashMap<>(Map.ofEntries(
+                    entry(ZERO, "GREEN ZERO IMAGE"),
+                    entry(ONE, "GREEN ONE IMAGE"),
+                    entry(TWO, "GREEN TWO IMAGE"),
+                    entry(THREE, "GREEN THREE IMAGE"),
+                    entry(FOUR, "GREEN FOUR IMAGE"),
+                    entry(FIVE, "GREEN FIVE IMAGE"),
+                    entry(SIX, "GREEN SIX IMAGE"),
+                    entry(SEVEN, "GREEN SEVEN IMAGE"),
+                    entry(EIGHT, "GREEN EIGHT IMAGE"),
+                    entry(NINE, "GREEN NINE IMAGE"),
+                    entry(SKIP, "GREEN SKIP IMAGE"),
+                    entry(REVERSE, "GREEN REVERSE IMAGE"),
+                    entry(DRAW_TWO, "GREEN DRAW TWO IMAGE"))),
+            BLUE, new HashMap<>(Map.ofEntries(
+                    entry(ZERO, "BLUE ZERO IMAGE"),
+                    entry(ONE, "BLUE ONE IMAGE"),
+                    entry(TWO, "BLUE TWO IMAGE"),
+                    entry(THREE, "BLUE THREE IMAGE"),
+                    entry(FOUR, "BLUE FOUR IMAGE"),
+                    entry(FIVE, "BLUE FIVE IMAGE"),
+                    entry(SIX, "BLUE SIX IMAGE"),
+                    entry(SEVEN, "BLUE SEVEN IMAGE"),
+                    entry(EIGHT, "BLUE EIGHT IMAGE"),
+                    entry(NINE, "BLUE NINE IMAGE"),
+                    entry(SKIP, "BLUE SKIP IMAGE"),
+                    entry(REVERSE, "BLUE REVERSE IMAGE"),
+                    entry(DRAW_TWO, "BLUE DRAW TWO IMAGE"))),
+            YELLOW, new HashMap<>(Map.ofEntries(
+                    entry(ZERO, "YELLOW ZERO IMAGE"),
+                    entry(ONE, "YELLOW ONE IMAGE"),
+                    entry(TWO, "YELLOW TWO IMAGE"),
+                    entry(THREE, "YELLOW THREE IMAGE"),
+                    entry(FOUR, "YELLOW FOUR IMAGE"),
+                    entry(FIVE, "YELLOW FIVE IMAGE"),
+                    entry(SIX, "YELLOW SIX IMAGE"),
+                    entry(SEVEN, "YELLOW SEVEN IMAGE"),
+                    entry(EIGHT, "YELLOW EIGHT IMAGE"),
+                    entry(NINE, "YELLOW NINE IMAGE"),
+                    entry(SKIP, "YELLOW SKIP IMAGE"),
+                    entry(REVERSE, "YELLOW REVERSE IMAGE"),
+                    entry(DRAW_TWO, "YELLOW DRAW TWO IMAGE"))),
+            UnoSuit.WILD, new HashMap<>(Map.ofEntries(
+                    entry(UnoValue.WILD, "WILD IMAGE"),
+                    entry(UnoValue.WILD_DRAW_FOUR, "WILD DRAW FOUR IMAGE")))
     ));
-
-
-
-
+    // @formatter:on
 }
