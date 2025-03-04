@@ -21,28 +21,24 @@ public enum UnoValue {
     }
 
     // This method checks if the enum is a wild card.
-    public boolean isWild() {
-        return this.name().startsWith("WILD");
+    public static boolean isWild(UnoValue value) {
+        return value.name().startsWith("WILD");
     }
 
     // This method checks if the enum is an action card.
-    public boolean isAction() {
-        switch(this.name()) {
-            case "REVERSE", "SKIP", "DRAW_TWO":
-                return true;
-            default:
-                return false;
-        }
+    public static boolean isAction(UnoValue value) {
+        return switch (value) {
+            case UnoValue.REVERSE, UnoValue.SKIP, UnoValue.DRAW_TWO -> true;
+            default -> false;
+        };
     }
 
     // This method checks if the enum is a number card.
-    public boolean isNumber() {
-        switch(this.name()) {
-            case "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE":
-                return true;
-            default:
-                return false;
-        }
+    public static boolean isNumber(UnoValue value) {
+        return switch (value) {
+            case UnoValue.ZERO, UnoValue.ONE, UnoValue.TWO, UnoValue.THREE, UnoValue.FOUR, UnoValue.FIVE, UnoValue.SIX, UnoValue.SEVEN, UnoValue.EIGHT, UnoValue.NINE-> true;
+            default -> false;
+        };
     }
 
 }

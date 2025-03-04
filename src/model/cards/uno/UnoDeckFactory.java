@@ -111,8 +111,6 @@ public class UnoDeckFactory {
                 - The intermediate operations accept specific functional interfaces for you to do certain actions to the elements in the stream,
                   which are the items in the list.
                 - In the code below, I used lambda expressions to implement the interfaces.
-                - IntelliJ suggests that I use method references, and although I have looked at method references, I am not completely comfortable
-                  with them enough to use them just yet. In other words, it's just easier for me to read, write, and understand a lambda expression.
      */
 
     // Note: The UnoValue enums are associated with a number which corresponds to the number of times that they should be in a suit of cards
@@ -125,7 +123,7 @@ public class UnoDeckFactory {
         ArrayList<UnoValue> numberValues = new ArrayList<>(List.of(UnoValue.values()));
 
         return numberValues.stream()
-                .filter(value -> value.isNumber()) // filter the list by check if the value is a number card value
+                .filter(UnoValue::isNumber) // filter the list by check if the value is a number card value
                 .flatMap(value -> Stream.generate(()-> value).limit(value.getCount())) // generate a new stream that contains the values from the filtered list
                 .collect(Collectors.toList()); // collect the list to be returned
     }
@@ -135,7 +133,7 @@ public class UnoDeckFactory {
         List<UnoValue> actionValues = new ArrayList<>(List.of(UnoValue.values()));
 
         return actionValues.stream()
-                .filter(value -> value.isAction()) // filter the list and check if the value is an action card value
+                .filter(UnoValue::isAction) // filter the list and check if the value is an action card value
                 .flatMap(value -> Stream.generate(() -> value).limit(value.getCount())) // generate a new stream that contains the values from the filtered list
                 .collect(Collectors.toList()); // collect the list to be returned
     }
@@ -145,10 +143,9 @@ public class UnoDeckFactory {
         List<UnoValue> wildValues = new ArrayList<>(List.of(UnoValue.values()));
 
         return wildValues.stream()
-                .filter(value -> value.isWild()) // filter the list and check if the value is a wild card value
+                .filter(UnoValue::isWild) // filter the list and check if the value is a wild card value
                 .flatMap(value -> Stream.generate(() -> value).limit(value.getCount())) // generate a new stream that contains the values from the filtered list
                 .collect(Collectors.toList()); // collect the list to be returned
     }
-
 }
 
