@@ -1,5 +1,7 @@
 package model.cards.uno;
 
+import model.players.Player;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -37,8 +39,7 @@ public class UnoCardMachine {
         this.deck = deck;
     }
 
-    public UnoCard drawCard() {
-
+    public UnoCard drawCardFromDrawPile() {
         if (drawPile.isEmpty()) {
             transferDiscardPileToDrawPile();
             shuffleDrawPile();
@@ -71,14 +72,22 @@ public class UnoCardMachine {
     }
 
     public List<UnoCard> getDrawPile() {
-        return Collections.unmodifiableList(drawPile.getPile());
+        return Collections.unmodifiableList(drawPile.getCardPile());
     }
 
     public List<UnoCard> getDiscardPile() {
-        return Collections.unmodifiableList(discardPile.getPile());
+        return Collections.unmodifiableList(discardPile.getCardPile());
     }
 
     public List<UnoCard> getDeck() {
         return Collections.unmodifiableList(deck.getDeck());
+    }
+
+    public void dealCards(int numberOfCards, List<Player<UnoCard>> players) {
+        for (var player : players) {
+            for (int i = 0; i < numberOfCards; i++) {
+                player.addCard(drawPile.drawCard());
+            }
+        }
     }
 }

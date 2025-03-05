@@ -9,27 +9,36 @@ import java.util.List;
 
     This class can be extended for other card games that might have different rules or operations for various card
     piles.
-
  */
 
 public abstract class Pile<C> {
 
     // Create variable to hold empty list of cards.
-    protected List<C> pile = new ArrayList<>();
+    protected List<C> cardPile = new ArrayList<>();
 
     // Get the pile of cards
-    public List<C> getPile() {
-        return pile;
+    public List<C> getCardPile() {
+        return cardPile;
+    }
+
+    public void addCard(C card) {
+        cardPile.add(card);
     }
 
     // Get how many cards are in the pile
     public int size() {
-        return pile.size();
+        return cardPile.size();
+    }
+
+    public C drawCard(int index) {
+        C card = cardPile.get(index);
+        cardPile.remove(index);
+        return card;
     }
 
     // Check if the pile of cards is empty
     public boolean isEmpty() {
-        return pile.isEmpty();
+        return cardPile.isEmpty();
     }
 
 }

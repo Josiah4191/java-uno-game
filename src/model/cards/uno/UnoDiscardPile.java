@@ -15,16 +15,12 @@ import model.cards.Pile;
 public class UnoDiscardPile extends Pile<UnoCard> {
 
     public UnoCard getLastPlayedCard() {
-        int index = pile.size() - 1;
-        return pile.get(index);
+        int index = cardPile.size() - 1;
+        return cardPile.get(index);
     }
 
     protected void transferCardsToDrawPile(UnoDrawPile drawPile) {
-        drawPile.fill(pile);
-        pile.clear();
-    }
-
-    protected void addCard(UnoCard card) {
-        pile.add(card);
+        drawPile.fill(cardPile);
+        cardPile.clear();
     }
 }

@@ -14,21 +14,21 @@ import java.util.List;
 
 public class UnoDrawPile extends Pile<UnoCard> {
 
-    public UnoCard drawCard() {
-        int index = pile.size() - 1;
-        UnoCard card = pile.get(index);
-        pile.remove(index);
-        return card;
-    }
-
     // This method fills the pile with the list of cards that is passed to it
     protected void fill(List<UnoCard> cards) {
-        pile.addAll(cards);
+        cardPile.addAll(cards);
+    }
+
+    public UnoCard drawCard() {
+        int index = cardPile.size() - 1;
+        UnoCard card = cardPile.get(index);
+        cardPile.remove(index);
+        return card;
     }
 
     // This method shuffles the draw pile
     protected void shuffle() {
-        Collections.shuffle(pile);
+        Collections.shuffle(cardPile);
     }
 
 }
