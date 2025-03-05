@@ -22,7 +22,7 @@ public abstract class Player<C> {
         return Collections.unmodifiableList(playerHand.getCardPile());
     }
 
-    public C drawCard(int index) {
+    public C playCard(int index) {
         return playerHand.drawCard(index);
     }
 

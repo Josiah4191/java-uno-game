@@ -36,7 +36,7 @@ public class Test {
 
         // draw a card from player1
         // pass an index to get the card from the list
-        UnoCard card = player1.drawCard(0 );
+        UnoCard card = player1.playCard(0 );
 
         // display card
         System.out.println(card);
