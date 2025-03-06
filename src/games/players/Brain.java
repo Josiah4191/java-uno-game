@@ -1,4 +1,4 @@
 package games.players;
 
-public class Brain {
+public abstract class Brain {
 }

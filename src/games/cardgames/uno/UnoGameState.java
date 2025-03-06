@@ -1,17 +1,95 @@
 package games.cardgames.uno;
 
 import games.Difficulty;
-import games.GameState;
-import games.cardgames.cardplayers.CardPlayer;
-import games.cardgames.uno.unocards.UnoCard;
+import games.cardgames.CardGameState;
+import games.cardgames.uno.unocards.*;
+import games.cardgames.uno.unoplayers.UnoPlayer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class UnoGameState extends GameState {
+public class UnoGameState extends CardGameState {
 
-    private List<CardPlayer<UnoCard>> players;
+    private UnoCardMachine machine;
+    private HashMap<String, UnoPlayer> players = new HashMap<>();
     private Difficulty difficulty;
-    private UnoCard lastPlayedCard;
 
+    public UnoGameState(UnoEdition edition, Difficulty difficulty) {
+        machine = new UnoCardMachine(new UnoDeck(edition));
+        this.difficulty = difficulty;
+    }
 
+    public void addPlayer(String name, UnoPlayer player) {
+        players.put(name, player);
+    }
+
+    public UnoPlayer getPlayer(String name) {
+        return players.get(name);
+    }
+
+    public List<String> getPlayerNames() {
+        return new ArrayList<>(players.keySet());
+    }
+
+    public List<UnoPlayer> getPlayers() {
+        return new ArrayList<>(players.values());
+    }
+
+    public UnoCard getLastPlayedCard() {
+        return machine.getLastPlayedCard();
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void shuffleDrawPile() {
+        machine.shuffleDrawPile();
+    }
+
+    public void shuffleDeck() {
+        machine.shuffleDeck();
+    }
+
+    public void dealCards(int numberOfCards, List<UnoPlayer> players) {
+        machine.dealCards(numberOfCards, players);
+    }
+
+    public UnoCard drawCardFromDrawPile() {
+        UnoCard card = machine.drawCardFromDrawPile();
+        machine.addCardToDiscardPile(card);
+        return card;
+    }
+
+    public void transferDiscardPileToDrawPile() {
+        machine.transferDiscardPileToDrawPile();
+    }
+
+    public UnoEdition getEdition() {
+        return machine.getEdition();
+    }
+
+    public List<UnoCard> getDrawPile() {
+        return machine.getDrawPile();
+    }
+
+    public List<UnoCard> getDiscardPile() {
+        return machine.getDiscardPile();
+    }
+
+    public List<UnoCard> getDeck() {
+        return machine.getDeck();
+    }
+
+    public UnoCard playCard(String name, int index) {
+        var player = players.get(name);
+        UnoCard card = player.playCard(index);
+        machine.addCardToDiscardPile(card);
+        return card;
+    }
 }

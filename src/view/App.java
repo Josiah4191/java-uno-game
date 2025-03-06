@@ -1,4 +1,6 @@
-package view;
+
+/*
+
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -122,3 +124,4 @@ public class App extends Application {
         launch(args);
     }
 }
+ */

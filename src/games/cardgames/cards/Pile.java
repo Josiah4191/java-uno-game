@@ -6,7 +6,6 @@ import java.util.List;
 /*
     This class is similar to Deck. It is an abstract generic class that is meant to contain a list of Card objects.
     This class is responsible for owning different types of piles of cards, like draw piles and discard piles.
-
     This class can be extended for other card games that might have different rules or operations for various card
     piles.
  */

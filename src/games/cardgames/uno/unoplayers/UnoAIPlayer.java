@@ -1,28 +1,41 @@
 package games.cardgames.uno.unoplayers;
 
-import games.cardgames.cardplayers.CardPlayer;
+import games.Difficulty;
 import games.cardgames.uno.UnoGameState;
 import games.cardgames.uno.unocards.UnoCard;
 import games.cardgames.uno.unocards.UnoPlayerHandPile;
+import games.cardgames.uno.unoplayers.unobrains.UnoBrain;
+import games.cardgames.uno.unoplayers.unobrains.UnoBrainEasy;
+import games.cardgames.uno.unoplayers.unobrains.UnoBrainHard;
+import games.cardgames.uno.unoplayers.unobrains.UnoBrainMedium;
 
-public class UnoAIPlayer extends CardPlayer<UnoCard> {
+public class UnoAIPlayer extends UnoPlayer {
 
-    private UnoGameState gameState;
+    private UnoBrain brain;
+
+    public UnoAIPlayer(UnoGameState gameState) {
+        createBrain(gameState);
+    }
 
     public UnoAIPlayer(UnoPlayerHandPile playerHand, UnoGameState gameState) {
         super(playerHand);
-        this.gameState = gameState;
+        createBrain(gameState);
     }
 
-    // method for the AI to play a card. (no need to pass index because brain will decide)
     public UnoCard playCard() {
-        int index = 0;
-        return playCard(index);
+        return playCard(brain.analyze());
     }
 
-    // viewPlayersTotalCardsRemaining
-    // analyzeGame
-
-
+    public void createBrain(UnoGameState gameState) {
+        switch (gameState.getDifficulty()) {
+            case Difficulty.EASY:
+                brain = new UnoBrainEasy(gameState);
+            case Difficulty.MEDIUM:
+                brain = new UnoBrainMedium(gameState);
+            case Difficulty.HARD:
+                brain = new UnoBrainHard(gameState);
+        }
+        
+    }
 }
 

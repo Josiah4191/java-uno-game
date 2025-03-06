@@ -28,7 +28,11 @@ package games.cardgames.uno.unocards;
 public class UnoCardImageManager {
 
     // Create and initialize the theme to classic
-    private UnoCardTheme theme = UnoCardTheme.CLASSIC;
+    private UnoCardTheme theme;
+
+    public UnoCardImageManager(UnoCardTheme theme) {
+        this.theme = theme;
+    }
 
     // Returns the Image. Accepts a UnoCard card object for the parameter
     public String getImage(UnoCard card) {
@@ -40,9 +44,13 @@ public class UnoCardImageManager {
         }
     }
 
+    public UnoCardTheme getTheme() {
+        return theme;
+    }
+
     // This method sets the theme of the Images to be returned.
     public void setTheme(UnoCardTheme theme) {
-        theme = theme;
+        this.theme = theme;
     }
 
 }
