@@ -1,13 +1,13 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
-import static games.cardgames.uno.unocards.UnoSuit.*;
-import static games.cardgames.uno.unocards.UnoSuit.YELLOW;
-import static games.cardgames.uno.unocards.UnoValue.*;
-import static games.cardgames.uno.unocards.UnoValue.DRAW_TWO;
+import static games.cardgames.cards.unocards.UnoSuit.*;
+import static games.cardgames.cards.unocards.UnoSuit.YELLOW;
+import static games.cardgames.cards.unocards.UnoValue.*;
+import static games.cardgames.cards.unocards.UnoValue.DRAW_TWO;
 
 public class UnoCardClassicImages {
 

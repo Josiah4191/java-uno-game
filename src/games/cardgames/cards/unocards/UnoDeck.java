@@ -1,4 +1,4 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 /*
     1. This class extends the Deck class.
     2. In the class declaration, it sets the generic type to UnoCard, so that it will

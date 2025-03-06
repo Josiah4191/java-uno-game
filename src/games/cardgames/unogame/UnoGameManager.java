@@ -1,9 +1,9 @@
-package games.cardgames.uno;
+package games.cardgames.unogame;
 
 import games.Difficulty;
 import games.cardgames.CardGameManager;
-import games.cardgames.uno.unocards.*;
-import games.cardgames.uno.unoplayers.UnoPlayer;
+import games.cardgames.cards.unocards.*;
+import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.List;
 

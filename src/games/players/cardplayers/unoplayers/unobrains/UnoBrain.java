@@ -1,7 +1,7 @@
-package games.cardgames.uno.unoplayers.unobrains;
+package games.players.cardplayers.unoplayers.unobrains;
 
-import games.cardgames.cardplayers.CardBrain;
-import games.cardgames.uno.UnoGameState;
+import games.players.cardplayers.CardBrain;
+import games.cardgames.unogame.UnoGameState;
 
 public abstract class UnoBrain extends CardBrain {
 

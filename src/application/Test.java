@@ -1,11 +1,11 @@
 package application;
 
 import games.Difficulty;
-import games.cardgames.uno.UnoGameManager;
-import games.cardgames.uno.UnoGameState;
-import games.cardgames.uno.unocards.*;
-import games.cardgames.uno.unoplayers.UnoAIPlayer;
-import games.cardgames.uno.unoplayers.UnoPlayer;
+import games.cardgames.unogame.UnoGameManager;
+import games.cardgames.unogame.UnoGameState;
+import games.cardgames.cards.unocards.*;
+import games.players.cardplayers.unoplayers.UnoAIPlayer;
+import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.List;
 
@@ -32,7 +32,6 @@ public class Test {
         System.out.println(gameManager.getDeck().isEmpty());
         System.out.println();
 
-
         // loop through the discard pile. it will be empty right now because we didn't add a card yet
         gameManager.getDiscardPile().forEach(System.out::println);
         // check the number of cards in discard pile
@@ -45,7 +44,6 @@ public class Test {
         gameManager.getDrawPile().forEach(System.out::println);
         // add a card to the discard pile from the draw pile
         UnoCard card = gameManager.drawCardFromDrawPile();
-        gameManager.addCardToDiscardPile(card);
         // check the size of the draw pile to see that the card was removed
         System.out.println(gameManager.getDrawPile().size());
         // check the size of the discard pile to see that a card was added
@@ -76,11 +74,8 @@ public class Test {
         UnoCard card2 = gameManager.playCard("Josiah", 2);
         // look at the selected card
         System.out.println(card2);
-        // add that played card to the discard pile
-        gameManager.addCardToDiscardPile(card2);
         // play a card from the computer
-        //UnoCard card3 = computer1Player.playCard();
-        // add card to discard pile
+
 
 
         /*

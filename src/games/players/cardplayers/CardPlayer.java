@@ -1,4 +1,4 @@
-package games.cardgames.cardplayers;
+package games.players.cardplayers;
 
 import games.cardgames.cards.Pile;
 import games.players.Player;
@@ -6,11 +6,11 @@ import games.players.Player;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class CardPlayer<C> extends Player {
+public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
 
-    private Pile<C> playerHand;
+    private P playerHand;
 
-    public CardPlayer(Pile<C> playerHand) {
+    public CardPlayer(P playerHand) {
         this.playerHand = playerHand;
     }
 

@@ -1,4 +1,4 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 /*
     This enum contains various themes that represent different variations of Uno (aka editions).
  */

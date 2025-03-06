@@ -1,4 +1,4 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 
 import games.cardgames.cards.Pile;
 
@@ -21,9 +21,7 @@ public class UnoDrawPile extends Pile<UnoCard> {
 
     public UnoCard drawCard() {
         int index = cardPile.size() - 1;
-        UnoCard card = cardPile.get(index);
-        cardPile.remove(index);
-        return card;
+        return drawCard(index);
     }
 
     // This method shuffles the draw pile

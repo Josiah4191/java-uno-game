@@ -1,4 +1,4 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 
 /*
     This enum contains the suits for a Uno card deck.

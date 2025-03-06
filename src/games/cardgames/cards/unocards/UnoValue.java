@@ -1,4 +1,4 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 
 /*
     This enum contains the values which correspond to the values in a Uno deck.

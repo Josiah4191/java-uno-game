@@ -1,4 +1,4 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 
 /*
     1. This class is responsible for managing the images for our cards.

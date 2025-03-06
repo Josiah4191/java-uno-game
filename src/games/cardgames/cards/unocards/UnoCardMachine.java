@@ -1,12 +1,9 @@
-package games.cardgames.uno.unocards;
+package games.cardgames.cards.unocards;
 
-import games.cardgames.cardplayers.CardPlayer;
-import games.cardgames.uno.unoplayers.UnoPlayer;
+import games.players.cardplayers.unoplayers.UnoPlayer;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class UnoCardMachine {
     /*

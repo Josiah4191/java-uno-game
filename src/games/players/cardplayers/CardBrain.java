@@ -1,4 +1,4 @@
-package games.cardgames.cardplayers;
+package games.players.cardplayers;
 
 import games.players.Brain;
 
