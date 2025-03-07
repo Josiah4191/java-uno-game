@@ -11,9 +11,4 @@ public class UnoBrainEasy extends UnoBrain {
     public int analyze() {
         return 0;
     }
-
 }
-
-    /*
-        needs to know the rules
-     */

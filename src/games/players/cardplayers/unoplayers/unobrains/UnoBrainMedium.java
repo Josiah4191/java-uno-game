@@ -12,7 +12,3 @@ public class UnoBrainMedium  extends UnoBrain {
         return 0;
     }
 }
-
-    /*
-        needs to know the rules
-     */
