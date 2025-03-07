@@ -45,6 +45,8 @@ public class UnoCardMachine {
             transferDiscardPileToDrawPile();
             shuffleDrawPile();
         }
+        UnoCard card = drawPile.drawCard();
+        addCardToDiscardPile(card);
         return drawPile.drawCard();
     }
 
@@ -52,12 +54,8 @@ public class UnoCardMachine {
         return discardPile.getLastPlayedCard();
     }
 
-    public void shuffleDrawPile() {
+    private void shuffleDrawPile() {
         drawPile.shuffle();
-    }
-
-    public void shuffleDeck() {
-        deck.shuffle();
     }
 
     private void transferDeckToDrawPile() {
@@ -68,7 +66,7 @@ public class UnoCardMachine {
         discardPile.addCard(card);
     }
 
-    public void transferDiscardPileToDrawPile() {
+    private void transferDiscardPileToDrawPile() {
         discardPile.transferCardsToDrawPile(drawPile);
     }
 

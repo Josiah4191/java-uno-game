@@ -61,24 +61,12 @@ public class UnoGameManager extends CardGameManager {
         return gameState.getLastPlayedCard();
     }
 
-    public void shuffleDrawPile() {
-        gameState.shuffleDrawPile();
-    }
-
-    public void shuffleDeck() {
-        gameState.shuffleDeck();
-    }
-
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
         gameState.dealCards(numberOfCards, players);
     }
 
     public UnoCard drawCardFromDrawPile() {
         return gameState.drawCardFromDrawPile();
-    }
-
-    public void transferDiscardPileToDrawPile() {
-        gameState.transferDiscardPileToDrawPile();
     }
 
     public UnoEdition getEdition() {

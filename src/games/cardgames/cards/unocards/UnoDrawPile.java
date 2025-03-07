@@ -21,7 +21,7 @@ public class UnoDrawPile extends Pile<UnoCard> {
 
     public UnoCard drawCard() {
         int index = cardPile.size() - 1;
-        return drawCard(index);
+        return super.drawCard(index);
     }
 
     // This method shuffles the draw pile

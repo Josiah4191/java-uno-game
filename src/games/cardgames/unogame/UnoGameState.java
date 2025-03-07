@@ -48,26 +48,12 @@ public class UnoGameState extends CardGameState {
         return difficulty;
     }
 
-    public void shuffleDrawPile() {
-        machine.shuffleDrawPile();
-    }
-
-    public void shuffleDeck() {
-        machine.shuffleDeck();
-    }
-
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
         machine.dealCards(numberOfCards, players);
     }
 
     public UnoCard drawCardFromDrawPile() {
-        UnoCard card = machine.drawCardFromDrawPile();
-        machine.addCardToDiscardPile(card);
-        return card;
-    }
-
-    public void transferDiscardPileToDrawPile() {
-        machine.transferDiscardPileToDrawPile();
+        return machine.drawCardFromDrawPile();
     }
 
     public UnoEdition getEdition() {
