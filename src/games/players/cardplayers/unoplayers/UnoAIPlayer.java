@@ -22,6 +22,7 @@ public class UnoAIPlayer extends UnoPlayer {
         createBrain(gameState);
     }
 
+    @Override
     public UnoCard playCard() {
         return playCard(brain.analyze());
     }

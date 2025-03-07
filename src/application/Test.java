@@ -65,15 +65,16 @@ public class Test {
         gameManager.dealCards(7, players);
 
         // get a player
-        var playerJosiah = gameManager.getPlayer("Josiah");
-        var computer1Player = gameManager.getPlayer("Computer1");
-        System.out.println(playerJosiah);
+        UnoPlayer playerJosiah = gameManager.getPlayer("Josiah");
+        UnoPlayer computer1Player = gameManager.getPlayer("Computer1");
+        System.out.println(playerJosiah.getClass());
         System.out.println(computer1Player.getClass());
+        computer1Player.playCard();
 
         // play a card from the player
-        UnoCard card2 = gameManager.playCard("Josiah", 2);
+        //UnoCard card2 = gameManager.playCard("Josiah", 2);
         // look at the selected card
-        System.out.println(card2);
+        //System.out.println(card2);
         // play a card from the computer
 
 

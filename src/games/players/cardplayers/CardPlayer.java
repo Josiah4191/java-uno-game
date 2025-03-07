@@ -28,6 +28,13 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
         return playerHand.drawCard(index);
     }
 
+    public C playCard() {
+        if (playerHand.isEmpty()) {
+            return null;
+        }
+        return playerHand.drawCard(0);
+    }
+
     public int getTotalCardsRemaining() {
         return playerHand.size();
     }
