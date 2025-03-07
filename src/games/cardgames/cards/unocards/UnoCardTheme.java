@@ -9,7 +9,7 @@ Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
 
-This enum contains various themes that represent different sets of Images for Uno cards.
+This enum contains themes that represent different sets of Images for Uno cards.
  */
 
 public enum UnoCardTheme {

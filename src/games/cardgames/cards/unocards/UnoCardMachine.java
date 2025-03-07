@@ -37,8 +37,8 @@ Methods:
     - Each method should be self-explanatory and performs the action that its name suggests.
     - For implementation details, refer to Pile, UnoDrawPile, and UnoDiscardPile.
 NOTE:
-    The get methods for drawPile, discardPile, and deck are read-only. This way, we can't alter the lists.
-    The UnoDrawPile and UnoDiscardPile are responsible for making changes to their lists of cards.
+    The get methods for drawPile, discardPile, and deck are read-only so lists can't be altered.
+    The UnoDrawPile and UnoDiscardPile are responsible for making changes to their list of cards.
 */
 
     private UnoDrawPile drawPile = new UnoDrawPile();

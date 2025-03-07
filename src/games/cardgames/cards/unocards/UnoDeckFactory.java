@@ -91,11 +91,11 @@ public class UnoDeckFactory {
     }
     /*
     The methods createNumberValues, createActionValues, and createWildValues are responsible for two things:
-    Filter through the list of UnoValue enums and get only the values for that type of card.
-    Return the filtered list of values with the correct number of values that belong in a Uno card
-    deck (e.g., createNumberValues -> 0, 1, 1, 2, 2, 3, 3, 4, 4, ... 9, 9).
-        - createWildValues -> WILD, WILD, WILD, WILD ...
-        - createActionValues -> SKIP, SKIP, REVERSE, REVERSE ...
+        1. Filter through the list of UnoValue enums and get only the values for that type of card.
+        2. Return the filtered list of values with the correct number of values that belong in a Uno card
+        deck (e.g., createNumberValues -> 0, 1, 1, 2, 2, 3, 3, 4, 4, ... 9, 9).
+            - createWildValues -> WILD, WILD, WILD, WILD ...
+            - createActionValues -> SKIP, SKIP, REVERSE, REVERSE ...
     Brief explanation of streams:
         - The collections in Java have a stream() method, which returns a stream.
         - (ArrayList, LinkedList, HashMap ...)
@@ -124,7 +124,7 @@ public class UnoDeckFactory {
         Generate a new stream that contains the values from the filtered list.
         Limit the value for the new items that are generated in the stream to number of times that value should appear
         in a suit.
-        Collect the list to be returned.
+        Collect the stream to be returned as a list.
          */
         return numberValues.stream()
                 .filter(UnoValue::isNumber)
@@ -140,7 +140,7 @@ public class UnoDeckFactory {
         Generate a new stream that contains the values from the filtered list.
         Limit the value for the new items that are generated in the stream to number of times that value should appear
         in a suit.
-        Collect the list to be returned.
+        Collect the stream to be returned as a list.
          */
         return actionValues.stream()
                 .filter(UnoValue::isAction)
@@ -156,7 +156,7 @@ public class UnoDeckFactory {
         Generate a new stream that contains the values from the filtered list.
         Limit the value for the new items that are generated in the stream to number of times that value should appear
         in a suit.
-        Collect the list to be returned.
+        Collect the stream to be returned as a list.
          */
         return wildValues.stream()
                 .filter(UnoValue::isWild)
