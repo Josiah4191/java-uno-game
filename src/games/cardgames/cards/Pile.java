@@ -21,7 +21,7 @@ NOTE:
     If List<UnoCard> is used, then subclasses cannot store different card types.
  */
 
-public abstract class Pile<C extends Card> {
+public abstract class Pile<C> {
 
     // Create variable to hold empty list of cards.
     protected List<C> cardPile = new ArrayList<>();
@@ -47,7 +47,7 @@ public abstract class Pile<C extends Card> {
         return card;
     }
 
-    // Checks if the pile is empty.
+    // Check if pile is empty.
     public boolean isEmpty() {
         return cardPile.isEmpty();
     }

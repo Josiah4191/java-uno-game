@@ -17,5 +17,4 @@ we can refactor and put them here.
 */
 
 public class CardBrain extends Brain {
-    
 }
