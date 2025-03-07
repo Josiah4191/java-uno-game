@@ -15,5 +15,4 @@ we can refactor and put them here.
 */
 
 public class GameState {
-
 }
