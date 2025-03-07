@@ -14,7 +14,7 @@ public class Test {
         UnoGameManager gameManager = new UnoGameManager(UnoEdition.CLASSIC, UnoCardTheme.CLASSIC, Difficulty.EASY);
         UnoGameState gameState = gameManager.getGameState();
 
-        // when gameManager is created, the Deck is made and then transferred to the draw pile
+        // when gameManager is created, the Deck is created and automatically transferred to the draw pile
 
         // loop through the deck. it will be empty because it automatically transferred to draw pile
         gameManager.getDeck().forEach(System.out::println);
@@ -88,6 +88,43 @@ public class Test {
                 - use var keyword! genius
          */
 
+
+
+
+        /*
+
+            ideas to consider: player class
+                - give player name field
+                - change addPlayer to createPlayer
+                    - pass the name to constructor for creating player
+                - create new method createAIPlayer
+                    - no parameter constructor that picks name from a list of names
+                - instead of a hashmap, just have a list of players.
+                - change the get playerNames and getPlayer methods to work with list
+                    - or still keep hashmap and use player.name as keys
+
+            ideas to consider: UnoPlayer class
+                - add a boolean sayUno
+                - will need a setSayUno method to reset it to false as well
+                - add method callUno and sayUno
+                - sayUno method will make boolean sayUno true
+                - callUno method
+                    - this method accepts another player as the parameter
+                    - this method uses the validator/rules class to check whether the other player:
+                        1.) has only 1 card remaining
+                        2.) their sayUno variable is false
+                            - if both of those things are true, then add cards to their hand of cards
+                            - this can also return a boolean for checking whether we should do some kind of
+                                visual action in the UI. like return true if we added cards, and then we can
+                                output some kind of message in the game. if it is a false accusation, maybe we
+                                can let them know it is a false accusation.
+                            - another solution is that we can have every player's sayUno status displayed on the screen
+                                so everybody can see
+                            - if both of them are not true, then don't do anything
+
+
+
+         */
 
 
 
