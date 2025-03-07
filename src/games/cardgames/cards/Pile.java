@@ -4,18 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-    This class is similar to Deck. It is an abstract generic class that is meant to contain a list of Card objects.
-    This class is responsible for owning different types of piles of cards, like draw piles and discard piles.
-    This class can be extended for other card games that might have different rules or operations for various card
-    piles.
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
+
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+
+This abstract generic class is responsible for managing a list of cards, which represents a pile of
+cards (e.g., draw pile, discard pile).
+
+NOTE:
+    This class needed to be generic for subclasses to specify the type of Card (e.g., UnoCard, BlackJackCard ...).
+    If List<UnoCard> is used, then subclasses cannot store different card types.
  */
 
-public abstract class Pile<C> {
+public abstract class Pile<C extends Card> {
 
     // Create variable to hold empty list of cards.
     protected List<C> cardPile = new ArrayList<>();
 
-    // Get the pile of cards
+    // Get the pile of cards.
     public List<C> getCardPile() {
         return cardPile;
     }
@@ -24,20 +35,28 @@ public abstract class Pile<C> {
         cardPile.add(card);
     }
 
-    // Get how many cards are in the pile
+    // Get the number of cards in the pile.
     public int size() {
         return cardPile.size();
     }
 
+    // Gets a card from the pile. Accepts an integer for the index of the card that needs to be removed.
     public C drawCard(int index) {
         C card = cardPile.get(index);
         cardPile.remove(index);
         return card;
     }
 
-    // Check if the pile of cards is empty
+    // Checks if the pile is empty.
     public boolean isEmpty() {
         return cardPile.isEmpty();
     }
-
 }
+
+/*
+    Note to self: (Josiah)
+        - Consider changing generic type to extend Card<S, V> to force C to be a Card object. This can also apply
+        to the Deck class.
+        - Consider Pile extend Deck, or Deck extend pile. It seems like there are similarities between
+        them.
+ */

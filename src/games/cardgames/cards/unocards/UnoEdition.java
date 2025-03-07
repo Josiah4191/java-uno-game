@@ -1,6 +1,15 @@
 package games.cardgames.cards.unocards;
 /*
-    This enum contains various themes that represent different variations of Uno (aka editions).
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
+
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+
+This enum contains the themes which represent separate editions of UNO.
  */
 
 public enum UnoEdition {

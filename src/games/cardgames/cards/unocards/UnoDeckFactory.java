@@ -6,26 +6,33 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /*
-        This class is responsible for creating a deck of Uno cards. It is designed in such a way that we can add multiple variations of
-        Uno. Right now, there is only a classic deck.
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
 
-        If we want to add another edition of Uno, the only thing we have to do is:
-            1. Add the edition to the UnoEdition enum
-            2. Create another method in this class that assembles a deck for that edition
-            3. Add the edition to the switch statement in the createDeck() method to create the proper deck
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
 
-            Additionally, if we added a new edition, then it's likely we will need to add those cards to the UnoValue enum. It also
-            is flexible to allow the addition of new cards. Refer to the UnoValue.java file for more information about it.
+This class is responsible for creating a deck of Uno cards.
+It flexibly allows adding different decks of UNO for other editions.
+Only the classic UNO deck has been added.
 
+Steps for adding another UNO edition:
+    - Add new edition enum to UnoEdition enum type.
+    - Add new card value enum to UnoValue enum type.
+    - Create methods in this class to assemble a deck for the new edition.
+    - Add the edition to the switch statement in the createDeck() method to create the appropriate deck.
  */
 
 public class UnoDeckFactory {
-
-    // Create the deck variable to contain the UnoCards
+    // Variable to hold the Card objects.
     private static ArrayList<UnoCard> deck;
-
-    // This method creates the appropriate deck based on the edition.
-    // It is called from the UnoDeck class
+    /*
+    Creates and returns the appropriate list of cards based on the edition.
+    This method is called from the UnoDeck class.
+     */
     protected static List<UnoCard> createDeck(UnoEdition edition) {
         switch (edition) {
             case UnoEdition.CLASSIC:
@@ -34,13 +41,11 @@ public class UnoDeckFactory {
                 return null;
         }
     }
-
     /*
-        This method creates the classic Uno deck consisting of 108 cards:
-            - 0(x1), 1-9 (x2), SKIP(x2), REVERSE(x2), DRAW TWO(x2), WILD(x4), WILD DRAW FOUR(x4)
-
-        Basically, this method is assembling the individual suits to form the complete deck.
-        If the selected edition is classic, then this method will be called to create the classic deck.
+    Creates a classic Uno deck consisting of 108 cards:
+        - 0(x1), 1-9 (x2), SKIP(x2), REVERSE(x2), DRAW TWO(x2), WILD(x4), WILD DRAW FOUR(x4)
+    Assembles the individual suits to form the complete deck (e.g., if the selected edition is classic,
+    a classic deck is created).
      */
     private static List<UnoCard> classicDeck() {
         deck = new ArrayList<>();
@@ -49,103 +54,114 @@ public class UnoDeckFactory {
         deck.addAll(createSuit(UnoSuit.YELLOW));
         deck.addAll(createSuit(UnoSuit.GREEN));
         deck.addAll(createSuit(UnoSuit.WILD));
-
         return deck;
     }
-
     /*
-        This method creates a suit of cards which contains the proper values and the proper number of duplicates for those
-        values.
-
-        This method is passed a suit (RED, GREEN, BLUE, YELLOW, WILD), and depending on which suit is provided, it will return
-        a list of UnoCards that are of that suit. E.g., if createSuit(UnoSuit.RED), then it will return all the RED Uno cards
-        that belong in the complete deck.
+    Receives a Suit enum (RED, GREEN, BLUE, YELLOW, WILD).
+    Returns a list of Card objects for a suit of cards which contains each value and the number of times that
+    value appears in the suit (e.g., createSuit(UnoSuit.RED) returns a list of red UNO Card objects).
      */
     private static List<UnoCard> createSuit(UnoSuit suit) {
 
-        // The values variable is used to collect all the numberValues, actionValues, and wildCardValues.
+        // Variable to hold a list of all values in the suit.
         ArrayList<UnoValue> values = new ArrayList<>();
-        // The suits variable is used to hold a list of UnoCards and will be returned.
+        // Variable to hold a list of Card objects to be returned.
         ArrayList<UnoCard> suits = new ArrayList<>();
 
-        // If the suit is WILD, then we only want those values (Wild Card and Wild Draw Four).
+        // If suit is WILD, only add values for Wild Cards.
         if (suit == UnoSuit.WILD) {
             var wildValues = createWildValues();
             values.addAll(wildValues);
-        // Otherwise, if the suit is NOT WILD, then we want to add all the numberValues and actionValues to the list of values.
+        // If suit is not WILD, add the values to the list of values.
         } else {
             var numberValues = createNumberValues();
             var actionValues = createActionValues();
             values.addAll(numberValues);
             values.addAll(actionValues);
         }
-
-        // Loop through the list of values and create an UnoCard for the given suit for every card value.
-        // Assign that UnoCard to the list of UnoCards.
+        /*
+        Loop through list of values and create an UnoCard with the given suit and value.
+        Add the UnoCard object to the list of UnoCards.
+         */
         for (UnoValue value : values) {
             suits.add(new UnoCard(suit, value));
         }
-
-        // return the suit of UnoCards
+        // Return the list of UnoCards.
         return suits;
     }
-
     /*
-        The createNumberValues, createActionValues, and createWildValues are responsible for two things:
-            1. Filter through the list of UnoValue enums and get only the values for that type of card
-            2. Return the filtered list of values with the correct number of values that belong in a Uno card deck
-                - e.g., createNumberValues -> 0, 1, 1, 2, 2, 3, 3, 4, 4, ... 9, 9
-                        createWildValues -> WILD, WILD, WILD, WILD ...
-                        createActionValues -> SKIP, SKIP, REVERSE, REVERSE ...
-
-         All the streams work similarly so I will explain them here: (This is my best explanation without trying to do a research paper).
-            - The collections in Java have a stream() method, which returns a stream.
-                - (ArrayList, LinkedList, HashMap ...)
-            - The chain of method calls is called the stream pipeline.
-                - (.filter().flatMap().collect() ...)
-            - The final method at the end of the pipeline is called a terminator (or terminal operation).
-                - .collect() is an example of a terminator
-                - I think its common for the terminator to just return the final result of the collection, which is all I do.
-            - The methods in between (.filter() ...) are intermediate operations.
-                - The intermediate operations do certain things to the list depending on what you want to do.
-                - The intermediate operations accept specific functional interfaces for you to do certain actions to the elements in the stream,
-                  which are the items in the list.
-                - In the code below, I used lambda expressions to implement the interfaces.
+    The methods createNumberValues, createActionValues, and createWildValues are responsible for two things:
+    Filter through the list of UnoValue enums and get only the values for that type of card.
+    Return the filtered list of values with the correct number of values that belong in a Uno card
+    deck (e.g., createNumberValues -> 0, 1, 1, 2, 2, 3, 3, 4, 4, ... 9, 9).
+        - createWildValues -> WILD, WILD, WILD, WILD ...
+        - createActionValues -> SKIP, SKIP, REVERSE, REVERSE ...
+    Brief explanation of streams:
+        - The collections in Java have a stream() method, which returns a stream.
+        - (ArrayList, LinkedList, HashMap ...)
+        - The chain of method calls is called the stream pipeline.
+        - (.filter().flatMap().collect() ...)
+        - The final method at the end of the pipeline is called a terminator (or terminal operation).
+        - .collect() is an example of a terminator
+        - I think its common for the terminator to just return the final result of the collection, which is all I do.
+        - The methods in between (.filter() ...) are intermediate operations.
+        - The intermediate operations do certain things to the list depending on what you want to do.
+        - The intermediate operations accept specific functional interfaces for you to do certain actions to the elements in the stream,
+        which are the items in the list.
+        - In the code below, I used lambda expressions to implement the interfaces.
+    NOTE:
+        The UnoValue enums are associated with a number which corresponds to the number of times that they should be in a suit of cards
+        (e.g., A SKIP is associated with 2, because there are 2 skips in a suit of cards)
+        This is used stream pipeline to determine how many times that card should be duplicated (limit(value.getCount)).
+        The UnoValue enum also has methods to check if the enum is a wild card, number card, or action card, and they're used for filtering.
      */
 
-    // Note: The UnoValue enums are associated with a number which corresponds to the number of times that they should be in a suit of cards
-    // (e.g., A SKIP is associated with 2, because there are 2 skips in a suit of cards)
-    // This is used stream pipeline to determine how many times that card should be duplicated (limit(value.getCount)).
-    // The UnoValue enum also has methods to check if the enum is a wild card, number card, or action card, and they're used for filtering.
-
     private static List<UnoValue> createNumberValues() {
-        // Create variable to hold a list of number values
+        // Variable to hold list of number values
         ArrayList<UnoValue> numberValues = new ArrayList<>(List.of(UnoValue.values()));
-
+        /*
+        Filter list by checking if the value is a number card value.
+        Generate a new stream that contains the values from the filtered list.
+        Limit the value for the new items that are generated in the stream to number of times that value should appear
+        in a suit.
+        Collect the list to be returned.
+         */
         return numberValues.stream()
-                .filter(UnoValue::isNumber) // filter the list by check if the value is a number card value
-                .flatMap(value -> Stream.generate(()-> value).limit(value.getCount())) // generate a new stream that contains the values from the filtered list
-                .collect(Collectors.toList()); // collect the list to be returned
+                .filter(UnoValue::isNumber)
+                .flatMap(value -> Stream.generate(()-> value).limit(value.getCount()))
+                .collect(Collectors.toList());
     }
 
     private static List<UnoValue> createActionValues() {
-        // Create variable to hold a list of action values
+        // Variable to hold list of action card values.
         List<UnoValue> actionValues = new ArrayList<>(List.of(UnoValue.values()));
-
+        /*
+        Filter list by checking if the value is an action card value.
+        Generate a new stream that contains the values from the filtered list.
+        Limit the value for the new items that are generated in the stream to number of times that value should appear
+        in a suit.
+        Collect the list to be returned.
+         */
         return actionValues.stream()
-                .filter(UnoValue::isAction) // filter the list and check if the value is an action card value
-                .flatMap(value -> Stream.generate(() -> value).limit(value.getCount())) // generate a new stream that contains the values from the filtered list
-                .collect(Collectors.toList()); // collect the list to be returned
+                .filter(UnoValue::isAction)
+                .flatMap(value -> Stream.generate(() -> value).limit(value.getCount()))
+                .collect(Collectors.toList());
     }
 
     private static List<UnoValue> createWildValues() {
-        // Create variable to hold a list of wild values
+        // Variable to hold list of wild card values.
         List<UnoValue> wildValues = new ArrayList<>(List.of(UnoValue.values()));
-
+        /*
+        Filter list by checking if the value is a wild card value.
+        Generate a new stream that contains the values from the filtered list.
+        Limit the value for the new items that are generated in the stream to number of times that value should appear
+        in a suit.
+        Collect the list to be returned.
+         */
         return wildValues.stream()
-                .filter(UnoValue::isWild) // filter the list and check if the value is a wild card value
-                .flatMap(value -> Stream.generate(() -> value).limit(value.getCount())) // generate a new stream that contains the values from the filtered list
-                .collect(Collectors.toList()); // collect the list to be returned
+                .filter(UnoValue::isWild)
+                .flatMap(value -> Stream.generate(() -> value).limit(value.getCount()))
+                .collect(Collectors.toList());
     }
 }
 

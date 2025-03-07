@@ -3,22 +3,31 @@ package games.cardgames.cards.unocards;
 import games.cardgames.cards.Pile;
 
 /*
-    1. This UnoDiscardPile class extends the Pile class and is responsible for managing the discard pile.
-    2. This class owns the discard pile.
-    3. The transferCardsToDrawPile receives an UnoDrawPile and transfers the cards from the discard pile
-       to the draw pile.
-    4. The addCard method receives an UnoCard and adds it to this discard pile.
-    5. The getLastPlayedCard() method will return the last card in the pile, which represents the top card on the discard pile
-        - The players in the game will need this card so they can play the game
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
+
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+
+This class manages the discard pile for an UNO game. It extends the Pile class and specifies UnoCard for the card type.
  */
 
 public class UnoDiscardPile extends Pile<UnoCard> {
-
+    /*
+    Returns an UnoCard object that represents the last card that was played. The last UnoCard object in the list
+    is retrieved. Does not remove the card from its list.
+     */
     public UnoCard getLastPlayedCard() {
         int index = cardPile.size() - 1;
         return cardPile.get(index);
     }
-
+    /*
+    Receives an UnoDrawPile object, and transfers all UnoCard objects in the list to the drawPile's list, then the
+    cards are removed from the list.
+     */
     protected void transferCardsToDrawPile(UnoDrawPile drawPile) {
         drawPile.fill(cardPile);
         cardPile.clear();

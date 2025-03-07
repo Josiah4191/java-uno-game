@@ -1,54 +1,54 @@
 package games.cardgames.cards.unocards;
 
 /*
-    1. This class is responsible for managing the images for our cards.
-    2. When we create an UnoCardImageManager object, we can pass an UnoCard object to the getImage() method, which
-       will return the image for that card.
-    3. This class is created in such a way that it will allow us to add different sets of Uno card images, which I called
-       themes.
-    4. The default theme is set to classic, which will look something like the original Uno cards.
-    5. We can pass a UnoCardTheme enum to the setTheme() method to change the theme.
-    6. The getImage() method will return the image based on the theme that is set.
-    7. If we want to add another theme, we will need to:
-        - Add a new theme to the UnoCardTheme enum
-        - Create another map that contains all the images
-        - Add the new theme to the switch statement in getImage() so it pulls image from the appropriate map
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
 
-    Note:
-        Right now, getImage() is returning a String for each file. That's because I don't have images yet. To actually implement the images, I
-        can think of a couple options:
-            - We can still return a String which will be a file path of the image.
-            - We can return an Image object from the javaFX library.
-            - Personally, I lean towards returning a String for the file path, and then we can deal with error handling
-              further up the call stack.
-            - I'm still not opposed to just returning an Image object. If we do it here, I think we'll need to add some
-              error handling here.
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+
+This class is responsible for getting Uno card images.
+The getImage method receives a Card object and returns the file path to that card's image.
+The theme determines the set of images that the getImage will return from.
+Additional themes for separate sets of Uno cards can easily be added.
+The default theme is classic, but can be changed.
+
+NOTE:
+    The classic images are stored in a map in the UnoCardClassicImages class.
+    getImage() is returning a descriptive String since there are no images yet.
  */
 
 public class UnoCardImageManager {
 
-    // Create and initialize the theme to classic
+    // Variable for the theme.
     private UnoCardTheme theme;
 
+    // The constructor receives an UnoCardTheme enum to know which set of images to return.
     public UnoCardImageManager(UnoCardTheme theme) {
         this.theme = theme;
     }
 
-    // Returns the Image. Accepts a UnoCard card object for the parameter
+    // Receives an UnoCard object and gets the file path as a String for that card's image.
     public String getImage(UnoCard card) {
-        switch (theme) { // Switch on the current theme
-            case UnoCardTheme.CLASSIC: // If it's classic theme
-                return UnoCardClassicImages.IMAGES.get(card.getSuit()).get(card.getValue()); // Get the card suit key from the map of images, and then get the card value key from the inner map
+        // Switch on the selected theme.
+        switch (theme) {
+            case UnoCardTheme.CLASSIC:
+                // Get card suit key from map of images, and then get card value key from inner map.
+                return UnoCardClassicImages.IMAGES.get(card.getSuit()).get(card.getValue());
             default:
                 return "";
         }
     }
 
+    // Gets the theme.
     public UnoCardTheme getTheme() {
         return theme;
     }
 
-    // This method sets the theme of the Images to be returned.
+    // Sets the theme.
     public void setTheme(UnoCardTheme theme) {
         this.theme = theme;
     }

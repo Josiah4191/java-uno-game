@@ -9,6 +9,64 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
+
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+
+This class is responsible for containing all information related to the state of the game.
+
+Things that this class knows about:
+    - UnoCardMachine (manages the cards)
+        - The draw pile
+        - The discard pile
+        - The deck
+            - UNO edition
+    - Players
+        - Player hand of cards
+    - Selected difficulty
+NOTE:
+    Information may be added or altered to this class later (e.g., player scores, rules).
+
+What this class contains:
+    - Variables:
+        - UnoCardMachine:
+            - Creates the deck of cards and manages the deck, draw pile, and discard pile.
+        - Map of Players:
+            - Holds a map of players.
+            - The player names are used as the keys.
+            - The keys are mapped to the player object.
+        - Difficulty:
+            - Represents the selected difficulty.
+    - Methods:
+            - getGameState
+            - getImage
+            - getTheme
+            - setTheme
+            - getDifficulty
+            - setDifficulty
+            - addPlayer
+            - getPlayer
+            - getPlayers
+            - getPlayerNames
+            - getLastPlayedCard
+            - dealCards
+            - drawCardFromDrawPile
+            - getEdition
+            - getDrawPile
+            - getDeck
+            - getDiscardPile
+            - playCard
+        - These are the second-highest level methods in a series of cascaded method calls.
+        - Each method should be self-explanatory and performs the action that its name suggests.
+        - For implementation details, refer to UnoCardMachine, Pile, UnoDrawPile, and UnoDiscardPile.
+ */
+
 public class UnoGameState extends CardGameState {
 
     private UnoCardMachine machine;

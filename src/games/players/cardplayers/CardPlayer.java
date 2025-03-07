@@ -6,28 +6,90 @@ import games.players.Player;
 import java.util.Collections;
 import java.util.List;
 
+
+/*
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
+
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+
+This abstract generic class represents a player for card games.
+    - Each card game should subclass Pile to have its own type of pile representing a player's cards.
+    - Each card game should subclass Card to have its own type of card.
+
+The type of pile of cards and the specific card itself is determined by this class's subclass.
+    - e.g., UnoPlayer is a subclass that uses UnoHandPile for the pile, and UnoCard for the card.
+
+ */
+
 public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
 
+    /*
+        The playerHand variable holds a player's pile of cards. The player owns and manages their cards.
+            - P represents Pile, or any subclass of Pile.
+            - C represents Card.
+     */
     private P playerHand;
 
+    /*
+        This constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
+     */
     public CardPlayer(P playerHand) {
         this.playerHand = playerHand;
     }
 
+    /*
+        The addCard(C card) method accepts a Card object.
+            - The playerHand is a Pile object, which calls its addCard method to add that card to the pile.
+     */
     public void addCard(C card) {
         playerHand.addCard(card);
     }
 
-    // this is public right now for testing purposes, but it needs to be protected so that other players or computer AI cannot access this list
-    // if other players or the AI could see this list, that would be cheating
+    /*
+        The getPlayerHand() method returns a view, or unmodifiable list, of the player's cards.
+            - The playerHand Pile object has a method getCardPile(), which returns the pile of cards.
+        NOTE:
+            - This is a public method right now for testing purposes, but it needs to be protected or removed
+            so other players or the computer AI cannot access this list.
+            - If other players or the AI could see this list, that would be cheating.
+            - UNO doesn't allow players to see their opponents cards.
+     */
     public List<C> getPlayerHand() {
         return Collections.unmodifiableList(playerHand.getCardPile());
     }
 
+    /*
+        The playCard(int index) method returns a Card object. The index parameter is an integer that identifies the
+        card in their pile of cards that they want to remove.
+            - The playerHand Pile object has a method drawCard(int index) that gets a card from its list of cards.
+        NOTE:
+            - This is the method that will be used by human players.
+     */
     public C playCard(int index) {
         return playerHand.drawCard(index);
     }
 
+    /*
+        The playCard() method returns the first card from the player's Pile of cards. If the player's Pile is empty,
+        then this method will return null.
+
+        WARNING:
+            - This method is not to be used by human players.
+            - This method is meant to be overridden by AI players.
+                - e.g., The UnoPlayerAI overrides the playCard() method to make its own decision for which card
+                to play.
+                    - The overridden playCard() method in UnoPlayerAI calls the playCard(int index) method.
+            - For now, the reason this parameterless playCard() method exists is to allow an UnoPlayer object to call
+             the playCard() method for an UnoPlayerAI object.
+                - UnoPlayerAI subclasses UnoPlayer. UnoPlayer subclasses CardPlayer.
+        FINAL NOTE:
+            - This solution isn't ideal. A different approach may be implemented later.
+     */
     public C playCard() {
         if (playerHand.isEmpty()) {
             return null;
@@ -35,10 +97,17 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
         return playerHand.drawCard(0);
     }
 
+    /*
+        The getTotalCardsRemaining() method returns an integer that represents the number of cards remaining in a
+        player's Pile of cards.
+     */
     public int getTotalCardsRemaining() {
         return playerHand.size();
     }
 
+    /*
+        The isEmpty() method returns a boolean that indicates if the player's Pile of cards is empty.
+     */
     public boolean isEmpty() {
         return playerHand.isEmpty();
     }

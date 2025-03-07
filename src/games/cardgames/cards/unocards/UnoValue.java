@@ -1,9 +1,18 @@
 package games.cardgames.cards.unocards;
 
 /*
-    This enum contains the values which correspond to the values in a Uno deck.
-    Each enum constructor sets its count to match the number of times it should appear in a suit.
-    e.g., A RED suit in Uno has only one ZERO, but it has two ONE values.
+Last edited: Josiah Stoltzfus
+Date: 3/7/2025
+    - Initial version - First time editing. Future edits and comments will be noted here. Please
+    include your name and date.
+
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+
+This enum contains values which correspond to card values in an Uno deck.
+Each enum constructor sets its count to match the number of times it should appear in a
+suit (e.g., A RED suit in Uno has one ZERO, but it has two ONE values).
  */
 
 public enum UnoValue {
@@ -11,21 +20,22 @@ public enum UnoValue {
 
     private int count;
 
+    // The constructor for each enum value sets the number for how many times it appears in a suit.
     UnoValue(int count) {
         this.count = count;
     }
 
-    // This method returns an integer that represents the number of times that value appears in a suit.
+    // Get the number of times this enum value appears in a suit.
     public int getCount() {
         return count;
     }
 
-    // This method checks if the enum is a wild card.
+    // Receives an enum value and checks if it is a WILD card.
     public static boolean isWild(UnoValue value) {
         return value.name().startsWith("WILD");
     }
 
-    // This method checks if the enum is an action card.
+    // Receives an enum value and checks if it is an ACTION card.
     public static boolean isAction(UnoValue value) {
         return switch (value) {
             case UnoValue.REVERSE, UnoValue.SKIP, UnoValue.DRAW_TWO -> true;
@@ -33,7 +43,7 @@ public enum UnoValue {
         };
     }
 
-    // This method checks if the enum is a number card.
+    // Receives an enum value and checks if it is a NUMBER card.
     public static boolean isNumber(UnoValue value) {
         return switch (value) {
             case UnoValue.ZERO, UnoValue.ONE, UnoValue.TWO, UnoValue.THREE, UnoValue.FOUR, UnoValue.FIVE, UnoValue.SIX, UnoValue.SEVEN, UnoValue.EIGHT, UnoValue.NINE-> true;
