@@ -4,6 +4,7 @@ import games.Difficulty;
 import games.cardgames.CardGameManager;
 import games.cardgames.cards.unocards.*;
 import games.players.cardplayers.unoplayers.UnoPlayer;
+import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
 import java.util.List;
 import java.util.Random;
@@ -139,7 +140,7 @@ public class UnoGameManager extends CardGameManager {
     public UnoCard playCard(int playerIndex, int cardIndex) {
         var machine = gameState.getMachine();
         var player = gameState.getPlayer(playerIndex);
-        UnoCard card = player.playCard(cardIndex);
+        UnoCard card = player.playCard(playerIndex);
         machine.addCardToDiscardPile(card);
         return card;
     }

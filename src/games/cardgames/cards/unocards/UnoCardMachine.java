@@ -41,8 +41,8 @@ public class UnoCardMachine {
     private UnoDiscardPile discardPile = new UnoDiscardPile();
     private UnoDeck deck;
 
-    public UnoCardMachine(UnoDeck deck) {
-        this.deck = deck;
+    public UnoCardMachine(UnoEdition edition) {
+        this.deck = new UnoDeck(edition);
         transferDeckToDrawPile();
     }
 

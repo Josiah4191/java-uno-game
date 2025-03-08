@@ -26,21 +26,11 @@ NOTE:
 */
 
 public abstract class UnoBrain extends CardBrain {
-
-    /*
-    The UnoGameState object contains information about the state of the UNO game.
-    */
-    private UnoGameState gameState;
-
-    public UnoBrain(UnoGameState gameState) {
-        this.gameState = gameState;
-    }
-
     /*
     The analyze() method must be subclassed. It analyzes the gameState and returns an integer which represents
     which card the AI chooses to play.
         - Internally, each subclass will implement its own methods for processing the gameState object. Those methods
         will be called by their analyze() method to generate an integer to return.
      */
-    public abstract int analyze();
+    public abstract int analyze(UnoGameState gameState);
 }

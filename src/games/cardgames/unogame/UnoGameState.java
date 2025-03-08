@@ -76,7 +76,7 @@ public class UnoGameState extends CardGameState {
     private int playerPosition;
 
     public UnoGameState(UnoEdition edition, Difficulty difficulty) {
-        machine = new UnoCardMachine(new UnoDeck(edition));
+        machine = new UnoCardMachine(edition);
         this.difficulty = difficulty;
     }
 

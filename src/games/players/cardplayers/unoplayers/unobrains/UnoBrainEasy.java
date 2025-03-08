@@ -17,11 +17,7 @@ will be added later.
 
 public class UnoBrainEasy extends UnoBrain {
 
-    public UnoBrainEasy(UnoGameState gameState) {
-        super(gameState);
-    }
-
-    public int analyze() {
+    public int analyze(UnoGameState gameState) {
         return 0;
     }
 }

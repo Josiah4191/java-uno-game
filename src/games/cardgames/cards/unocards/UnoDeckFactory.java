@@ -23,8 +23,6 @@ Steps for adding another UNO edition:
  */
 
 public class UnoDeckFactory {
-    // Variable to hold the Card objects.
-    private static ArrayList<UnoCard> deck;
     /*
     Creates and returns the appropriate list of cards based on the edition.
     This method is called from the UnoDeck class.
@@ -44,7 +42,7 @@ public class UnoDeckFactory {
     a classic deck is created).
      */
     private static List<UnoCard> classicDeck() {
-        deck = new ArrayList<>();
+        ArrayList<UnoCard> deck = new ArrayList<>();
         deck.addAll(createSuit(UnoSuit.RED));
         deck.addAll(createSuit(UnoSuit.BLUE));
         deck.addAll(createSuit(UnoSuit.YELLOW));
