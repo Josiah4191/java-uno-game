@@ -9,9 +9,8 @@ import games.cardgames.cards.unocards.UnoEdition;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /*
 Last edited: Josiah Stoltzfus
@@ -74,7 +73,7 @@ What this class contains:
 public class UnoGameState extends CardGameState {
 
     private UnoCardMachine machine;
-    private HashMap<String, UnoPlayer> players = new HashMap<>();
+    private List<UnoPlayer> players = new ArrayList<>();
     private UnoModerator moderator;
     private Difficulty difficulty;
     private PlayDirection direction = PlayDirection.FORWARD;
@@ -83,23 +82,18 @@ public class UnoGameState extends CardGameState {
     public UnoGameState(UnoEdition edition, Difficulty difficulty) {
         machine = new UnoCardMachine(new UnoDeck(edition));
         this.difficulty = difficulty;
-        this.playerPosition = selectFirstPlayer();
     }
 
-    public void addPlayer(String name, UnoPlayer player) {
-        players.put(name, player);
+    public void addPlayer(UnoPlayer player) {
+        players.add(player);
     }
 
-    public UnoPlayer getPlayer(String name) {
-        return players.get(name);
-    }
-
-    public List<String> getPlayerNames() {
-        return new ArrayList<>(players.keySet());
+    public UnoPlayer getPlayer(int playerIndex) {
+        return players.get(playerIndex);
     }
 
     public List<UnoPlayer> getPlayers() {
-        return new ArrayList<>(players.values());
+        return Collections.unmodifiableList(players);
     }
 
     public UnoCard getLastPlayedCard() {
@@ -146,18 +140,8 @@ public class UnoGameState extends CardGameState {
         return machine.getDeck();
     }
 
-    public UnoCard playCard(String name, int index) {
-        var player = players.get(name);
-        UnoCard card = player.playCard(index);
-        machine.addCardToDiscardPile(card);
-        return card;
-    }
-
-    private int selectFirstPlayer() {
-        Random random = new Random();
-        var players = getPlayers();
-        UnoPlayer player = players.get(random.nextInt(players.size()));
-        return players.indexOf(player);
+    public UnoCardMachine getMachine() {
+        return machine;
     }
 
     public int getPlayerPosition() {
@@ -166,26 +150,6 @@ public class UnoGameState extends CardGameState {
 
     public void setPlayerPosition(int playerPosition) {
         this.playerPosition = playerPosition;
-    }
-
-    public void reversePlayDirection() {
-        direction = direction == PlayDirection.FORWARD ? PlayDirection.REVERSE : PlayDirection.FORWARD;
-    }
-
-    public void nextPlayerPosition() {
-        if (direction == PlayDirection.FORWARD) {
-            playerPosition++;
-        } else {
-            playerPosition--;
-        }
-    }
-
-    public void skipNextPlayerPosition() {
-        if (direction == PlayDirection.FORWARD) {
-            playerPosition += 2;
-        } else {
-            playerPosition -= 2;
-        }
     }
 
 }
