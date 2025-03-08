@@ -1,10 +1,6 @@
 package games.cardgames.cards;
 /*
-Last edited: Josiah Stoltzfus
-Date: 3/7/2025
-    - Initial version - First time editing. Future edits and comments will be noted here. Please
-    include your name and date.
-
+Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
