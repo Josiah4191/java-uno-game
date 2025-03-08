@@ -2,6 +2,7 @@ package games.cardgames.cards;
 
 import java.util.Collections;
 import java.util.List;
+
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus

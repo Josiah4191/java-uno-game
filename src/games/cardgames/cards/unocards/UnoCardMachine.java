@@ -5,7 +5,6 @@ import games.players.cardplayers.unoplayers.UnoPlayer;
 import java.util.Collections;
 import java.util.List;
 
-public class UnoCardMachine {
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
@@ -37,6 +36,7 @@ NOTE:
     The UnoDrawPile and UnoDiscardPile are responsible for making changes to their list of cards.
 */
 
+public class UnoCardMachine {
     private UnoDrawPile drawPile = new UnoDrawPile();
     private UnoDiscardPile discardPile = new UnoDiscardPile();
     private UnoDeck deck;

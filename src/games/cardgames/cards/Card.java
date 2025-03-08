@@ -1,4 +1,5 @@
 package games.cardgames.cards;
+
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
