@@ -11,4 +11,5 @@ UnoGameManager is the controller class for managing the game. It manages cards, 
 
 All other classes are not meant for our use in the program.
 
+NEW UPDATE at 11:05pm: Just added some new code (Rules interface, Moderator, UnoModerator, UnoClassicRules, new methods to GameManager and GameState). Comments have not been added for them yet.
 
