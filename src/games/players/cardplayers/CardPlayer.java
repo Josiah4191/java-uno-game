@@ -33,7 +33,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
      */
     private P playerHand;
     /*
-    This constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
+    The constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
      */
     public CardPlayer(P playerHand) {
         this.playerHand = playerHand;
@@ -76,7 +76,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
         - This method is meant to be overridden by AI players (e.g., The UnoPlayerAI overrides the playCard() method
         to make its own decision for which card to play).
         - The overridden playCard() method in UnoPlayerAI calls the playCard(int index) method.
-        - The reason this parameterless playCard() method exists is to allow an UnoPlayer object to call
+        - The reason this parameterless playCard() method exists is to allow an UnoPlayer reference type to call
         the playCard() method for an UnoPlayerAI object.
         - UnoPlayerAI subclasses UnoPlayer. UnoPlayer subclasses CardPlayer.
         - This solution isn't ideal. A different approach may be implemented later.

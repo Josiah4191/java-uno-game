@@ -1,20 +1,3 @@
-package games;
-
-/*
-Last edited: Josiah Stoltzfus
-Date: 3/7/2025
-    - Initial version - First time editing. Future edits and comments will be noted here. Please
-    include your name and date.
-
-Author: Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
- */
-
-interface Rules {
-
-    boolean validatePlay();
-
 /*
 at the beginning of the game, a player is selected at random within the list of players
 
@@ -71,8 +54,4 @@ random thought:
     - we could allow the ability to suggest a card that the player should play, if they are
     learning to play the game.
 
-
-
  */
-
-}

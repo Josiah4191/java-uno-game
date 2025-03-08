@@ -2,12 +2,16 @@ package games.cardgames.unogame;
 
 import games.Difficulty;
 import games.cardgames.CardGameState;
-import games.cardgames.cards.unocards.*;
+import games.cardgames.cards.unocards.UnoCard;
+import games.cardgames.cards.unocards.UnoCardMachine;
+import games.cardgames.cards.unocards.UnoDeck;
+import games.cardgames.cards.unocards.UnoEdition;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /*
 Last edited: Josiah Stoltzfus
@@ -71,11 +75,15 @@ public class UnoGameState extends CardGameState {
 
     private UnoCardMachine machine;
     private HashMap<String, UnoPlayer> players = new HashMap<>();
+    private UnoModerator moderator;
     private Difficulty difficulty;
+    private PlayDirection direction = PlayDirection.FORWARD;
+    private int playerPosition;
 
     public UnoGameState(UnoEdition edition, Difficulty difficulty) {
         machine = new UnoCardMachine(new UnoDeck(edition));
         this.difficulty = difficulty;
+        this.playerPosition = selectFirstPlayer();
     }
 
     public void addPlayer(String name, UnoPlayer player) {
@@ -96,6 +104,14 @@ public class UnoGameState extends CardGameState {
 
     public UnoCard getLastPlayedCard() {
         return machine.getLastPlayedCard();
+    }
+
+    public void setDirection(PlayDirection direction) {
+        this.direction = direction;
+    }
+
+    public PlayDirection getDirection() {
+        return direction;
     }
 
     public void setDifficulty(Difficulty difficulty) {
@@ -136,4 +152,40 @@ public class UnoGameState extends CardGameState {
         machine.addCardToDiscardPile(card);
         return card;
     }
+
+    private int selectFirstPlayer() {
+        Random random = new Random();
+        var players = getPlayers();
+        UnoPlayer player = players.get(random.nextInt(players.size()));
+        return players.indexOf(player);
+    }
+
+    public int getPlayerPosition() {
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(int playerPosition) {
+        this.playerPosition = playerPosition;
+    }
+
+    public void reversePlayDirection() {
+        direction = direction == PlayDirection.FORWARD ? PlayDirection.REVERSE : PlayDirection.FORWARD;
+    }
+
+    public void nextPlayerPosition() {
+        if (direction == PlayDirection.FORWARD) {
+            playerPosition++;
+        } else {
+            playerPosition--;
+        }
+    }
+
+    public void skipNextPlayerPosition() {
+        if (direction == PlayDirection.FORWARD) {
+            playerPosition += 2;
+        } else {
+            playerPosition -= 2;
+        }
+    }
+
 }

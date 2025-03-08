@@ -25,6 +25,9 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
     The new UnoPlayerHandPile represents the player's Pile cards.
     The new UnoPlayerHandPile starts empty.
      */
+
+    private boolean sayUno = false;
+
     public UnoPlayer() {
         this(new UnoPlayerHandPile());
     }
@@ -32,4 +35,14 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
     public UnoPlayer(UnoPlayerHandPile playerHand) {
         super(playerHand);
     }
+
+    public void setSayUno(boolean sayUno) {
+        this.sayUno = sayUno;
+    }
+
+    public boolean getSayUno() {
+        return sayUno;
+    }
+
+
 }

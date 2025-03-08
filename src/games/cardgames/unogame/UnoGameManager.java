@@ -72,6 +72,14 @@ public class UnoGameManager extends CardGameManager {
         return cardImageManager.getImage(card);
     }
 
+    public PlayDirection getDirection() {
+        return gameState.getDirection();
+    }
+
+    public void setDirection(PlayDirection direction) {
+        gameState.setDirection(direction);
+    }
+
     public UnoCardTheme getTheme() {
         return cardImageManager.getTheme();
     }
@@ -134,5 +142,17 @@ public class UnoGameManager extends CardGameManager {
 
     public UnoCard playCard(String name, int index) {
         return gameState.playCard(name, index);
+    }
+
+    private void reversePlayDirection() {
+        gameState.reversePlayDirection();
+    }
+
+    private void nextPlayerPosition() {
+        gameState.nextPlayerPosition();
+    }
+
+    private void skipNextPlayerPosition() {
+        gameState.skipNextPlayerPosition();
     }
 }

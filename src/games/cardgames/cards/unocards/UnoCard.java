@@ -24,4 +24,5 @@ public class UnoCard extends Card<UnoSuit, UnoValue> {
     protected UnoCard(UnoSuit suit, UnoValue value) {
         super(suit, value);
     }
+
 }
