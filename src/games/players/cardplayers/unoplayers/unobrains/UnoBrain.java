@@ -1,7 +1,11 @@
 package games.players.cardplayers.unoplayers.unobrains;
 
+import games.cardgames.cards.unocards.UnoCard;
 import games.players.cardplayers.CardBrain;
 import games.cardgames.unogame.UnoGameState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -32,5 +36,5 @@ public abstract class UnoBrain extends CardBrain {
         - Internally, each subclass will implement its own methods for processing the gameState object. Those methods
         will be called by their analyze() method to generate an integer to return.
      */
-    public abstract int analyze(UnoGameState gameState);
+    public abstract int analyze(UnoGameState gameState, List<UnoCard> playableCards);
 }

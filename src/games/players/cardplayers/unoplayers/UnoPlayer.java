@@ -16,14 +16,14 @@ For more information about this class, refer to CardPlayer.
 */
 
 public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
+
+    private boolean sayUno = false;
+
     /*
     The UnoPlayer constructor assigns its playerHand Pile to a new UnoPlayerHandPile.
     The new UnoPlayerHandPile represents the player's Pile cards.
     The new UnoPlayerHandPile starts empty.
      */
-
-    private boolean sayUno = false;
-
     public UnoPlayer() {
         this(new UnoPlayerHandPile());
     }
@@ -39,6 +39,5 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
     public boolean getSayUno() {
         return sayUno;
     }
-
 
 }

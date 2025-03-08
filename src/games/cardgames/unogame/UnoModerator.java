@@ -13,23 +13,15 @@ Date: 3/7/2025
 
 public class UnoModerator extends Moderator {
 
-    private UnoRules rules;
-    private UnoGameState gameState;
-
-    public UnoModerator(UnoRules rules, UnoGameState gameState) {
-        this.rules = rules;
-        this.gameState = gameState;
+    public boolean validatePlay(UnoRules rules, UnoCard card, UnoCard lastPlayedCard) {
+        return rules.validatePlay(card, lastPlayedCard);
     }
 
-    public boolean validatePlay(UnoCard card) {
-        return rules.validatePlay(card, gameState.getLastPlayedCard());
-    }
-
-    public int callUnoPenalty(UnoPlayer player) {
+    public int callUnoPenalty(UnoRules rules, UnoPlayer player) {
         return rules.getCallUnoPenalty(player);
     }
 
-    public int getCardPenalty(UnoPlayer player) {
-        return rules.getCompareCardPenalty(player, gameState.getLastPlayedCard());
+    public int getCardPenalty(UnoRules rules, UnoCard lastPlayedCard, UnoPlayer player) {
+        return rules.getCompareCardPenalty(player, lastPlayedCard);
     }
 }

@@ -42,7 +42,8 @@ public enum UnoValue {
     // Receives an enum value and checks if it is a NUMBER card.
     public static boolean isNumber(UnoValue value) {
         return switch (value) {
-            case UnoValue.ZERO, UnoValue.ONE, UnoValue.TWO, UnoValue.THREE, UnoValue.FOUR, UnoValue.FIVE, UnoValue.SIX, UnoValue.SEVEN, UnoValue.EIGHT, UnoValue.NINE-> true;
+            case UnoValue.ZERO, UnoValue.ONE, UnoValue.TWO, UnoValue.THREE, UnoValue.FOUR, UnoValue.FIVE, UnoValue.SIX,
+                 UnoValue.SEVEN, UnoValue.EIGHT, UnoValue.NINE -> true;
             default -> false;
         };
     }

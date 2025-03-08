@@ -1,11 +1,9 @@
 package games.cardgames.unogame;
 
 import games.Difficulty;
+import games.Moderator;
 import games.cardgames.CardGameState;
-import games.cardgames.cards.unocards.UnoCard;
-import games.cardgames.cards.unocards.UnoCardMachine;
-import games.cardgames.cards.unocards.UnoDeck;
-import games.cardgames.cards.unocards.UnoEdition;
+import games.cardgames.cards.unocards.*;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.ArrayList;
@@ -68,14 +66,17 @@ What this class contains:
 
 public class UnoGameState extends CardGameState {
 
-    private UnoCardMachine machine;
+    private UnoRules rules = new UnoClassicRules();
     private List<UnoPlayer> players = new ArrayList<>();
-    private UnoModerator moderator;
-    private Difficulty difficulty;
+    private UnoModerator moderator = new UnoModerator();
     private PlayDirection direction = PlayDirection.FORWARD;
+    private Difficulty difficulty;
+    private UnoCardImageManager cardImageManager;
+    private UnoCardMachine machine;
     private int playerPosition;
 
-    public UnoGameState(UnoEdition edition, Difficulty difficulty) {
+    public UnoGameState(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty) {
+        cardImageManager = new UnoCardImageManager(theme);
         machine = new UnoCardMachine(edition);
         this.difficulty = difficulty;
     }
@@ -146,6 +147,22 @@ public class UnoGameState extends CardGameState {
 
     public void setPlayerPosition(int playerPosition) {
         this.playerPosition = playerPosition;
+    }
+
+    public UnoRules getRules() {
+        return rules;
+    }
+
+    public void setRules(UnoRules rules) {
+        this.rules = rules;
+    }
+
+    public UnoCardImageManager getCardImageManager() {
+        return cardImageManager;
+    }
+
+    public UnoModerator getModerator() {
+        return moderator;
     }
 
 }

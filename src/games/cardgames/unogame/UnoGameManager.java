@@ -55,14 +55,9 @@ NOTE:
 public class UnoGameManager extends CardGameManager {
 
     private UnoGameState gameState;
-    private UnoCardImageManager cardImageManager;
-    private UnoModerator moderator;
 
     public UnoGameManager(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty) {
-        cardImageManager = new UnoCardImageManager(theme);
-        gameState = new UnoGameState(edition, difficulty);
-        selectFirstPlayer();
-        moderator = new UnoModerator(new UnoClassicRules(), gameState);
+        gameState = new UnoGameState(edition, theme, difficulty);
     }
 
     public UnoGameState getGameState() {
@@ -70,7 +65,7 @@ public class UnoGameManager extends CardGameManager {
     }
 
     public String getImage(UnoCard card) {
-        return cardImageManager.getImage(card);
+        return gameState.getCardImageManager().getImage(card);
     }
 
     public PlayDirection getDirection() {
@@ -82,11 +77,11 @@ public class UnoGameManager extends CardGameManager {
     }
 
     public UnoCardTheme getTheme() {
-        return cardImageManager.getTheme();
+        return gameState.getCardImageManager().getTheme();
     }
 
     public void setTheme(UnoCardTheme theme) {
-        cardImageManager.setTheme(theme);
+        gameState.getCardImageManager().setTheme(theme);
     }
 
     public void setDifficulty(Difficulty difficulty) {
@@ -135,6 +130,14 @@ public class UnoGameManager extends CardGameManager {
 
     public List<UnoCard> getDeck() {
         return gameState.getDeck();
+    }
+
+    public UnoRules getRules() {
+        return gameState.getRules();
+    }
+
+    public void setRules(UnoRules rules) {
+        gameState.setRules(rules);
     }
 
     public UnoCard playCard(int playerIndex, int cardIndex) {

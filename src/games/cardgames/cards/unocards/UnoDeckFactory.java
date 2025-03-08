@@ -35,6 +35,7 @@ public class UnoDeckFactory {
                 return null;
         }
     }
+
     /*
     Creates a classic Uno deck consisting of 108 cards:
         - 0(x1), 1-9 (x2), SKIP(x2), REVERSE(x2), DRAW TWO(x2), WILD(x4), WILD DRAW FOUR(x4)
@@ -50,6 +51,7 @@ public class UnoDeckFactory {
         deck.addAll(createSuit(UnoSuit.WILD));
         return deck;
     }
+
     /*
     Receives a Suit enum (RED, GREEN, BLUE, YELLOW, WILD).
     Returns a list of Card objects for a suit of cards which contains each value and the number of times that
@@ -66,7 +68,7 @@ public class UnoDeckFactory {
         if (suit == UnoSuit.WILD) {
             var wildValues = createWildValues();
             values.addAll(wildValues);
-        // If suit is not WILD, add the values to the list of values.
+            // If suit is not WILD, add the values to the list of values.
         } else {
             var numberValues = createNumberValues();
             var actionValues = createActionValues();
@@ -122,7 +124,7 @@ public class UnoDeckFactory {
          */
         return numberValues.stream()
                 .filter(UnoValue::isNumber)
-                .flatMap(value -> Stream.generate(()-> value).limit(value.getCount()))
+                .flatMap(value -> Stream.generate(() -> value).limit(value.getCount()))
                 .collect(Collectors.toList());
     }
 

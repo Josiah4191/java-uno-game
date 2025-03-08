@@ -25,7 +25,7 @@ NOTE:
     If List<UnoCard> is used, then subclasses cannot store different card types.
  */
 
-public abstract class Deck <C, E extends Enum<E>> {
+public abstract class Deck<C, E extends Enum<E>> {
     // Variable to hold a list of Card objects.
     protected List<C> deck;
 

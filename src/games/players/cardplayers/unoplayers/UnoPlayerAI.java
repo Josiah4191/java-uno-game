@@ -4,8 +4,13 @@ import games.Difficulty;
 import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.cards.unocards.UnoPlayerHandPile;
 import games.cardgames.unogame.UnoGameState;
+import games.cardgames.unogame.UnoModerator;
+import games.cardgames.unogame.UnoRules;
 import games.players.cardplayers.CardPlayer;
 import games.players.cardplayers.unoplayers.unobrains.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -32,8 +37,9 @@ public class UnoPlayerAI extends UnoPlayer {
      */
     public UnoPlayerAI(UnoGameState gameState) {
         this.gameState = gameState;
-        brain = UnoBrainFactory.createBrain(gameState);
+        createBrain();
     }
+
     /*
     The playCard() method returns an UnoCard.
     The playCard(int index) method is defined in CardPlayer.
@@ -41,9 +47,28 @@ public class UnoPlayerAI extends UnoPlayer {
      */
     @Override
     public UnoCard playCard(int cardIndex) {
-        return playCard(brain.analyze(gameState));
+        var playableCards = getPlayableCards();
+        return playCard(brain.analyze(gameState, playableCards));
     }
 
+    private List<UnoCard> getPlayableCards() {
+        ArrayList<UnoCard> playableCards = new ArrayList<>();
+        UnoModerator moderator = gameState.getModerator();
+        UnoCard lastPlayedCard = gameState.getLastPlayedCard();
+        UnoRules rules = gameState.getRules();
+
+        for (var card : getPlayerHand()) {
+            if (moderator.validatePlay(rules, card, lastPlayedCard)) {
+                playableCards.add(card);
+            }
+        }
+
+        return playableCards;
+    }
+
+    public void createBrain() {
+        this.brain = UnoBrainFactory.createBrain(gameState.getDifficulty());
+    }
 }
 
 

@@ -21,28 +21,28 @@ NOTE:
 
 public abstract class Card<S extends Enum<S>, V extends Enum<V>> {
 
-        // Variables to refer to the suit and value.
-        private S suit;
-        private V value;
+    // Variables to refer to the suit and value.
+    private S suit;
+    private V value;
 
-        // The constructor receives an enum suit and value, and sets them.
-        public Card(S suit, V value) {
-            this.suit = suit;
-            this.value = value;
-        }
+    // The constructor receives an enum suit and value, and sets them.
+    public Card(S suit, V value) {
+        this.suit = suit;
+        this.value = value;
+    }
 
-        // Get the suit
-        public S getSuit() {
-            return suit;
-        }
+    // Get the suit
+    public S getSuit() {
+        return suit;
+    }
 
-        // Get the value
-        public V getValue() {
-            return value;
-        }
+    // Get the value
+    public V getValue() {
+        return value;
+    }
 
-        // Get the suit and value as a string
-        public String toString() {
-            return "Suit: " + suit + " | " + "Value: " + value;
-        }
+    // Get the suit and value as a string
+    public String toString() {
+        return "Suit: " + suit + " | " + "Value: " + value;
+    }
 }

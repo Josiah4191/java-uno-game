@@ -28,12 +28,14 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     - C represents Card.
      */
     private P playerHand;
+
     /*
     The constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
      */
     public CardPlayer(P playerHand) {
         this.playerHand = playerHand;
     }
+
     /*
     The addCard(C card) method accepts a Card object.
     The playerHand is a Pile object, which calls its addCard method to add that card to the pile.
@@ -41,6 +43,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public void addCard(C card) {
         playerHand.addCard(card);
     }
+
     /*
     The getPlayerHand() method returns a view, or unmodifiable list, of the player's cards.
     The playerHand Pile object has a method getCardPile(), which returns the pile of cards.
@@ -53,6 +56,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public List<C> getPlayerHand() {
         return Collections.unmodifiableList(playerHand.getCardPile());
     }
+
     /*
     The playCard(int index) method returns a Card object. The index parameter is an integer that identifies the
     card in their pile of cards that they want to remove.
@@ -63,6 +67,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public C playCard(int cardIndex) {
         return playerHand.drawCard(cardIndex);
     }
+
     /*
     The getTotalCardsRemaining() method returns an integer that represents the number of cards remaining in a
     player's Pile of cards.
@@ -70,6 +75,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public int getTotalCardsRemaining() {
         return playerHand.size();
     }
+
     /*
     The isEmpty() method returns a boolean that indicates if the player's Pile of cards is empty.
      */
