@@ -57,7 +57,7 @@ NOTE:
         }
         UnoCard card = drawPile.drawCard();
         addCardToDiscardPile(card);
-        return drawPile.drawCard();
+        return card;
     }
 
     public UnoCard getLastPlayedCard() {

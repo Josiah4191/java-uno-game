@@ -30,8 +30,8 @@ public class UnoDrawPile extends Pile<UnoCard> {
     Refer to Pile for details.
      */
     public UnoCard drawCard() {
-        int index = cardPile.size() - 1;
-        return super.drawCard(index);
+        int cardIndex = cardPile.size() - 1;
+        return drawCard(cardIndex);
     }
 
     // Shuffles the list of UnoCard objects.

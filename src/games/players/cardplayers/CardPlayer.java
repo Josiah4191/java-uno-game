@@ -64,8 +64,8 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     NOTE:
         This is the method that will be used by human players.
      */
-    public C playCard(int index) {
-        return playerHand.drawCard(index);
+    public C playCard(int cardIndex) {
+        return playerHand.drawCard(cardIndex);
     }
     /*
     The playCard() method returns the first card from the player's Pile of cards. If the player's Pile is empty,

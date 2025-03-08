@@ -41,9 +41,9 @@ public abstract class Pile<C> {
     }
 
     // Gets a card from the pile. Accepts an integer for the index of the card that needs to be removed.
-    public C drawCard(int index) {
-        C card = cardPile.get(index);
-        cardPile.remove(index);
+    public C drawCard(int cardIndex) {
+        C card = cardPile.get(cardIndex);
+        cardPile.remove(cardIndex);
         return card;
     }
 

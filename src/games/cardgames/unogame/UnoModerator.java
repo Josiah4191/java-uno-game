@@ -25,10 +25,4 @@ public class UnoModerator extends Moderator {
     public int getCardPenalty(UnoPlayer player) {
         return rules.getCompareCardPenalty(player, gameState.getLastPlayedCard());
     }
-
-    public void applyPenalty(UnoPlayer player, int cardPenalty) {
-        for (int i = 0; i < cardPenalty; i++) {
-            player.addCard(gameState.drawCardFromDrawPile());
-        }
-    }
 }

@@ -140,10 +140,10 @@ public class UnoGameManager extends CardGameManager {
         return gameState.getDeck();
     }
 
-    public UnoCard playCard(int playerIndex, int index) {
+    public UnoCard playCard(int playerIndex, int cardIndex) {
         var machine = gameState.getMachine();
         var player = gameState.getPlayer(playerIndex);
-        UnoCard card = player.playCard(index);
+        UnoCard card = player.playCard(cardIndex);
         machine.addCardToDiscardPile(card);
         return card;
     }
@@ -181,4 +181,12 @@ public class UnoGameManager extends CardGameManager {
         }
         gameState.setPlayerPosition(playerPosition);
     }
+
+    public void applyPenalty(int playerIndex, int cardPenalty) {
+        var player = gameState.getPlayer(playerIndex);
+        for (int i = 0; i < cardPenalty; i++) {
+            player.addCard(gameState.drawCardFromDrawPile());
+        }
+    }
+
 }
