@@ -6,13 +6,8 @@ import games.players.Player;
 import java.util.Collections;
 import java.util.List;
 
-
 /*
-Last edited: Josiah Stoltzfus
-Date: 3/7/2025
-    - Initial version - First time editing. Future edits and comments will be noted here. Please
-    include your name and date.
-
+Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
@@ -64,8 +59,8 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     NOTE:
         This is the method that will be used by human players.
      */
-    public C playCard(int index) {
-        return playerHand.drawCard(index);
+    public C playCard(int cardIndex) {
+        return playerHand.drawCard(cardIndex);
     }
     /*
     The playCard() method returns the first card from the player's Pile of cards. If the player's Pile is empty,

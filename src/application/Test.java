@@ -6,7 +6,6 @@ import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.UnoGameManager;
 import games.players.cardplayers.unoplayers.UnoPlayer;
-import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
 import java.util.List;
 
@@ -51,26 +50,26 @@ public class Test {
         gameManager.getDrawPile().forEach(System.out::println);
 
         // add a player to the game
-        gameManager.addPlayer("Josiah", new UnoPlayer());
-        gameManager.addPlayer("Computer1", new UnoPlayerAI(gameManager.getGameState()));
+        //gameManager.addPlayer("Josiah", new UnoPlayer());
+        //gameManager.addPlayer("Computer1", new UnoPlayerAI(gameManager.getGameState()));
 
         // get the list of players
         List<UnoPlayer> players = gameManager.getPlayers();
 
         // get the list of player names
-        List<String> playerNames = gameManager.getPlayerNames();
+        //List<String> playerNames = gameManager.getPlayerNames();
 
         // deal cards to the players
         gameManager.dealCards(7, players);
 
         // get a player
-        UnoPlayer playerJosiah = gameManager.getPlayer("Josiah");
-        UnoPlayer computer1Player = gameManager.getPlayer("Computer1");
-        System.out.println(playerJosiah.getClass());
-        System.out.println(computer1Player.getClass());
+        //UnoPlayer playerJosiah = gameManager.getPlayer("Josiah");
+        //UnoPlayer computer1Player = gameManager.getPlayer("Computer1");
+        //System.out.println(playerJosiah.getClass());
+        //System.out.println(computer1Player.getClass());
         // play a card
-        computer1Player.playCard();
-        playerJosiah.playCard(3);
+        //computer1Player.playCard();
+        //playerJosiah.playCard(3);
 
         /*
         ideas: player class

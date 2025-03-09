@@ -1,10 +1,7 @@
 package games.players;
 
 /*
-Last edited: Josiah Stoltzfus
-Date: 3/7/2025
-    - Added name variable with get/set methods
-------------------------------------------------------------------------------
+Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------

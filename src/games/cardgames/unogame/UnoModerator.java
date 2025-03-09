@@ -4,6 +4,13 @@ import games.Moderator;
 import games.cardgames.cards.unocards.UnoCard;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
+/*
+Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
+Author: Josiah Stoltzfus
+Date: 3/7/2025
+------------------------------------------------------------------------------
+ */
+
 public class UnoModerator extends Moderator {
 
     private UnoRules rules;
@@ -24,11 +31,5 @@ public class UnoModerator extends Moderator {
 
     public int getCardPenalty(UnoPlayer player) {
         return rules.getCompareCardPenalty(player, gameState.getLastPlayedCard());
-    }
-
-    public void applyPenalty(UnoPlayer player, int cardPenalty) {
-        for (int i = 0; i < cardPenalty; i++) {
-            player.addCard(gameState.drawCardFromDrawPile());
-        }
     }
 }

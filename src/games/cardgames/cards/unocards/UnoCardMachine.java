@@ -5,13 +5,8 @@ import games.players.cardplayers.unoplayers.UnoPlayer;
 import java.util.Collections;
 import java.util.List;
 
-public class UnoCardMachine {
 /*
-Last edited: Josiah Stoltzfus
-Date: 3/7/2025
-    - Initial version - First time editing. Future edits and comments will be noted here. Please
-    include your name and date.
-
+Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
@@ -41,6 +36,7 @@ NOTE:
     The UnoDrawPile and UnoDiscardPile are responsible for making changes to their list of cards.
 */
 
+public class UnoCardMachine {
     private UnoDrawPile drawPile = new UnoDrawPile();
     private UnoDiscardPile discardPile = new UnoDiscardPile();
     private UnoDeck deck;
@@ -57,7 +53,7 @@ NOTE:
         }
         UnoCard card = drawPile.drawCard();
         addCardToDiscardPile(card);
-        return drawPile.drawCard();
+        return card;
     }
 
     public UnoCard getLastPlayedCard() {

@@ -6,13 +6,10 @@ import games.cardgames.cards.unocards.*;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.List;
+import java.util.Random;
 
 /*
-Last edited: Josiah Stoltzfus
-Date: 3/7/2025
-    - Initial version - First time editing. Future edits and comments will be noted here. Please
-    include your name and date.
-
+Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
@@ -58,10 +55,13 @@ public class UnoGameManager extends CardGameManager {
 
     private UnoGameState gameState;
     private UnoCardImageManager cardImageManager;
+    private UnoModerator moderator;
 
     public UnoGameManager(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty) {
         cardImageManager = new UnoCardImageManager(theme);
         gameState = new UnoGameState(edition, difficulty);
+        selectFirstPlayer();
+        moderator = new UnoModerator(new UnoClassicRules(), gameState);
     }
 
     public UnoGameState getGameState() {
@@ -96,16 +96,12 @@ public class UnoGameManager extends CardGameManager {
         return gameState.getDifficulty();
     }
 
-    public void addPlayer(String name, UnoPlayer player) {
-        gameState.addPlayer(name, player);
+    public void addPlayer(UnoPlayer player) {
+        gameState.addPlayer(player);
     }
 
-    public UnoPlayer getPlayer(String name) {
-        return gameState.getPlayer(name);
-    }
-
-    public List<String> getPlayerNames() {
-        return gameState.getPlayerNames();
+    public UnoPlayer getPlayer(int playerIndex) {
+        return gameState.getPlayer(playerIndex);
     }
 
     public List<UnoPlayer> getPlayers() {
@@ -140,19 +136,53 @@ public class UnoGameManager extends CardGameManager {
         return gameState.getDeck();
     }
 
-    public UnoCard playCard(String name, int index) {
-        return gameState.playCard(name, index);
+    public UnoCard playCard(int playerIndex, int cardIndex) {
+        var machine = gameState.getMachine();
+        var player = gameState.getPlayer(playerIndex);
+        UnoCard card = player.playCard(cardIndex);
+        machine.addCardToDiscardPile(card);
+        return card;
     }
 
-    private void reversePlayDirection() {
-        gameState.reversePlayDirection();
+    private void selectFirstPlayer() {
+        Random random = new Random();
+        var players = getPlayers();
+        UnoPlayer player = players.get(random.nextInt(players.size()));
+        int index = players.indexOf(player);
+        gameState.setPlayerPosition(index);
     }
 
-    private void nextPlayerPosition() {
-        gameState.nextPlayerPosition();
+    public void reversePlayDirection() {
+        PlayDirection direction = gameState.getDirection();
+        direction = direction == PlayDirection.FORWARD ? PlayDirection.REVERSE : PlayDirection.FORWARD;
+        gameState.setDirection(direction);
     }
 
-    private void skipNextPlayerPosition() {
-        gameState.skipNextPlayerPosition();
+    public void nextPlayerPosition() {
+        int playerPosition = gameState.getPlayerPosition();
+        if (gameState.getDirection() == PlayDirection.FORWARD) {
+            playerPosition++;
+        } else {
+            playerPosition--;
+        }
+        gameState.setPlayerPosition(playerPosition);
     }
+
+    public void skipNextPlayerPosition() {
+        int playerPosition = gameState.getPlayerPosition();
+        if (gameState.getDirection() == PlayDirection.FORWARD) {
+            playerPosition += 2;
+        } else {
+            playerPosition -= 2;
+        }
+        gameState.setPlayerPosition(playerPosition);
+    }
+
+    public void applyPenalty(int playerIndex, int cardPenalty) {
+        var player = gameState.getPlayer(playerIndex);
+        for (int i = 0; i < cardPenalty; i++) {
+            player.addCard(gameState.drawCardFromDrawPile());
+        }
+    }
+
 }

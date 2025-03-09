@@ -6,11 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /*
-Last edited: Josiah Stoltzfus
-Date: 3/7/2025
-    - Initial version - First time editing. Future edits and comments will be noted here. Please
-    include your name and date.
-
+Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
@@ -30,8 +26,8 @@ public class UnoDrawPile extends Pile<UnoCard> {
     Refer to Pile for details.
      */
     public UnoCard drawCard() {
-        int index = cardPile.size() - 1;
-        return super.drawCard(index);
+        int cardIndex = cardPile.size() - 1;
+        return drawCard(cardIndex);
     }
 
     // Shuffles the list of UnoCard objects.
