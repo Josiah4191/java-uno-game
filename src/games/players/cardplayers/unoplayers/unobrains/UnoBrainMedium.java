@@ -1,6 +1,10 @@
 package games.players.cardplayers.unoplayers.unobrains;
 
+import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.unogame.UnoGameState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -15,13 +19,9 @@ The gameState is currently missing Rules for validation, so this class is waitin
 will be added later.
  */
 
-public class UnoBrainMedium  extends UnoBrain {
+public class UnoBrainMedium extends UnoBrain {
 
-    public UnoBrainMedium(UnoGameState gameState) {
-        super(gameState);
-    }
-
-    public int analyze() {
+    public int analyze(UnoGameState gameState, List<UnoCard> playableCards) {
         return 0;
     }
 }

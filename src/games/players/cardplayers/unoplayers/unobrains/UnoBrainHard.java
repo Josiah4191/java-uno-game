@@ -1,6 +1,10 @@
 package games.players.cardplayers.unoplayers.unobrains;
 
+import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.unogame.UnoGameState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -17,11 +21,7 @@ will be added later.
 
 public class UnoBrainHard extends UnoBrain {
 
-    public UnoBrainHard(UnoGameState gameState) {
-        super(gameState);
-    }
-
-    public int analyze() {
+    public int analyze(UnoGameState gameState, List<UnoCard> playableCards) {
         return 0;
     }
 }

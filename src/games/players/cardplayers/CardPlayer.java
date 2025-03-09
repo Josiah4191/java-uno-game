@@ -2,6 +2,7 @@ package games.players.cardplayers;
 
 import games.cardgames.cards.Pile;
 import games.players.Player;
+import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,12 +28,14 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     - C represents Card.
      */
     private P playerHand;
+
     /*
     The constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
      */
     public CardPlayer(P playerHand) {
         this.playerHand = playerHand;
     }
+
     /*
     The addCard(C card) method accepts a Card object.
     The playerHand is a Pile object, which calls its addCard method to add that card to the pile.
@@ -40,6 +43,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public void addCard(C card) {
         playerHand.addCard(card);
     }
+
     /*
     The getPlayerHand() method returns a view, or unmodifiable list, of the player's cards.
     The playerHand Pile object has a method getCardPile(), which returns the pile of cards.
@@ -52,6 +56,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public List<C> getPlayerHand() {
         return Collections.unmodifiableList(playerHand.getCardPile());
     }
+
     /*
     The playCard(int index) method returns a Card object. The index parameter is an integer that identifies the
     card in their pile of cards that they want to remove.
@@ -62,26 +67,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public C playCard(int cardIndex) {
         return playerHand.drawCard(cardIndex);
     }
-    /*
-    The playCard() method returns the first card from the player's Pile of cards. If the player's Pile is empty,
-    then this method will return null.
 
-    WARNING:
-        - This method is not to be used by human players.
-        - This method is meant to be overridden by AI players (e.g., The UnoPlayerAI overrides the playCard() method
-        to make its own decision for which card to play).
-        - The overridden playCard() method in UnoPlayerAI calls the playCard(int index) method.
-        - The reason this parameterless playCard() method exists is to allow an UnoPlayer reference type to call
-        the playCard() method for an UnoPlayerAI object.
-        - UnoPlayerAI subclasses UnoPlayer. UnoPlayer subclasses CardPlayer.
-        - This solution isn't ideal. A different approach may be implemented later.
-     */
-    public C playCard() {
-        if (playerHand.isEmpty()) {
-            return null;
-        }
-        return playerHand.drawCard(0);
-    }
     /*
     The getTotalCardsRemaining() method returns an integer that represents the number of cards remaining in a
     player's Pile of cards.
@@ -89,10 +75,12 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public int getTotalCardsRemaining() {
         return playerHand.size();
     }
+
     /*
     The isEmpty() method returns a boolean that indicates if the player's Pile of cards is empty.
      */
     public boolean isEmpty() {
         return playerHand.isEmpty();
     }
+
 }

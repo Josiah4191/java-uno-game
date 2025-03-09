@@ -11,18 +11,18 @@ import static games.cardgames.cards.unocards.UnoValue.DRAW_TWO;
 
 public class UnoCardClassicImages {
 
-/*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Author: Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
+    /*
+    Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
+    Author: Josiah Stoltzfus
+    Date: 3/7/2025
+    ------------------------------------------------------------------------------
 
-This class contains Maps for storing classic images of Uno cards.
-    - Outer map keys are suits (e.g., RED, GREEN, BLUE, YELLOW, WILD).
-    - Outer map values are maps.
-        - Inner map keys correspond to card values within their suit.
-        - Inner map values are file paths for an image.
- */
+    This class contains Maps for storing classic images of Uno cards.
+        - Outer map keys are suits (e.g., RED, GREEN, BLUE, YELLOW, WILD).
+        - Outer map values are maps.
+            - Inner map keys correspond to card values within their suit.
+            - Inner map values are file paths for an image.
+     */
     // @formatter:off
     protected static final Map<UnoSuit, Map<UnoValue, String>> IMAGES = new HashMap<>(Map.of(
             RED, new HashMap<>(Map.ofEntries(

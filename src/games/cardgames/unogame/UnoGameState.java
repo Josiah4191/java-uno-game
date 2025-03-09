@@ -2,10 +2,7 @@ package games.cardgames.unogame;
 
 import games.Difficulty;
 import games.cardgames.CardGameState;
-import games.cardgames.cards.unocards.UnoCard;
-import games.cardgames.cards.unocards.UnoCardMachine;
-import games.cardgames.cards.unocards.UnoDeck;
-import games.cardgames.cards.unocards.UnoEdition;
+import games.cardgames.cards.unocards.*;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.ArrayList;
@@ -68,20 +65,27 @@ What this class contains:
 
 public class UnoGameState extends CardGameState {
 
-    private UnoCardMachine machine;
+    private UnoRules rules = new UnoClassicRules();
     private List<UnoPlayer> players = new ArrayList<>();
-    private UnoModerator moderator;
-    private Difficulty difficulty;
+    private UnoModerator moderator = new UnoModerator();
     private PlayDirection direction = PlayDirection.FORWARD;
-    private int playerPosition;
+    private Difficulty difficulty;
+    private UnoCardImageManager cardImageManager;
+    private UnoCardMachine machine;
+    private int currentPlayerIndex;
 
-    public UnoGameState(UnoEdition edition, Difficulty difficulty) {
-        machine = new UnoCardMachine(new UnoDeck(edition));
+    public UnoGameState(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty) {
+        cardImageManager = new UnoCardImageManager(theme);
+        machine = new UnoCardMachine(edition);
         this.difficulty = difficulty;
     }
 
     public void addPlayer(UnoPlayer player) {
         players.add(player);
+    }
+
+    public void addPlayers(List<UnoPlayer> players) {
+        this.players.addAll(players);
     }
 
     public UnoPlayer getPlayer(int playerIndex) {
@@ -140,12 +144,27 @@ public class UnoGameState extends CardGameState {
         return machine;
     }
 
-    public int getPlayerPosition() {
-        return playerPosition;
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
     }
 
-    public void setPlayerPosition(int playerPosition) {
-        this.playerPosition = playerPosition;
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
     }
 
+    public UnoRules getRules() {
+        return rules;
+    }
+
+    public void setRules(UnoRules rules) {
+        this.rules = rules;
+    }
+
+    public UnoCardImageManager getCardImageManager() {
+        return cardImageManager;
+    }
+
+    public UnoModerator getModerator() {
+        return moderator;
+    }
 }

@@ -4,72 +4,123 @@ import games.Difficulty;
 import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
+import games.cardgames.unogame.PlayDirection;
+import games.cardgames.unogame.UnoClassicRules;
 import games.cardgames.unogame.UnoGameManager;
+import games.cardgames.unogame.UnoRules;
 import games.players.cardplayers.unoplayers.UnoPlayer;
+import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
 import java.util.List;
 
 public class Test {
     public static void main(String[] args) {
-        // create UnoGameManager
-        UnoGameManager gameManager = new UnoGameManager(UnoEdition.CLASSIC, UnoCardTheme.CLASSIC, Difficulty.EASY);
-        // when gameManager is created, the Deck is created and automatically transferred to the draw pile
-        // loop through the deck. it will be empty because it automatically transferred to draw pile
-        gameManager.getDeck().forEach(System.out::println);
-        // get the number of cards in the deck
-        System.out.println(gameManager.getDeck().size());
-        // check if the deck is empty
-        System.out.println(gameManager.getDeck().isEmpty());
-        System.out.println();
 
-        // loop through draw pile. it will contain a shuffled 108 card uno deck
-        gameManager.getDrawPile().forEach(System.out::println);
-        // get the number of cards
-        System.out.println(gameManager.getDrawPile().size());
-        // check if the draw pile is empty
-        System.out.println(gameManager.getDeck().isEmpty());
-        System.out.println();
+        // create game manager
+        UnoGameManager manager = new UnoGameManager(UnoEdition.CLASSIC, UnoCardTheme.CLASSIC, Difficulty.EASY);
 
-        // loop through the discard pile. it will be empty right now because we didn't add a card yet
-        gameManager.getDiscardPile().forEach(System.out::println);
-        // check the number of cards in discard pile
-        System.out.println(gameManager.getDiscardPile().size());
-        // check if the draw pile is empty
-        System.out.println(gameManager.getDeck().isEmpty());
-        System.out.println();
+        // get the deck
+        manager.getDeck();
 
-        // look at the last card of the draw pile from the list
-        gameManager.getDrawPile().forEach(System.out::println);
-        // add a card to the discard pile from the draw pile
-        UnoCard card = gameManager.drawCardFromDrawPile();
-        // check the size of the draw pile to see that the card was removed
-        System.out.println(gameManager.getDrawPile().size());
-        // check the size of the discard pile to see that a card was added
-        System.out.println(gameManager.getDiscardPile().size());
-        // check the actual card in the discard pile to verify that it was the card that was removed
-        gameManager.getDrawPile().forEach(System.out::println);
+        // get the draw pile
+        manager.getDrawPile();
 
-        // add a player to the game
-        //gameManager.addPlayer("Josiah", new UnoPlayer());
-        //gameManager.addPlayer("Computer1", new UnoPlayerAI(gameManager.getGameState()));
+        // get the discard pile
+        manager.getDiscardPile();
 
-        // get the list of players
-        List<UnoPlayer> players = gameManager.getPlayers();
+        // get the rules
+        UnoRules rules = manager.getRules();
 
-        // get the list of player names
-        //List<String> playerNames = gameManager.getPlayerNames();
+        // set the rules
+        manager.setRules(new UnoClassicRules());
 
-        // deal cards to the players
-        gameManager.dealCards(7, players);
+        // get the difficulty
+        Difficulty difficulty = manager.getDifficulty();
 
-        // get a player
-        //UnoPlayer playerJosiah = gameManager.getPlayer("Josiah");
-        //UnoPlayer computer1Player = gameManager.getPlayer("Computer1");
-        //System.out.println(playerJosiah.getClass());
-        //System.out.println(computer1Player.getClass());
-        // play a card
-        //computer1Player.playCard();
-        //playerJosiah.playCard(3);
+        // set the difficulty
+        manager.setDifficulty(Difficulty.EASY);
+
+        // get the card theme
+        manager.getTheme();
+
+        // set the card theme
+        manager.setTheme(UnoCardTheme.CLASSIC);
+
+        // get the uno game edition
+        UnoEdition edition = manager.getEdition();
+
+        // get the direction of play
+        PlayDirection direction = manager.getDirection();
+
+        // reverse the direction of play
+        manager.reversePlayDirection();
+
+        // create a player
+        UnoPlayer player = new UnoPlayer();
+        UnoPlayer playerAI1 = new UnoPlayerAI(manager.getGameState());
+        UnoPlayer playerAI2 = new UnoPlayerAI(manager.getGameState());
+
+
+        // add single player to game
+        manager.addPlayer(player);
+
+        // add list of players to game
+        manager.addPlayers(List.of(player, playerAI1, playerAI2));
+
+        // get a single player
+        manager.getPlayer(0);
+
+        // get a list of the players
+        manager.getPlayers();
+
+        // deal cards to players
+        manager.dealCards(7, List.of(player, playerAI1, playerAI2));
+
+        // get the current player position
+        //int playerPosition = manager.getPlayerPosition();
+
+        // set the next player position
+        manager.moveToNextPlayer();
+
+        // skip the next player and set position
+        manager.skipNextPlayer();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /*
         ideas: player class

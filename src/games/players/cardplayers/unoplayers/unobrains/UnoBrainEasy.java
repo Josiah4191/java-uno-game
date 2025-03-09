@@ -1,6 +1,12 @@
 package games.players.cardplayers.unoplayers.unobrains;
 
+import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.unogame.UnoGameState;
+import games.players.cardplayers.unoplayers.UnoPlayer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -17,11 +23,9 @@ will be added later.
 
 public class UnoBrainEasy extends UnoBrain {
 
-    public UnoBrainEasy(UnoGameState gameState) {
-        super(gameState);
-    }
-
-    public int analyze() {
-        return 0;
+    public int analyze(UnoGameState gameState, List<UnoCard> playableCards) {
+        Random random = new Random();
+        UnoCard card = playableCards.get(random.nextInt(playableCards.size()));
+        return playableCards.indexOf(card);
     }
 }

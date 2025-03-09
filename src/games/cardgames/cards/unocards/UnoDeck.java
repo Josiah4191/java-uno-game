@@ -25,6 +25,7 @@ public class UnoDeck extends Deck<UnoCard, UnoEdition> {
         deck = UnoDeckFactory.createDeck(edition);
         shuffle();
     }
+
     /*
     Receives an UnoDrawPile object and transfers the Card objects from the deck to the draw pile's list of cards.
     The deck.clear() method clears its cards after transfer.
