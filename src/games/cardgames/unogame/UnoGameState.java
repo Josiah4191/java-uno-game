@@ -1,7 +1,6 @@
 package games.cardgames.unogame;
 
 import games.Difficulty;
-import games.Moderator;
 import games.cardgames.CardGameState;
 import games.cardgames.cards.unocards.*;
 import games.players.cardplayers.unoplayers.UnoPlayer;
@@ -73,7 +72,7 @@ public class UnoGameState extends CardGameState {
     private Difficulty difficulty;
     private UnoCardImageManager cardImageManager;
     private UnoCardMachine machine;
-    private int playerPosition;
+    private int currentPlayerIndex;
 
     public UnoGameState(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty) {
         cardImageManager = new UnoCardImageManager(theme);
@@ -83,6 +82,10 @@ public class UnoGameState extends CardGameState {
 
     public void addPlayer(UnoPlayer player) {
         players.add(player);
+    }
+
+    public void addPlayers(List<UnoPlayer> players) {
+        this.players.addAll(players);
     }
 
     public UnoPlayer getPlayer(int playerIndex) {
@@ -141,12 +144,12 @@ public class UnoGameState extends CardGameState {
         return machine;
     }
 
-    public int getPlayerPosition() {
-        return playerPosition;
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
     }
 
-    public void setPlayerPosition(int playerPosition) {
-        this.playerPosition = playerPosition;
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
     }
 
     public UnoRules getRules() {
@@ -164,5 +167,4 @@ public class UnoGameState extends CardGameState {
     public UnoModerator getModerator() {
         return moderator;
     }
-
 }
