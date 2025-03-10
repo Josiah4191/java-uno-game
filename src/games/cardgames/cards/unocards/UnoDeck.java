@@ -30,8 +30,8 @@ public class UnoDeck extends Deck<UnoCard, UnoEdition> {
     Receives an UnoDrawPile object and transfers the Card objects from the deck to the draw pile's list of cards.
     The deck.clear() method clears its cards after transfer.
      */
-    protected void transferDeckToDrawPile(UnoDrawPile pile) {
-        pile.fill(deck);
+    protected void transferUnoDeckToDrawPile(UnoDrawPile drawPile) {
+        drawPile.fill(deck);
         deck.clear();
     }
 }

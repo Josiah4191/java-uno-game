@@ -6,7 +6,6 @@ import games.cardgames.cards.unocards.*;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /*
@@ -93,7 +92,7 @@ public class UnoGameState extends CardGameState {
     }
 
     public List<UnoPlayer> getPlayers() {
-        return Collections.unmodifiableList(players);
+        return players;
     }
 
     public UnoCard getLastPlayedCard() {

@@ -50,6 +50,7 @@ public class UnoCardMachine {
         if (drawPile.isEmpty()) {
             transferDiscardPileToDrawPile();
             shuffleDrawPile();
+            drawCardFromDrawPile();
         }
         UnoCard card = drawPile.drawCard();
         addCardToDiscardPile(card);
@@ -65,7 +66,7 @@ public class UnoCardMachine {
     }
 
     private void transferDeckToDrawPile() {
-        deck.transferDeckToDrawPile(drawPile);
+        deck.transferUnoDeckToDrawPile(drawPile);
     }
 
     public void addCardToDiscardPile(UnoCard card) {

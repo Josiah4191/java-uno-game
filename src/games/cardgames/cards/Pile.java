@@ -1,5 +1,7 @@
 package games.cardgames.cards;
 
+import games.cardgames.unogame.DuplicateCardException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,11 @@ public abstract class Pile<C> {
     }
 
     public void addCard(C card) {
+        for (var c: cardPile) {
+            if (c == card) {
+                throw new DuplicateCardException("Card already exists in the pile.");
+            }
+        }
         cardPile.add(card);
     }
 

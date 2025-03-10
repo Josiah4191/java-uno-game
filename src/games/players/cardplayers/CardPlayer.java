@@ -1,8 +1,8 @@
 package games.players.cardplayers;
 
 import games.cardgames.cards.Pile;
+import games.cardgames.cards.unocards.UnoCard;
 import games.players.Player;
-import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
 import java.util.Collections;
 import java.util.List;
@@ -81,6 +81,13 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
      */
     public boolean isEmpty() {
         return playerHand.isEmpty();
+    }
+
+    public void swapCardPositions(UnoCard card1, UnoCard card2) {
+        var cards = playerHand.getCardPile();
+        int card1Index = cards.indexOf(card1);
+        int card2Index = cards.indexOf(card2);
+        Collections.swap(cards, card1Index, card2Index);
     }
 
 }

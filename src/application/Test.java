@@ -1,7 +1,6 @@
 package application;
 
 import games.Difficulty;
-import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.PlayDirection;
@@ -20,13 +19,22 @@ public class Test {
         UnoGameManager manager = new UnoGameManager(UnoEdition.CLASSIC, UnoCardTheme.CLASSIC, Difficulty.EASY);
 
         // get the deck
-        manager.getDeck();
+        var deck = manager.getDeck();
+        System.out.println("Deck:");
+        deck.forEach(System.out::println);
+        System.out.println();
 
         // get the draw pile
-        manager.getDrawPile();
+        var drawPile = manager.getDrawPile();
+        System.out.println("Draw pile: " + drawPile.size() + " cards");
+        drawPile.forEach(System.out::println);
+        System.out.println();
 
         // get the discard pile
-        manager.getDiscardPile();
+        var discardPile = manager.getDiscardPile();
+        System.out.println("Discard pile:");
+        discardPile.forEach(System.out::println);
+        System.out.println();
 
         // get the rules
         UnoRules rules = manager.getRules();
@@ -41,49 +49,161 @@ public class Test {
         manager.setDifficulty(Difficulty.EASY);
 
         // get the card theme
-        manager.getTheme();
+        UnoCardTheme theme = manager.getTheme();
+        System.out.print("Theme: ");
+        System.out.println(theme);
+        System.out.println();
 
         // set the card theme
         manager.setTheme(UnoCardTheme.CLASSIC);
 
         // get the uno game edition
         UnoEdition edition = manager.getEdition();
+        System.out.print("Edition: ");
+        System.out.println(edition);
+        System.out.println();
 
         // get the direction of play
         PlayDirection direction = manager.getDirection();
+        System.out.print("Direction: ");
+        System.out.println(direction);
+        System.out.println();
 
         // reverse the direction of play
         manager.reversePlayDirection();
 
+        // get the new direction of play
+        PlayDirection newDirection = manager.getDirection();
+        System.out.print("New direction after using the reverseDirection method: ");
+        System.out.println(newDirection);
+        System.out.println();
+
+        // reverse the direction back to forward
+        manager.reversePlayDirection();
+
+        // get the direction of play again
+        PlayDirection secondReverseDirection = manager.getDirection();
+        System.out.print("Direction after reversing a second time: ");
+        System.out.println(secondReverseDirection);
+        System.out.println();
+
         // create a player
-        UnoPlayer player = new UnoPlayer();
+        UnoPlayer player1 = new UnoPlayer();
+        UnoPlayer player2 = new UnoPlayer();
         UnoPlayer playerAI1 = new UnoPlayerAI(manager.getGameState());
         UnoPlayer playerAI2 = new UnoPlayerAI(manager.getGameState());
+        UnoPlayer playerAI3 = new UnoPlayerAI(manager.getGameState());
+        UnoPlayer playerAI4 = new UnoPlayerAI(manager.getGameState());
+        UnoPlayer playerAI5 = new UnoPlayerAI(manager.getGameState());
+        UnoPlayer playerAI6 = new UnoPlayerAI(manager.getGameState());
 
+        // set some names (testing purposes)
+        player1.setName("Josiah");
+        player2.setName("Aaron");
+        playerAI1.setName("AI 1");
+        playerAI2.setName("AI 2");
+        playerAI3.setName("AI 3");
+        playerAI4.setName("AI 4");
+        playerAI5.setName("AI 5");
+        playerAI6.setName("AI 6");
 
-        // add single player to game
-        manager.addPlayer(player);
+        // add single player to game ( 1 player)
+        manager.addPlayer(player1);
 
-        // add list of players to game
-        manager.addPlayers(List.of(player, playerAI1, playerAI2));
+        // add list of players to game ( 7 players)
+        manager.addPlayers(List.of(player2, playerAI1, playerAI2, playerAI3, playerAI4, playerAI5, playerAI6));
 
         // get a single player
-        manager.getPlayer(0);
+        UnoPlayer playerIndex0 = manager.getPlayer(0);
+        System.out.print("Player index 0: ");
+        System.out.println(playerIndex0);
+        System.out.println();
 
         // get a list of the players
-        manager.getPlayers();
+        var playerList = manager.getPlayers();
+        System.out.println("List of players: ");
+        playerList.forEach(System.out::println);
+        System.out.println();
+
+        // get the number of players (should be 8 players)
+        int numberOfPlayers = manager.getPlayers().size();
+        System.out.print("Number of players: ");
+        System.out.println(numberOfPlayers);
+        System.out.println();
 
         // deal cards to players
-        manager.dealCards(7, List.of(player, playerAI1, playerAI2));
+        manager.dealCards(7, playerList);
 
-        // get the current player position
-        //int playerPosition = manager.getPlayerPosition();
+        // get the current player
+        UnoPlayer currentPlayer = manager.getCurrentPlayer();
+        System.out.print("Current player: ");
+        System.out.println(currentPlayer);
+        System.out.println();
 
-        // set the next player position
+        // get the current player index
+        int currentPlayerIndex = manager.getCurrentPlayerIndex();
+        System.out.print("Current player index: ");
+        System.out.println(currentPlayerIndex);
+        System.out.println();
+
+        // move to the next player
         manager.moveToNextPlayer();
 
-        // skip the next player and set position
+        // get the current player after moving
+        UnoPlayer nextCurrentPlayer = manager.getCurrentPlayer();
+        System.out.print("Current player after moving to the next player: ");
+        System.out.println(nextCurrentPlayer);
+        System.out.println();
+
+        // get the player who comes after the current player, but don't move to them yet
+        UnoPlayer nextPlayer = manager.getNextPlayer();
+        System.out.print("View who the next player is, but don't move yet: ");
+        System.out.println(nextPlayer);
+        System.out.println();
+
+        // move and skip the next player
         manager.skipNextPlayer();
+
+        // get the current player after skipping
+        UnoPlayer nextPlayerAfterSKip = manager.getCurrentPlayer();
+        System.out.print("Current player after skipping the next player: ");
+        System.out.println(nextPlayerAfterSKip);
+        System.out.println();
+
+
+        // reverse the direction
+        manager.reversePlayDirection();
+
+        // get the current player
+        UnoPlayer currentPlayer2 = manager.getCurrentPlayer();
+        System.out.println("Current player: " + currentPlayer2);
+        System.out.println();
+
+        // get the next player moving in reverse
+        UnoPlayer nextPlayer2 = manager.getNextPlayer();
+        System.out.println("View the next player moving in reverse, but don't move yet: " + nextPlayer2);
+        System.out.println();
+
+        // move to the next player in reverse
+        manager.moveToNextPlayer();
+
+        // get the new current player after moving
+        UnoPlayer playerAfterMovingReverse = manager.getCurrentPlayer();
+        System.out.println("Current player after moving in reverse: " + playerAfterMovingReverse);
+        System.out.println();
+
+        // view the next player again
+        UnoPlayer nextPlayer3 = manager.getNextPlayer();
+        System.out.println("View the next player again moving in reverse, but don't move yet: " + nextPlayer3);
+        System.out.println();
+
+        // skip the next player
+        manager.skipNextPlayer();
+
+        // get the current player after skipping
+        UnoPlayer currentPlayerAfterSkipping = manager.getCurrentPlayer();
+        System.out.println("Current player after skipping: " + currentPlayerAfterSkipping);
+        System.out.println();
 
 
 

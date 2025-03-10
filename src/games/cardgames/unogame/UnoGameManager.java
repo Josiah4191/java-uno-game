@@ -2,9 +2,12 @@ package games.cardgames.unogame;
 
 import games.Difficulty;
 import games.cardgames.CardGameManager;
-import games.cardgames.cards.unocards.*;
+import games.cardgames.cards.unocards.UnoCard;
+import games.cardgames.cards.unocards.UnoCardTheme;
+import games.cardgames.cards.unocards.UnoEdition;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -173,7 +176,7 @@ public class UnoGameManager extends CardGameManager {
         int currentPlayerIndex = getCurrentPlayerIndex();
         int numberOfPlayers = gameState.getPlayers().size();
 
-        if (gameState.getDirection() == PlayDirection.FORWARD) {
+        if (gameState.getDirection().isForward()) {
             currentPlayerIndex += numberToSkipAhead;
         } else {
             currentPlayerIndex -= numberToSkipAhead;
@@ -215,4 +218,10 @@ public class UnoGameManager extends CardGameManager {
         }
     }
 
+    public void swapPlayerPositions(UnoPlayer player1, UnoPlayer player2) {
+        var players = getPlayers();
+        int player1Position = players.indexOf(player1);
+        int player2Position = players.indexOf(player2);
+        Collections.swap(players, player1Position, player2Position);
+    }
 }
