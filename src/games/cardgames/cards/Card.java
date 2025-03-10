@@ -47,11 +47,4 @@ public abstract class Card<S extends Enum<S>, V extends Enum<V>> {
         return "Suit: " + suit + " | " + "Value: " + value;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean status) {
-        this.active = status;
-    }
 }

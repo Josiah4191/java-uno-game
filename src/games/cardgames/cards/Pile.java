@@ -1,10 +1,7 @@
 package games.cardgames.cards;
 
-import games.cardgames.unogame.DuplicateCardException;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus

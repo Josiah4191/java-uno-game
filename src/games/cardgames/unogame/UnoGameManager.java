@@ -118,10 +118,6 @@ public class UnoGameManager extends CardGameManager {
         gameState.dealCards(numberOfCards, players);
     }
 
-    public UnoCard drawCardFromDrawPile() {
-        return gameState.drawCardFromDrawPile();
-    }
-
     public UnoEdition getEdition() {
         return gameState.getEdition();
     }
@@ -146,12 +142,29 @@ public class UnoGameManager extends CardGameManager {
         gameState.setRules(rules);
     }
 
-    public UnoCard playCard(int playerIndex, int cardIndex) {
+    public UnoCard drawCardFromDrawPile() {
         var machine = gameState.getMachine();
-        var player = gameState.getPlayer(playerIndex);
-        UnoCard card = player.playCard(playerIndex);
+        UnoCard card = gameState.drawCardFromDrawPile();
         machine.addCardToDiscardPile(card);
         return card;
+    }
+
+    public UnoCard playCard(int playerIndex, int cardIndex) {
+        var player = gameState.getPlayer(playerIndex);
+        UnoCard card = player.playCard(cardIndex);
+        addCardToDiscardPile(card);
+        return card;
+    }
+
+    public void addCardToDiscardPile(UnoCard card) {
+        var machine = gameState.getMachine();
+        machine.addCardToDiscardPile(card);
+    }
+
+    public void addCardToPlayer(int playerIndex, UnoCard card) {
+        var players = getPlayers();
+        UnoPlayer player = players.get(playerIndex);
+        player.addCard(card);
     }
 
     private void selectFirstPlayer() {

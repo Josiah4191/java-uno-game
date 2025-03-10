@@ -1,13 +1,11 @@
 package games.players.cardplayers.unoplayers;
 
-import games.Difficulty;
 import games.cardgames.cards.unocards.UnoCard;
-import games.cardgames.cards.unocards.UnoPlayerHandPile;
 import games.cardgames.unogame.UnoGameState;
 import games.cardgames.unogame.UnoModerator;
 import games.cardgames.unogame.UnoRules;
-import games.players.cardplayers.CardPlayer;
-import games.players.cardplayers.unoplayers.unobrains.*;
+import games.players.cardplayers.unoplayers.unobrains.UnoBrain;
+import games.players.cardplayers.unoplayers.unobrains.UnoBrainFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +46,8 @@ public class UnoPlayerAI extends UnoPlayer {
     @Override
     public UnoCard playCard(int cardIndex) {
         var playableCards = getPlayableCards();
-        return playCard(brain.analyze(gameState, playableCards));
+        cardIndex = brain.analyze(gameState, playableCards);
+        return super.playCard(cardIndex);
     }
 
     private List<UnoCard> getPlayableCards() {

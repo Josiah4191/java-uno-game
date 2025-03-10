@@ -11,8 +11,8 @@ import java.util.List;
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Author: Josiah Stoltzfus
 Date: 3/7/2025
-------------------------------------------------------------------------------
-
+-----------------------------------------------------------------------------
+-
 This abstract generic class represents a player for card games.
     - Each card game should subclass Pile to have its own type of pile representing a player's cards.
     - Each card game should subclass Card to have its own type of card.
@@ -35,7 +35,6 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     public CardPlayer(P playerHand) {
         this.playerHand = playerHand;
     }
-
     /*
     The addCard(C card) method accepts a Card object.
     The playerHand is a Pile object, which calls its addCard method to add that card to the pile.

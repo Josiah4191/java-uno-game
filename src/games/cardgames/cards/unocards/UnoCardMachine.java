@@ -52,8 +52,7 @@ public class UnoCardMachine {
             shuffleDrawPile();
             drawCardFromDrawPile();
         }
-        UnoCard card = drawPile.drawCard();
-        return card;
+        return drawPile.drawCard();
     }
 
     public UnoCard getLastPlayedCard() {
