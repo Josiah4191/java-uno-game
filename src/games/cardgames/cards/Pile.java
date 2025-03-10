@@ -4,6 +4,7 @@ import games.cardgames.unogame.DuplicateCardException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -30,11 +31,6 @@ public abstract class Pile<C> {
     }
 
     public void addCard(C card) {
-        for (var c: cardPile) {
-            if (c == card) {
-                throw new DuplicateCardException("Card already exists in the pile.");
-            }
-        }
         cardPile.add(card);
     }
 
@@ -55,11 +51,3 @@ public abstract class Pile<C> {
         return cardPile.isEmpty();
     }
 }
-
-/*
-    Note to self: (Josiah)
-        - Consider changing generic type to extend Card<S, V> to force C to be a Card object. This can also apply
-        to the Deck class.
-        - Consider Pile extend Deck, or Deck extend pile. It seems like there are similarities between
-        them.
- */

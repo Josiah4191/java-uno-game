@@ -5,7 +5,9 @@ import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.UnoGameManager;
+import games.cardgames.unogame.UnoGameState;
 import games.players.cardplayers.unoplayers.UnoPlayer;
+import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
 public class TestCardManagement {
     public static void main(String[] args) {
@@ -64,12 +66,34 @@ public class TestCardManagement {
         // UnoPlayer player1 = manager.getPlayer(0);
         // player1.addCard(card1);
 
+        // we also need to handle when playing cards when the player has no cards
+        // we need to handle getting players when there are no players
+        // handle drawing cards when there are no cards
+        // handle transferring cards when there are no cards
+
+        /*
+        should we figure out a way to keep track of where each card is at all times?
+        think about this: right now, we can't add the same card to a pile. an exception
+        will be thrown. but what if we have 'card1' in a pile, and then try to add 'card1'
+        to another pile? we would need to stop that from happening as well. our cards objects
+        need to pass some sort of verification process in order to be added to a pile. i think
+        instead of doing really loops through other piles to see if the card exists, maybe
+        we can store an on/off switch in cards. if we try to add a card, we check their on/off
+        switch. if they are on, then we can't add it to the pile. if they are off, we can add it to
+        the pile. when we draw the card, we turn the switch off before adding it to another pile.
+        this should also solve the problem of trying to add a duplicate card. because if we try to add
+        it to the same pile, then the switch would be on, and the exception will be thrown.
+        */
+
         // create a player
         UnoPlayer player1 = new UnoPlayer();
         player1.setName("Josiah");
+        UnoPlayer robot1 = new UnoPlayerAI(manager.getGameState());
+        robot1.setName("Robot 1");
 
         // add the player to the game
         manager.addPlayer(player1);
+        manager.addPlayer(robot1);
 
         // get the players hand of cards
         var cards = player1.getPlayerHand();
@@ -89,7 +113,16 @@ public class TestCardManagement {
 
         // see what happens if we add card1 to the hand again
         // this throws a DuplicateCardException because both cards are the same
-        player1.addCard(card1);
+        //player1.addCard(card1);
+
+        // see what happens if we try to add card1 to a player when another player already has
+        // that card
+        robot1.addCard(card1);
+
+        // see what happens when we try to add card1 to a pile if it already exists in another
+        // pile (player hand, draw pile, discard pile)
+        
+
 
 
 

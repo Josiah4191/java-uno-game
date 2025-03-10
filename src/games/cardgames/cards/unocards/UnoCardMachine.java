@@ -53,7 +53,6 @@ public class UnoCardMachine {
             drawCardFromDrawPile();
         }
         UnoCard card = drawPile.drawCard();
-        addCardToDiscardPile(card);
         return card;
     }
 
@@ -74,7 +73,7 @@ public class UnoCardMachine {
     }
 
     private void transferDiscardPileToDrawPile() {
-        discardPile.transferCardsToDrawPile(drawPile);
+        discardPile.transferDiscardPileToDrawPile(drawPile);
     }
 
     public UnoEdition getEdition() {

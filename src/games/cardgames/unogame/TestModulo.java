@@ -1,6 +1,6 @@
 package games.cardgames.unogame;
 
-public class Test {
+public class TestModulo {
     public static void main(String[] args) {
 
         /*

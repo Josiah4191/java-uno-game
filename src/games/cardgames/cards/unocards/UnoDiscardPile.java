@@ -25,7 +25,7 @@ public class UnoDiscardPile extends Pile<UnoCard> {
     Receives an UnoDrawPile object, and transfers all UnoCard objects in the list to the drawPile's list, then the
     cards are removed from the list.
      */
-    protected void transferCardsToDrawPile(UnoDrawPile drawPile) {
+    protected void transferDiscardPileToDrawPile(UnoDrawPile drawPile) {
         drawPile.fill(cardPile);
         cardPile.clear();
     }

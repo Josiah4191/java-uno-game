@@ -22,7 +22,6 @@ public class TestPlayerManagement {
         players.forEach(System.out::println);
         System.out.println();
 
-
         // create a single player
         UnoPlayer playerJosiah = new UnoPlayer();
         playerJosiah.setName("Josiah");
