@@ -1,5 +1,6 @@
 package games.cardgames.cards.unocards;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,21 +25,24 @@ public class UnoCardClassicImages {
             - Inner map values are file paths for an image.
      */
     // @formatter:off
+    String cwd = System.getProperty("user.dir");
+
+
     protected static final Map<UnoSuit, Map<UnoValue, String>> IMAGES = new HashMap<>(Map.of(
             RED, new HashMap<>(Map.ofEntries(
-                    entry(ZERO, "RED ZERO IMAGE"),
-                    entry(ONE, "RED ONE IMAGE"),
-                    entry(TWO, "RED TWO IMAGE"),
-                    entry(THREE, "RED THREE IMAGE"),
-                    entry(FOUR, "RED FOUR IMAGE"),
-                    entry(FIVE, "RED FIVE IMAGE"),
-                    entry(SIX, "RED SIX IMAGE"),
-                    entry(SEVEN, "RED SEVEN IMAGE"),
-                    entry(EIGHT, "RED EIGHT IMAGE"),
-                    entry(NINE, "RED NINE IMAGE"),
-                    entry(SKIP, "RED SKIP IMAGE"),
-                    entry(REVERSE, "RED REVERSE IMAGE"),
-                    entry(DRAW_TWO, "RED DRAW TWO IMAGE"))),
+                    entry(ZERO, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(ONE, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(TWO, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(THREE, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(FOUR, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(FIVE, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(SIX, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(SEVEN, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(EIGHT, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(NINE, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(SKIP, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(REVERSE, "cwd" + File.separator + "images/cardimages/Red_0.png"),
+                    entry(DRAW_TWO, "cwd" + File.separator + "images/cardimages/Red_0.png"))),
             GREEN, new HashMap<>(Map.ofEntries(
                     entry(ZERO, "GREEN ZERO IMAGE"),
                     entry(ONE, "GREEN ONE IMAGE"),

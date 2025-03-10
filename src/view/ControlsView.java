@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-
 public class ControlsView {
     private VBox controlsBox;
 
@@ -15,8 +14,10 @@ public class ControlsView {
         controlsBox.setPadding(new Insets(5));
         controlsBox.setAlignment(Pos.CENTER);
 
-        Label playerFrame = new Label("Player: Your Name");
+        Label playerFrame = new Label("Player Portrait");
+        Label playerName = new Label("Player name");
         playerFrame.setStyle("-fx-text-fill: white;");
+        playerName.setStyle("-fx-text-fill: white;");
 
         HBox controlButtonsBox = new HBox(10);
         controlButtonsBox.setAlignment(Pos.CENTER);
@@ -27,7 +28,7 @@ public class ControlsView {
 
         controlButtonsBox.getChildren().addAll(playCardButton, drawCardButton, passTurnButton);
 
-        controlsBox.getChildren().addAll(playerFrame, controlButtonsBox);
+        controlsBox.getChildren().addAll(playerFrame, playerName, controlButtonsBox);
     }
 
     public VBox getView() {

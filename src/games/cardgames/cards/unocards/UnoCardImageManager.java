@@ -17,6 +17,8 @@ NOTE:
     getImage() is returning a descriptive String since there are no images yet.
  */
 
+import javafx.scene.image.Image;
+
 public class UnoCardImageManager {
 
     // Variable for the theme.
