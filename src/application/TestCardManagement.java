@@ -5,7 +5,6 @@ import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.UnoGameManager;
-import games.cardgames.unogame.UnoGameState;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
@@ -55,7 +54,7 @@ public class TestCardManagement {
         System.out.println();
 
         // get the card that is in the discard pile
-        UnoCard card2 = discardPile.get(0);
+        UnoCard card2 = discardPile.getFirst();
 
         // verify that the card in the discard pile is the same object as the card that was drawn from earlier
         System.out.println("They are the same object: " + (card1 == card2));
@@ -76,7 +75,7 @@ public class TestCardManagement {
         think about this: right now, we can't add the same card to a pile. an exception
         will be thrown. but what if we have 'card1' in a pile, and then try to add 'card1'
         to another pile? we would need to stop that from happening as well. our cards objects
-        need to pass some sort of verification process in order to be added to a pile. i think
+        need to pass some sort of verification process in order to be added to a pile, I think
         instead of doing really loops through other piles to see if the card exists, maybe
         we can store an on/off switch in cards. if we try to add a card, we check their on/off
         switch. if they are on, then we can't add it to the pile. if they are off, we can add it to
