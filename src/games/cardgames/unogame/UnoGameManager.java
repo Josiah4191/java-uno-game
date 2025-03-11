@@ -246,6 +246,10 @@ public class UnoGameManager extends CardGameManager {
         UnoPlayer player2 = new UnoPlayerAI(getGameState());
         UnoPlayer player3 = new UnoPlayerAI(getGameState());
         UnoPlayer player4 = new UnoPlayerAI(getGameState());
+        mainPlayer.setName("Player 1");
+        player2.setName("Player 2");
+        player3.setName("Player 3");
+        player4.setName("Player 4");
 
         // create list of players
         var players = new ArrayList<UnoPlayer>(List.of(mainPlayer, player2, player3, player4));
@@ -254,9 +258,12 @@ public class UnoGameManager extends CardGameManager {
         addPlayers(players);
 
         // deal cards to players
-        dealCards(5, players);
-    }
+        dealCards(7, players);
 
+        // select first card
+        UnoCard card = drawCardFromDrawPile();
+        addCardToDiscardPile(card);
+    }
 
 
 

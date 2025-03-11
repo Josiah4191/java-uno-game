@@ -17,8 +17,6 @@ NOTE:
     getImage() is returning a descriptive String since there are no images yet.
  */
 
-import javafx.scene.image.Image;
-
 public class UnoCardImageManager {
 
     // Variable for the theme.
@@ -35,10 +33,14 @@ public class UnoCardImageManager {
         switch (theme) {
             case UnoCardTheme.CLASSIC:
                 // Get card suit key from map of images, and then get card value key from inner map.
-                return UnoCardClassicImages.IMAGES.get(card.getSuit()).get(card.getValue());
+                return UnoCardClassicImages.CARD_IMAGES.get(card.getSuit()).get(card.getValue());
             default:
                 return "";
         }
+    }
+
+    public String getImage(String cardImage) {
+        return UnoCardClassicImages.IMAGES.get(cardImage);
     }
 
     // Gets the theme.

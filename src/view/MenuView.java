@@ -3,6 +3,8 @@ package view;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class MenuView {
@@ -19,6 +21,11 @@ public class MenuView {
         menuBox = new VBox(10);
         menuBox.setPadding(new Insets(5));
         menuPane.setExpanded(true);
+
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        menuBox.getChildren().add(spacer);
         menuBox.getChildren().add(menuPane);
     }
 
