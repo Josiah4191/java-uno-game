@@ -1,7 +1,6 @@
 package view.controllers;
 
 import games.Difficulty;
-import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.UnoGameManager;
 import games.cardgames.unogame.UnoGameState;
@@ -21,7 +20,7 @@ public class MainController {
     private MenuController menuController = new MenuController(gameManager, gameState);
     private OpponentsController opponentsController = new OpponentsController(gameManager, gameState);
     private GameAreaController gameAreaController = new GameAreaController(gameManager, gameState);
-    private ControlsController controlsController = new ControlsController(gameManager, gameState);
+    private PlayerController playerController = new PlayerController(gameManager, gameState);
 
     // constructor
     public MainController() {
@@ -30,23 +29,39 @@ public class MainController {
 
     public void initialize() {
         gameManager.initialize();
+        opponentsController.setPlayDirection();
+        initializeGameAreaControls();
+        initializeMenuControls();
+    }
+
+    public void initializeOpponentsControls() {
+
+    }
+
+    public void initializePlayerControls() {
+
+    }
+
+    public void initializeMenuControls() {
         menuController.getMenuView().getNewGameButton().setOnAction(e -> gameAreaController.initialize());
     }
 
-    // run
+    public void initializeGameAreaControls() {
+        gameAreaController.setLogoImage();
+        playerController.setPlayerName();
+    }
+
     public void run(Stage primaryStage) {
         MainView mainView = new MainView(
                 menuController.getMenuView(),
                 opponentsController.getOpponentsView(),
                 gameAreaController.getGameAreaView(),
-                controlsController.getControlsView());
+                playerController.getPlayerView());
         Scene scene = new Scene(mainView.getRoot(), 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("UNO");
         primaryStage.show();
     }
-
-
 }
 
 /*

@@ -28,54 +28,68 @@ public class GameAreaController {
     // sort of parameters that their methods require to get information about them. like, should we really
     // need to work with player indexes, card indexes, or pass those indexes to methods?
 
-    // method to set the image for the draw pile
-    // method to set the image for the discard pile
-    /*
-        If we set the image for the discard pile, then we will need what?:
-            - card image manager
-            - last played card
-            - game manager
-    */
+    public void initialize() {
+        setDiscardPileImage();
+        setDrawPileImage();
+        setPlayerCardImage();
+        setCurrentPlayer();
+        clearLogo();
+        playCard();
+    }
+
     public void setDrawPileImage() {
         Label drawPileLbl = gameAreaView.getDrawPile();
-        UnoCardImageManager imageManager = gameState.getCardImageManager();
+        UnoCardImageManager imageManager = gameManager.getCardImageManager();
 
         Image image = imageManager.getImage(UnoCardClassicImages.DECK);
         ImageView imageView = new ImageView(image);
 
-        // configure the size of the ImageView
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
 
-        // set the picture of the drawPile label
         drawPileLbl.setGraphic(imageView);
+    }
+
+    public void setLogoImage() {
+        Label logoLbl = gameAreaView.getCenterLogo();
+        UnoCardImageManager imageManager = gameManager.getCardImageManager();
+
+        Image image = imageManager.getImage(UnoCardClassicImages.LOGO);
+        ImageView imageView = new ImageView(image);
+
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(240);
+
+        logoLbl.setGraphic(imageView);
+    }
+
+    public void clearLogo() {
+        gameAreaView.getCenterLogo().setGraphic(null);
     }
 
     public void setDiscardPileImage() {
         Label discardPileLbl = gameAreaView.getDiscardPile();
-        UnoCardImageManager imageManager = gameState.getCardImageManager();
-        UnoCard lastPlayedCard = gameState.getLastPlayedCard();
+        UnoCardImageManager imageManager = gameManager.getCardImageManager();
+        UnoCard lastPlayedCard = gameManager.getLastPlayedCard();
 
         Image image = imageManager.getImage(lastPlayedCard);
         ImageView imageView = new ImageView(image);
 
-        // configure the size of the ImageView
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
 
-        // set the picture of the drawPile label
         discardPileLbl.setGraphic(imageView);
     }
 
     public void setPlayerCardImage() {
-        var players = gameState.getPlayers();
+        var players = gameManager.getPlayers();
         var player = players.get(0);
         int numberOfCards = player.getPlayerHand().size();
-
+        gameAreaView.getPlayerCardsBox().getChildren().clear();
         for (int i = 0; i < numberOfCards; i++) {
             Label cardPlaceholder = new Label("");
             UnoCard card = player.getPlayerHand().get(i);
-            var imageManager = gameState.getCardImageManager();
+            var imageManager = gameManager.getCardImageManager();
 
             Image cardImage = imageManager.getImage(card);
             ImageView imageView = new ImageView(cardImage);
@@ -89,14 +103,6 @@ public class GameAreaController {
         }
     }
 
-    public void initialize() {
-        setDiscardPileImage();
-        setDrawPileImage();
-        setPlayerCardImage();
-        setCurrentPlayer();
-        playCard();
-    }
-
     public void playCard() {
         var labels = getGameAreaView().getPlayerCardsBox().getChildren();
         for (var label: labels) {
@@ -105,14 +111,16 @@ public class GameAreaController {
                 public void handle(MouseEvent mouseEvent) {
                     UnoCard card = (UnoCard)label.getUserData();
                     int currentPlayerIndex = gameManager.getCurrentPlayerIndex();
-                    var players = gameState.getPlayers();
+                    var players = gameManager.getPlayers();
                     var player = players.get(currentPlayerIndex);
                     var cards = player.getPlayerHand();
                     int cardIndex = cards.indexOf(card);
                     if (currentPlayerIndex == 0) {
                         gameManager.playCard(currentPlayerIndex, cardIndex);
                         gameManager.moveToNextPlayer();
+                        setCurrentPlayer();
                         setDiscardPileImage();
+                        setPlayerCardImage();
                     }
                 }
             });
@@ -120,8 +128,8 @@ public class GameAreaController {
     }
 
     public void setCurrentPlayer() {
-        int currentPlayerIndex = gameState.getCurrentPlayerIndex();
-        UnoPlayer player = gameState.getPlayer(currentPlayerIndex);
+        int currentPlayerIndex = gameManager.getCurrentPlayerIndex();
+        UnoPlayer player = gameManager.getPlayer(currentPlayerIndex);
         gameAreaView.getCurrentPlayerLabel().setText(player.getName() + "'s turn");
     }
 

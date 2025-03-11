@@ -3,6 +3,7 @@ package games.cardgames.unogame;
 import games.Difficulty;
 import games.cardgames.CardGameManager;
 import games.cardgames.cards.unocards.UnoCard;
+import games.cardgames.cards.unocards.UnoCardImageManager;
 import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.players.cardplayers.unoplayers.UnoPlayer;
@@ -249,7 +250,7 @@ public class UnoGameManager extends CardGameManager {
         UnoPlayer player2 = new UnoPlayerAI(getGameState());
         UnoPlayer player3 = new UnoPlayerAI(getGameState());
         UnoPlayer player4 = new UnoPlayerAI(getGameState());
-        mainPlayer.setName("Player 1");
+        mainPlayer.setName("Josiah");
         player2.setName("Player 2");
         player3.setName("Player 3");
         player4.setName("Player 4");
@@ -268,8 +269,9 @@ public class UnoGameManager extends CardGameManager {
         addCardToDiscardPile(card);
     }
 
-
-
+    public UnoCardImageManager getCardImageManager() {
+        return gameState.getCardImageManager();
+    }
 }
 
 /*

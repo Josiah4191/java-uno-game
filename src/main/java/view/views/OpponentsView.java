@@ -14,7 +14,6 @@ import java.util.List;
 public class OpponentsView {
     private VBox opponentsBox;
     private HBox playersBox = new HBox(10);
-    private ArrayList<Label> opponents = new ArrayList<>(List.of());
     private Label directionPlaceholder = new Label("Direction Arrow Placeholder");
 
     public OpponentsView() {
@@ -25,26 +24,16 @@ public class OpponentsView {
         opponentsBox.getChildren().addAll(playersBox, directionPlaceholder);
     }
 
-    public void setOpponentNames(UnoGameState gameState) {
-        var mainPlayer = gameState.getPlayer(0);
-        var players = gameState.getPlayers()
-                .stream()
-                .filter(e -> e != mainPlayer)
-                .toList();
-
-        players.forEach(e -> System.out.println(e.getName()));
-
-        for (UnoPlayer player: players) {
-            Label label = new Label(player.getName());
-            label.setStyle("-fx-text-fill: white;");
-            opponents.add(label);
-        }
-        playersBox.getChildren().addAll(opponents);
+    public VBox getOpponentsBox() {
+        return opponentsBox;
     }
 
-    public void setPlayDirection(UnoGameState gameState) {
-        PlayDirection direction = gameState.getDirection();
-        directionPlaceholder.setText(direction.name());
+    public HBox getPlayersBox() {
+        return playersBox;
+    }
+
+    public Label getDirectionPlaceholder() {
+        return directionPlaceholder;
     }
 
     public VBox getView() {

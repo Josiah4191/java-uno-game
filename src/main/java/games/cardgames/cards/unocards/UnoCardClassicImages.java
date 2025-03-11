@@ -28,6 +28,7 @@ public class UnoCardClassicImages {
 
 
     public static final UnoCard DECK = new UnoCard(GENERAL, UnoValue.DECK);
+    public static final UnoCard LOGO = new UnoCard(GENERAL, UnoValue.LOGO);
 
     protected static final Map<UnoSuit, Map<UnoValue, URL>> CARD_IMAGES = new HashMap<>(Map.of(
             RED, new HashMap<>(Map.ofEntries(
@@ -90,7 +91,8 @@ public class UnoCardClassicImages {
                     entry(UnoValue.WILD, Objects.requireNonNull(UnoCardClassicImages.class.getResource("/images/cardimages/Wild.png"))),
                     entry(UnoValue.WILD_DRAW_FOUR, Objects.requireNonNull(UnoCardClassicImages.class.getResource("/images/cardimages/Wild_Draw.png"))))),
             GENERAL, new HashMap<>(Map.ofEntries(
-                    entry(UnoValue.DECK, Objects.requireNonNull(UnoCardClassicImages.class.getResource("/images/cardimages/Deck.png")))
+                    entry(UnoValue.DECK, Objects.requireNonNull(UnoCardClassicImages.class.getResource("/images/cardimages/Deck.png"))),
+                    entry(UnoValue.LOGO, Objects.requireNonNull(UnoCardClassicImages.class.getResource("/images/cardimages/Logo.png")))
             ))
     ));
 }

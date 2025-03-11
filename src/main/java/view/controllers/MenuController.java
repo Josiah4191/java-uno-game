@@ -11,6 +11,8 @@ public class MenuController {
     private UnoGameState gameState;
 
     public MenuController(UnoGameManager gameManager, UnoGameState gameState) {
+        this.gameManager = gameManager;
+        this.gameState = gameState;
     }
 
     public MenuView getMenuView() {

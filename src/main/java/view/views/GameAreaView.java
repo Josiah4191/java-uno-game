@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
 public class GameAreaView {
     private StackPane gameArea;
     private VBox centerBox = new VBox(10);
-    private Label centerLogo = new Label("Game Logo");
+    private Label centerLogo = new Label();
     private HBox pilesBox = new HBox(20);
     private Label drawPile = new Label("");
     private Label discardPile = new Label("");
