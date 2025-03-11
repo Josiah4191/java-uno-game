@@ -155,9 +155,10 @@ public class UnoGameManager extends CardGameManager {
         return card;
     }
 
-    public UnoCard playCard(int playerIndex, int cardIndex) {
-        var player = gameState.getPlayer(playerIndex);
-        UnoCard card = player.playCard(cardIndex);
+    public UnoCard playCard(UnoPlayer player, UnoCard card) {
+        var playerCards = player.getPlayerHand();
+        int cardIndex = playerCards.indexOf(card);
+        player.playCard(cardIndex);
         addCardToDiscardPile(card);
         return card;
     }
@@ -167,9 +168,7 @@ public class UnoGameManager extends CardGameManager {
         machine.addCardToDiscardPile(card);
     }
 
-    public void addCardToPlayer(int playerIndex, UnoCard card) {
-        var players = getPlayers();
-        UnoPlayer player = players.get(playerIndex);
+    public void addCardToPlayer(UnoPlayer player, UnoCard card) {
         player.addCard(card);
     }
 
@@ -178,13 +177,17 @@ public class UnoGameManager extends CardGameManager {
         var players = getPlayers();
         UnoPlayer player = players.get(random.nextInt(players.size()));
         int index = players.indexOf(player);
-        gameState.setCurrentPlayerIndex(index);
+        setCurrentPlayerIndex(index);
     }
 
     public void reversePlayDirection() {
-        PlayDirection direction = gameState.getDirection();
+        PlayDirection direction = getDirection();
         direction = direction == PlayDirection.FORWARD ? PlayDirection.REVERSE : PlayDirection.FORWARD;
-        gameState.setDirection(direction);
+        setDirection(direction);
+    }
+
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        gameState.setCurrentPlayerIndex(currentPlayerIndex);
     }
 
     public int getCurrentPlayerIndex() {
@@ -193,9 +196,9 @@ public class UnoGameManager extends CardGameManager {
 
     public int getNextPlayerIndex(int numberToSkipAhead) {
         int currentPlayerIndex = getCurrentPlayerIndex();
-        int numberOfPlayers = gameState.getPlayers().size();
+        int numberOfPlayers = getPlayers().size();
 
-        if (gameState.getDirection().isForward()) {
+        if (getDirection().isForward()) {
             currentPlayerIndex += numberToSkipAhead;
         } else {
             currentPlayerIndex -= numberToSkipAhead;
@@ -230,10 +233,9 @@ public class UnoGameManager extends CardGameManager {
         return gameState.getPlayer(nextPlayerPosition);
     }
 
-    public void applyPenalty(int playerIndex, int cardPenalty) {
-        var player = gameState.getPlayer(playerIndex);
+    public void applyPenalty(UnoPlayer player, int cardPenalty) {
         for (int i = 0; i < cardPenalty; i++) {
-            player.addCard(gameState.drawCardFromDrawPile());
+            addCardToPlayer(player, drawCardFromDrawPile());
         }
     }
 
@@ -246,17 +248,20 @@ public class UnoGameManager extends CardGameManager {
 
     public void initialize() {
         // create 4 players
-        UnoPlayer mainPlayer = new UnoPlayer();
+        UnoPlayer player1 = new UnoPlayer();
         UnoPlayer player2 = new UnoPlayerAI(getGameState());
         UnoPlayer player3 = new UnoPlayerAI(getGameState());
         UnoPlayer player4 = new UnoPlayerAI(getGameState());
-        mainPlayer.setName("Josiah");
+        player1.setName("Josiah");
         player2.setName("Player 2");
         player3.setName("Player 3");
         player4.setName("Player 4");
 
-        // create list of players
-        var players = new ArrayList<UnoPlayer>(List.of(mainPlayer, player2, player3, player4));
+        // set the main player
+        setMainPlayer(player1);
+
+        // create a list of players
+        var players = new ArrayList<>(List.of(player1, player2, player3, player4));
 
         // add players to game
         addPlayers(players);
@@ -271,6 +276,14 @@ public class UnoGameManager extends CardGameManager {
 
     public UnoCardImageManager getCardImageManager() {
         return gameState.getCardImageManager();
+    }
+
+    public UnoPlayer getMainPlayer() {
+        return gameState.getMainPlayer();
+    }
+
+    public void setMainPlayer(UnoPlayer player) {
+        gameState.setMainPlayer(player);
     }
 }
 

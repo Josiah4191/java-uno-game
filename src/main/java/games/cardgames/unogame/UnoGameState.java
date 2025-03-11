@@ -72,6 +72,7 @@ public class UnoGameState extends CardGameState {
     private UnoCardImageManager cardImageManager;
     private UnoCardMachine machine;
     private int currentPlayerIndex;
+    private UnoPlayer mainPlayer;
 
     public UnoGameState(UnoEdition edition, Difficulty difficulty) {
         cardImageManager = new UnoCardImageManager();
@@ -165,5 +166,13 @@ public class UnoGameState extends CardGameState {
 
     public UnoModerator getModerator() {
         return moderator;
+    }
+
+    public UnoPlayer getMainPlayer() {
+        return mainPlayer;
+    }
+
+    public void setMainPlayer(UnoPlayer mainPlayer) {
+        this.mainPlayer = mainPlayer;
     }
 }

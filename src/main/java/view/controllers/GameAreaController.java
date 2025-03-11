@@ -82,8 +82,7 @@ public class GameAreaController {
     }
 
     public void setPlayerCardImage() {
-        var players = gameManager.getPlayers();
-        var player = players.get(0);
+        UnoPlayer player = gameManager.getMainPlayer();
         int numberOfCards = player.getPlayerHand().size();
         gameAreaView.getPlayerCardsBox().getChildren().clear();
         for (int i = 0; i < numberOfCards; i++) {
@@ -110,13 +109,9 @@ public class GameAreaController {
             label.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent mouseEvent) {
                     UnoCard card = (UnoCard)label.getUserData();
-                    int currentPlayerIndex = gameManager.getCurrentPlayerIndex();
-                    var players = gameManager.getPlayers();
-                    var player = players.get(currentPlayerIndex);
-                    var cards = player.getPlayerHand();
-                    int cardIndex = cards.indexOf(card);
-                    if (currentPlayerIndex == 0) {
-                        gameManager.playCard(currentPlayerIndex, cardIndex);
+                    var player = gameManager.getCurrentPlayer();
+                    if (player.equals(gameManager.getMainPlayer())) {
+                        gameManager.playCard(player, card);
                         gameManager.moveToNextPlayer();
                         setCurrentPlayer();
                         setDiscardPileImage();
@@ -128,8 +123,7 @@ public class GameAreaController {
     }
 
     public void setCurrentPlayer() {
-        int currentPlayerIndex = gameManager.getCurrentPlayerIndex();
-        UnoPlayer player = gameManager.getPlayer(currentPlayerIndex);
+        UnoPlayer player = gameManager.getCurrentPlayer();
         gameAreaView.getCurrentPlayerLabel().setText(player.getName() + "'s turn");
     }
 
