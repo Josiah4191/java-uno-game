@@ -3,9 +3,7 @@ package view.views;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 public class MenuView {
     private VBox menuBox = new VBox(10);
@@ -18,12 +16,12 @@ public class MenuView {
     private TitledPane menuPane = new TitledPane("Menu", buttonContainer);
 
     public MenuView() {
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
         menuBox = new VBox(10);
         menuBox.setPadding(new Insets(5));
         menuPane.setExpanded(true);
-
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
 
         menuBox.getChildren().add(spacer);
         menuBox.getChildren().add(menuPane);
@@ -57,13 +55,8 @@ public class MenuView {
         return scoreHistoryButton;
     }
 
-    public VBox getButtonContainer() {
-        return buttonContainer;
-    }
 
-    public TitledPane getMenuPane() {
-        return menuPane;
-    }
+
 }
 
 

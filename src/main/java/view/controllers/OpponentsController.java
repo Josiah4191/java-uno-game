@@ -3,6 +3,7 @@ package view.controllers;
 import games.cardgames.unogame.PlayDirection;
 import games.cardgames.unogame.UnoGameManager;
 import games.cardgames.unogame.UnoGameState;
+import javafx.scene.control.Button;
 import view.views.OpponentsView;
 
 public class OpponentsController {
@@ -14,6 +15,7 @@ public class OpponentsController {
     public OpponentsController(UnoGameManager gameManager, UnoGameState gameState) {
         this.gameManager = gameManager;
         this.gameState = gameState;
+
     }
 
     public OpponentsView getOpponentsView() {

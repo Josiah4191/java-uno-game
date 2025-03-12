@@ -7,8 +7,4 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         new MainController().run(primaryStage);
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

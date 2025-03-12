@@ -1,12 +1,6 @@
 package view.views;
 
-import games.cardgames.cards.unocards.UnoCard;
-import games.cardgames.cards.unocards.UnoCardClassicImages;
-import games.cardgames.unogame.UnoGameState;
-import games.players.cardplayers.unoplayers.UnoPlayer;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;

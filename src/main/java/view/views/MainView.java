@@ -7,7 +7,7 @@ public class MainView {
 
     public MainView(MenuView menu, OpponentsView opponents, GameAreaView gameArea, PlayerView player) {
         root = new BorderPane();
-        root.setStyle("-fx-background-color: #1e1e1e;");
+        root.setStyle("-fx-background-color: darkgreen;");
 
         root.setLeft(menu.getView());
         root.setTop(opponents.getView());

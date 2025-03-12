@@ -19,7 +19,7 @@ NOTE:
 
 public abstract class Pile<C> {
 
-    // Create variable to hold empty list of cards.
+    // Create variable to hold of cards.
     protected List<C> cardPile = new ArrayList<>();
 
     // Get the pile of cards.
