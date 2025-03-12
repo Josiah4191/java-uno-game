@@ -1,16 +1,9 @@
 package view.views;
 
-import games.cardgames.unogame.PlayDirection;
-import games.cardgames.unogame.UnoGameState;
-import games.players.cardplayers.unoplayers.UnoPlayer;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OpponentsView {
     private VBox opponentsBox;

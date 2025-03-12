@@ -2,7 +2,6 @@ package games.players;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
 

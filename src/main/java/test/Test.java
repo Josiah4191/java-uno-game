@@ -1,8 +1,10 @@
 package test;
 
+import games.Difficulty;
 import games.cardgames.cards.unocards.UnoCardClassicImages;
 import games.cardgames.cards.unocards.UnoCardImageManager;
 import games.cardgames.cards.unocards.UnoCardTheme;
+import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.PlayDirection;
 import games.cardgames.unogame.UnoClassicRules;
 import games.cardgames.unogame.UnoGameManager;
@@ -16,24 +18,9 @@ import java.util.List;
 
 public class Test {
 
-    public void testMethod() {
-        URL resource = getClass().getResource("/images/cardimages/Blue_0.png");
-        System.out.println(resource);
-        System.out.println(resource.getClass());
-    }
-
     public static void main(String[] args) {
-        Test test = new Test();
-        test.testMethod();
-
-
-
-
-
-
-        /*
         // create game manager
-        UnoGameManager manager = new UnoGameManager(UnoEdition.CLASSIC, UnoCardTheme.CLASSIC, Difficulty.EASY);
+        UnoGameManager manager = new UnoGameManager(UnoEdition.CLASSIC, Difficulty.EASY);
 
         // get the deck
         var deck = manager.getDeck();
@@ -221,7 +208,6 @@ public class Test {
         UnoPlayer currentPlayerAfterSkipping = manager.getCurrentPlayer();
         System.out.println("Current player after skipping: " + currentPlayerAfterSkipping);
         System.out.println();
-         */
 
 
 
