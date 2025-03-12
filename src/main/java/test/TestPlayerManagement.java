@@ -3,6 +3,7 @@ package test;
 import games.Difficulty;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.UnoGameManager;
+import games.cardgames.unogame.UnoGameState;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
@@ -13,9 +14,10 @@ public class TestPlayerManagement {
     public static void main(String[] args) {
         // initialize the game
         UnoGameManager manager = new UnoGameManager(UnoEdition.CLASSIC, Difficulty.EASY);
+        UnoGameState gameState = manager.getGameState();
 
         // get the players in the game
-        var players = manager.getPlayers();
+        var players = gameState.getPlayers();
         System.out.println("Number of players: " + players.size());
         System.out.println("List of players: ");
         players.forEach(System.out::println);
@@ -56,9 +58,6 @@ public class TestPlayerManagement {
         System.out.println("List of players: ");
         players.forEach(System.out::println);
         System.out.println();
-
-        // get a player by using its index in the list
-        UnoPlayer getPlayerByIndex = manager.getPlayer(0);
 
         // swap player positions
         manager.swapPlayerPositions(playerJosiah, playerAI3);

@@ -70,34 +70,6 @@ public class UnoGameManager extends CardGameManager {
         return gameState;
     }
 
-    public Image getImage(UnoCard card) {
-        return gameState.getCardImageManager().getImage(card);
-    }
-
-    public PlayDirection getDirection() {
-        return gameState.getDirection();
-    }
-
-    public void setDirection(PlayDirection direction) {
-        gameState.setDirection(direction);
-    }
-
-    public UnoCardTheme getTheme() {
-        return gameState.getCardImageManager().getTheme();
-    }
-
-    public void setTheme(UnoCardTheme theme) {
-        gameState.getCardImageManager().setTheme(theme);
-    }
-
-    public void setDifficulty(Difficulty difficulty) {
-        gameState.setDifficulty(difficulty);
-    }
-
-    public Difficulty getDifficulty() {
-        return gameState.getDifficulty();
-    }
-
     public void addPlayer(UnoPlayer player) {
         gameState.addPlayer(player);
     }
@@ -106,44 +78,8 @@ public class UnoGameManager extends CardGameManager {
         gameState.addPlayers(players);
     }
 
-    public UnoPlayer getPlayer(int playerIndex) {
-        return gameState.getPlayer(playerIndex);
-    }
-
-    public List<UnoPlayer> getPlayers() {
-        return gameState.getPlayers();
-    }
-
-    public UnoCard getLastPlayedCard() {
-        return gameState.getLastPlayedCard();
-    }
-
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
         gameState.dealCards(numberOfCards, players);
-    }
-
-    public UnoEdition getEdition() {
-        return gameState.getEdition();
-    }
-
-    public List<UnoCard> getDrawPile() {
-        return gameState.getDrawPile();
-    }
-
-    public List<UnoCard> getDiscardPile() {
-        return gameState.getDiscardPile();
-    }
-
-    public List<UnoCard> getDeck() {
-        return gameState.getDeck();
-    }
-
-    public UnoRules getRules() {
-        return gameState.getRules();
-    }
-
-    public void setRules(UnoRules rules) {
-        gameState.setRules(rules);
     }
 
     public UnoCard drawCardFromDrawPile() {
@@ -153,6 +89,9 @@ public class UnoGameManager extends CardGameManager {
         return card;
     }
 
+    /*
+    This method will need validation added.
+    */
     public UnoCard playCard(UnoPlayer player, UnoCard card) {
         var playerCards = player.getPlayerHand();
         int cardIndex = playerCards.indexOf(card);
@@ -166,37 +105,30 @@ public class UnoGameManager extends CardGameManager {
         machine.addCardToDiscardPile(card);
     }
 
+
     public void addCardToPlayer(UnoPlayer player, UnoCard card) {
         player.addCard(card);
     }
 
     private void selectFirstPlayer() {
         Random random = new Random();
-        var players = getPlayers();
+        var players = gameState.getPlayers();
         UnoPlayer player = players.get(random.nextInt(players.size()));
         int index = players.indexOf(player);
-        setCurrentPlayerIndex(index);
+        gameState.setCurrentPlayerIndex(index);
     }
 
     public void reversePlayDirection() {
-        PlayDirection direction = getDirection();
+        PlayDirection direction = gameState.getDirection();
         direction = direction == PlayDirection.FORWARD ? PlayDirection.REVERSE : PlayDirection.FORWARD;
-        setDirection(direction);
-    }
-
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        gameState.setCurrentPlayerIndex(currentPlayerIndex);
-    }
-
-    public int getCurrentPlayerIndex() {
-        return gameState.getCurrentPlayerIndex();
+        gameState.setDirection(direction);
     }
 
     public int getNextPlayerIndex(int numberToSkipAhead) {
-        int currentPlayerIndex = getCurrentPlayerIndex();
-        int numberOfPlayers = getPlayers().size();
+        int currentPlayerIndex = gameState.getCurrentPlayerIndex();
+        int numberOfPlayers = gameState.getPlayers().size();
 
-        if (getDirection().isForward()) {
+        if (gameState.getDirection().isForward()) {
             currentPlayerIndex += numberToSkipAhead;
         } else {
             currentPlayerIndex -= numberToSkipAhead;
@@ -221,6 +153,10 @@ public class UnoGameManager extends CardGameManager {
         gameState.setCurrentPlayerIndex(nextPlayerIndex);
     }
 
+    /*
+        Need to see if this belongs here, or belongs in GameState.
+        We also need to see if we should be passing indexes to getPlayer instead of a name.
+    */
     public UnoPlayer getCurrentPlayer() {
         int playerPosition = gameState.getCurrentPlayerIndex();
         return gameState.getPlayer(playerPosition);
@@ -238,7 +174,7 @@ public class UnoGameManager extends CardGameManager {
     }
 
     public void swapPlayerPositions(UnoPlayer player1, UnoPlayer player2) {
-        var players = getPlayers();
+        var players = gameState.getPlayers();
         int player1Position = players.indexOf(player1);
         int player2Position = players.indexOf(player2);
         Collections.swap(players, player1Position, player2Position);
@@ -256,7 +192,7 @@ public class UnoGameManager extends CardGameManager {
         player4.setName("Player 4");
 
         // set the main player
-        setMainPlayer(player1);
+        gameState.setMainPlayer(player1);
 
         // create a list of players
         var players = new ArrayList<>(List.of(player1, player2, player3, player4));
@@ -270,14 +206,6 @@ public class UnoGameManager extends CardGameManager {
         // select first card
         UnoCard card = drawCardFromDrawPile();
         addCardToDiscardPile(card);
-    }
-
-    public UnoPlayer getMainPlayer() {
-        return gameState.getMainPlayer();
-    }
-
-    public void setMainPlayer(UnoPlayer player) {
-        gameState.setMainPlayer(player);
     }
 }
 

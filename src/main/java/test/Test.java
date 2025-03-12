@@ -5,10 +5,7 @@ import games.cardgames.cards.unocards.UnoCardClassicImages;
 import games.cardgames.cards.unocards.UnoCardImageManager;
 import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
-import games.cardgames.unogame.PlayDirection;
-import games.cardgames.unogame.UnoClassicRules;
-import games.cardgames.unogame.UnoGameManager;
-import games.cardgames.unogame.UnoRules;
+import games.cardgames.unogame.*;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 import games.players.cardplayers.unoplayers.UnoPlayerAI;
 import javafx.scene.image.Image;
@@ -21,54 +18,55 @@ public class Test {
     public static void main(String[] args) {
         // create game manager
         UnoGameManager manager = new UnoGameManager(UnoEdition.CLASSIC, Difficulty.EASY);
+        UnoGameState gameState = manager.getGameState();
 
         // get the deck
-        var deck = manager.getDeck();
+        var deck = gameState.getDeck();
         System.out.println("Deck:");
         deck.forEach(System.out::println);
         System.out.println();
 
         // get the draw pile
-        var drawPile = manager.getDrawPile();
+        var drawPile = gameState.getDrawPile();
         System.out.println("Draw pile: " + drawPile.size() + " cards");
         drawPile.forEach(System.out::println);
         System.out.println();
 
         // get the discard pile
-        var discardPile = manager.getDiscardPile();
+        var discardPile = gameState.getDiscardPile();
         System.out.println("Discard pile:");
         discardPile.forEach(System.out::println);
         System.out.println();
 
         // get the rules
-        UnoRules rules = manager.getRules();
+        UnoRules rules = gameState.getRules();
 
         // set the rules
-        manager.setRules(new UnoClassicRules());
+        gameState.setRules(new UnoClassicRules());
 
         // get the difficulty
-        Difficulty difficulty = manager.getDifficulty();
+        Difficulty difficulty = gameState.getDifficulty();
 
         // set the difficulty
-        manager.setDifficulty(Difficulty.EASY);
+        gameState.setDifficulty(Difficulty.EASY);
 
         // get the card theme
-        UnoCardTheme theme = manager.getTheme();
+        UnoCardTheme theme = gameState.getTheme();
         System.out.print("Theme: ");
         System.out.println(theme);
         System.out.println();
 
         // set the card theme
-        manager.setTheme(UnoCardTheme.CLASSIC);
+        gameState.setTheme(UnoCardTheme.CLASSIC);
 
         // get the uno game edition
-        UnoEdition edition = manager.getEdition();
+        UnoEdition edition = gameState.getEdition();
         System.out.print("Edition: ");
         System.out.println(edition);
         System.out.println();
 
         // get the direction of play
-        PlayDirection direction = manager.getDirection();
+        PlayDirection direction = gameState.getDirection();
         System.out.print("Direction: ");
         System.out.println(direction);
         System.out.println();
@@ -77,7 +75,7 @@ public class Test {
         manager.reversePlayDirection();
 
         // get the new direction of play
-        PlayDirection newDirection = manager.getDirection();
+        PlayDirection newDirection = gameState.getDirection();
         System.out.print("New direction after using the reverseDirection method: ");
         System.out.println(newDirection);
         System.out.println();
@@ -86,7 +84,7 @@ public class Test {
         manager.reversePlayDirection();
 
         // get the direction of play again
-        PlayDirection secondReverseDirection = manager.getDirection();
+        PlayDirection secondReverseDirection = gameState.getDirection();
         System.out.print("Direction after reversing a second time: ");
         System.out.println(secondReverseDirection);
         System.out.println();
@@ -118,19 +116,19 @@ public class Test {
         manager.addPlayers(List.of(player2, playerAI1, playerAI2, playerAI3, playerAI4, playerAI5, playerAI6));
 
         // get a single player
-        UnoPlayer playerIndex0 = manager.getPlayer(0);
+        UnoPlayer playerIndex0 = gameState.getPlayer(0);
         System.out.print("Player index 0: ");
         System.out.println(playerIndex0);
         System.out.println();
 
         // get a list of the players
-        var playerList = manager.getPlayers();
+        var playerList = gameState.getPlayers();
         System.out.println("List of players: ");
         playerList.forEach(System.out::println);
         System.out.println();
 
         // get the number of players (should be 8 players)
-        int numberOfPlayers = manager.getPlayers().size();
+        int numberOfPlayers = gameState.getPlayers().size();
         System.out.print("Number of players: ");
         System.out.println(numberOfPlayers);
         System.out.println();
@@ -145,7 +143,7 @@ public class Test {
         System.out.println();
 
         // get the current player index
-        int currentPlayerIndex = manager.getCurrentPlayerIndex();
+        int currentPlayerIndex = gameState.getCurrentPlayerIndex();
         System.out.print("Current player index: ");
         System.out.println(currentPlayerIndex);
         System.out.println();

@@ -39,8 +39,9 @@ public class GameAreaController {
 
     public void setDrawPileImage() {
         Label drawPileLbl = gameAreaView.getDrawPile();
+        UnoCardImageManager imageManager = gameState.getCardImageManager();
 
-        Image image = gameManager.getImage(UnoCardClassicImages.DECK);
+        Image image = imageManager.getImage(UnoCardClassicImages.DECK);
         ImageView imageView = new ImageView(image);
 
         imageView.setFitHeight(100);
@@ -51,7 +52,8 @@ public class GameAreaController {
 
     public void setLogoImage() {
         Label logoLbl = gameAreaView.getCenterLogo();
-        Image image = gameManager.getImage(UnoCardClassicImages.LOGO);
+        UnoCardImageManager imageManager = gameState.getCardImageManager();
+        Image image = imageManager.getImage(UnoCardClassicImages.LOGO);
         ImageView imageView = new ImageView(image);
 
         imageView.setFitHeight(200);
@@ -66,9 +68,10 @@ public class GameAreaController {
 
     public void setDiscardPileImage() {
         Label discardPileLbl = gameAreaView.getDiscardPile();
-        UnoCard lastPlayedCard = gameManager.getLastPlayedCard();
+        UnoCardImageManager imageManager = gameState.getCardImageManager();
+        UnoCard lastPlayedCard = gameState.getLastPlayedCard();
 
-        Image image = gameManager.getImage(lastPlayedCard);
+        Image image = imageManager.getImage(lastPlayedCard);
         ImageView imageView = new ImageView(image);
 
         imageView.setFitHeight(100);
@@ -78,14 +81,15 @@ public class GameAreaController {
     }
 
     public void setPlayerCardImage() {
-        UnoPlayer player = gameManager.getMainPlayer();
+        UnoPlayer player = gameState.getMainPlayer();
         int numberOfCards = player.getPlayerHand().size();
         gameAreaView.getPlayerCardsBox().getChildren().clear();
         for (int i = 0; i < numberOfCards; i++) {
             Label cardPlaceholder = new Label("");
+            UnoCardImageManager imageManager = gameState.getCardImageManager();
             UnoCard card = player.getPlayerHand().get(i);
 
-            Image cardImage = gameManager.getImage(card);
+            Image cardImage = imageManager.getImage(card);
             ImageView imageView = new ImageView(cardImage);
 
             imageView.setFitHeight(60);
@@ -105,7 +109,7 @@ public class GameAreaController {
                 public void handle(MouseEvent mouseEvent) {
                     UnoCard card = (UnoCard)label.getUserData();
                     var player = gameManager.getCurrentPlayer();
-                    if (player.equals(gameManager.getMainPlayer())) {
+                    if (player.equals(gameState.getMainPlayer())) {
                         gameManager.playCard(player, card);
                         gameManager.moveToNextPlayer();
                         setCurrentPlayer();

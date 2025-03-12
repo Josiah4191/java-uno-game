@@ -17,7 +17,7 @@ public class PlayerController {
     }
 
     public void setPlayerName() {
-        UnoPlayer player = gameManager.getPlayer(0);
+        UnoPlayer player = gameState.getPlayer(0);
         playerView.getPlayerName().setText(player.getName());
     }
 

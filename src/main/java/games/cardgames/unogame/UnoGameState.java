@@ -92,6 +92,14 @@ public class UnoGameState extends CardGameState {
         return players.get(playerIndex);
     }
 
+    public UnoCardTheme getTheme() {
+        return cardImageManager.getTheme();
+    }
+
+    public void setTheme(UnoCardTheme theme) {
+        cardImageManager.setTheme(theme);
+    }
+
     public List<UnoPlayer> getPlayers() {
         return players;
     }

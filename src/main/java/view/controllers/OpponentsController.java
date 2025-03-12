@@ -26,7 +26,7 @@ public class OpponentsController {
     }
 
     public void setPlayDirection() {
-        PlayDirection direction = gameManager.getDirection();
+        PlayDirection direction = gameState.getDirection();
         opponentsView.getDirectionPlaceholder().setText(direction.name());
     }
 }

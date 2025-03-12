@@ -4,6 +4,7 @@ import games.Difficulty;
 import games.cardgames.cards.unocards.UnoCard;
 import games.cardgames.cards.unocards.UnoEdition;
 import games.cardgames.unogame.UnoGameManager;
+import games.cardgames.unogame.UnoGameState;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 import games.players.cardplayers.unoplayers.UnoPlayerAI;
 
@@ -11,6 +12,7 @@ public class TestCardManagement {
     public static void main(String[] args) {
         // initialize the game
         UnoGameManager manager = new UnoGameManager(UnoEdition.CLASSIC, Difficulty.EASY);
+        UnoGameState gameState = manager.getGameState();
 
         /*
         Consider removing getDeck() because we never use it. The deck is automatically swapped to the draw pile, and then
@@ -21,19 +23,19 @@ public class TestCardManagement {
         */
 
         // get the deck
-        var deck = manager.getDeck();
+        var deck = gameState.getDeck();
         System.out.println("Deck: " + deck.size() + " cards");
         deck.forEach(System.out::println);
         System.out.println();
 
         // get the draw pile
-        var drawPile = manager.getDrawPile();
+        var drawPile = gameState.getDrawPile();
         System.out.println("Draw pile: " + drawPile.size() + " cards");
         drawPile.forEach(System.out::println);
         System.out.println();
 
         // get the discard pile
-        var discardPile = manager.getDiscardPile();
+        var discardPile = gameState.getDiscardPile();
         System.out.println("Discard pile: " + discardPile.size() + " cards");
         discardPile.forEach(System.out::println);
         System.out.println();
