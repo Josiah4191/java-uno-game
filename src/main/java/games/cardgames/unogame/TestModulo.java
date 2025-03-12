@@ -2,7 +2,6 @@ package games.cardgames.unogame;
 
 public class TestModulo {
     public static void main(String[] args) {
-
         /*
         the current player index is 1
 
@@ -16,7 +15,6 @@ public class TestModulo {
 
         2 % 5 = ?
 
-
         current player index is 0
 
         the number of players is 5
@@ -28,8 +26,6 @@ public class TestModulo {
         (0 - 1) = -2
 
         (-2 + 5) = 3 % 5 = 3
-
-
          */
         System.out.println(2 % 5);
 

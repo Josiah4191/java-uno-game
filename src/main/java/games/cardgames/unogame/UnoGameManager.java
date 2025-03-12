@@ -70,11 +70,9 @@ public class UnoGameManager extends CardGameManager {
         return gameState;
     }
 
-
     public Image getImage(UnoCard card) {
         return gameState.getCardImageManager().getImage(card);
     }
-
 
     public PlayDirection getDirection() {
         return gameState.getDirection();
@@ -274,10 +272,6 @@ public class UnoGameManager extends CardGameManager {
         addCardToDiscardPile(card);
     }
 
-    public UnoCardImageManager getCardImageManager() {
-        return gameState.getCardImageManager();
-    }
-
     public UnoPlayer getMainPlayer() {
         return gameState.getMainPlayer();
     }
@@ -310,7 +304,4 @@ public class UnoGameManager extends CardGameManager {
                 - later, we will update the game view to reflect changes
                 - e.g., after drawing a card, popup window says "RED Action card drawn"
                         after playing a card, popup window says "Opponent draws 2 cards. Opponent total cards: 5"
-
-
-
  */

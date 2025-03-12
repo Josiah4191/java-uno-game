@@ -81,11 +81,13 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
         return playerHand.isEmpty();
     }
 
+    /*
     public void swapCardPositions(UnoCard card1, UnoCard card2) {
         var cards = playerHand.getCardPile();
         int card1Index = cards.indexOf(card1);
         int card2Index = cards.indexOf(card2);
         Collections.swap(cards, card1Index, card2Index);
     }
+    */
 
 }

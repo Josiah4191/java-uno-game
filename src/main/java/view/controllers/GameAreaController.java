@@ -39,9 +39,8 @@ public class GameAreaController {
 
     public void setDrawPileImage() {
         Label drawPileLbl = gameAreaView.getDrawPile();
-        UnoCardImageManager imageManager = gameManager.getCardImageManager();
 
-        Image image = imageManager.getImage(UnoCardClassicImages.DECK);
+        Image image = gameManager.getImage(UnoCardClassicImages.DECK);
         ImageView imageView = new ImageView(image);
 
         imageView.setFitHeight(100);
@@ -52,9 +51,7 @@ public class GameAreaController {
 
     public void setLogoImage() {
         Label logoLbl = gameAreaView.getCenterLogo();
-        UnoCardImageManager imageManager = gameManager.getCardImageManager();
-
-        Image image = imageManager.getImage(UnoCardClassicImages.LOGO);
+        Image image = gameManager.getImage(UnoCardClassicImages.LOGO);
         ImageView imageView = new ImageView(image);
 
         imageView.setFitHeight(200);
@@ -69,10 +66,9 @@ public class GameAreaController {
 
     public void setDiscardPileImage() {
         Label discardPileLbl = gameAreaView.getDiscardPile();
-        UnoCardImageManager imageManager = gameManager.getCardImageManager();
         UnoCard lastPlayedCard = gameManager.getLastPlayedCard();
 
-        Image image = imageManager.getImage(lastPlayedCard);
+        Image image = gameManager.getImage(lastPlayedCard);
         ImageView imageView = new ImageView(image);
 
         imageView.setFitHeight(100);
@@ -88,9 +84,8 @@ public class GameAreaController {
         for (int i = 0; i < numberOfCards; i++) {
             Label cardPlaceholder = new Label("");
             UnoCard card = player.getPlayerHand().get(i);
-            var imageManager = gameManager.getCardImageManager();
 
-            Image cardImage = imageManager.getImage(card);
+            Image cardImage = gameManager.getImage(card);
             ImageView imageView = new ImageView(cardImage);
 
             imageView.setFitHeight(60);

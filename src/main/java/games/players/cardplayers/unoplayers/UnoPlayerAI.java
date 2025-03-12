@@ -49,6 +49,14 @@ public class UnoPlayerAI extends UnoPlayer {
         return super.playCard(cardIndex);
     }
 
+    /*
+     It might make sense to define this method in game manager, so that it could work for any player's
+     hand of cards.
+     OR we need to define it inside the moderator class.
+     We can pass the method a player's name, and then check their cards against the last played card.
+     Then we can return the list of cards that are playable.
+     If the player tries to play a card not in the list of playable cards, then we prevent it.
+    */
     private List<UnoCard> getPlayableCards() {
         ArrayList<UnoCard> playableCards = new ArrayList<>();
         UnoModerator moderator = gameState.getModerator();
