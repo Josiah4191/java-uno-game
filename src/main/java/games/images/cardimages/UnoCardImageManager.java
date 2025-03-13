@@ -1,4 +1,4 @@
-package games.cardgames.cards.unocards;
+package games.images.cardimages;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -16,12 +16,21 @@ NOTE:
     getImage() is returning a descriptive String since there are no images yet.
  */
 
+import games.cardgames.cards.unocards.UnoCard;
+import games.cardgames.cards.unocards.UnoCardTheme;
+import games.cardgames.cards.unocards.UnoSuit;
+import games.cardgames.cards.unocards.UnoValue;
+import games.images.ImageLogger;
 import javafx.scene.image.Image;
 
 import java.net.URL;
-import java.util.Objects;
 
 public class UnoCardImageManager {
+
+    static {
+        ImageLogger.getImageLogger().info("[Card Image Log]: Loading images");
+        UnoCardClassicImages.loadImages();
+    }
 
     // Variable for the theme.
     private UnoCardTheme theme = UnoCardTheme.CLASSIC;
@@ -37,24 +46,13 @@ public class UnoCardImageManager {
         }
     }
 
-    public void loadImages() {
-        // get map of images
-        try {
-            var map = UnoCardClassicImages.CARD_IMAGES;
-            System.out.println("Images loaded successfully.");
-        } catch (ExceptionInInitializerError e)  {
-            System.out.println("Images failed to load.");
-        }
-    }
-
-
     public Image getClassicImage(UnoCard card) {
         // Get card suit key from map of images, and then get card value key from inner map.
-        var imageMap = UnoCardClassicImages.CARD_IMAGES;
+        var outerMap = UnoCardClassicImages.getClassicCardImages();
         UnoSuit suit = card.getSuit();
         UnoValue value = card.getValue();
 
-        var innerMap = imageMap.get(suit);
+        var innerMap = outerMap.get(suit);
         URL imageURL = innerMap.get(value);
         return new Image(imageURL.toString());
     }

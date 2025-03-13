@@ -23,7 +23,6 @@ public abstract class Card<S extends Enum<S>, V extends Enum<V>> {
     // Variables to refer to the suit and value.
     private S suit;
     private V value;
-    private boolean active = true;
 
     // The constructor receives an enum suit and value, and sets them.
     public Card(S suit, V value) {

@@ -2,20 +2,20 @@ package games.cardgames.unogame;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
  */
 
 import games.cardgames.cards.unocards.UnoCard;
+import games.cardgames.cards.unocards.UnoValue;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 public interface UnoRules {
 
-    boolean validatePlay(UnoCard card, UnoCard lastPlayedCard);
+    boolean validateCard(UnoGameState gameState, UnoCard card);
 
-    int getCallUnoPenalty(UnoPlayer player);
+    boolean checkCallUno(UnoPlayer player);
 
-    int getCompareCardPenalty(UnoPlayer player, UnoCard lastPlayedCard);
+    UnoValue evaluateCardValue(UnoCard card);
 
 }

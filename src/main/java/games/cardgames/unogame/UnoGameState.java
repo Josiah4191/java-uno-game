@@ -3,6 +3,7 @@ package games.cardgames.unogame;
 import games.Difficulty;
 import games.cardgames.CardGameState;
 import games.cardgames.cards.unocards.*;
+import games.images.cardimages.UnoCardImageManager;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.ArrayList;
@@ -10,7 +11,6 @@ import java.util.List;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
 
@@ -73,6 +73,7 @@ public class UnoGameState extends CardGameState {
     private UnoCardMachine machine;
     private int currentPlayerIndex;
     private UnoPlayer mainPlayer;
+    private int stackPenalty = 0;
 
     public UnoGameState(UnoEdition edition, Difficulty difficulty) {
         cardImageManager = new UnoCardImageManager();
@@ -148,7 +149,7 @@ public class UnoGameState extends CardGameState {
         return machine.getDeck();
     }
 
-    public UnoCardMachine getMachine() {
+    public UnoCardMachine getCardMachine() {
         return machine;
     }
 
@@ -158,6 +159,10 @@ public class UnoGameState extends CardGameState {
 
     public void setCurrentPlayerIndex(int currentPlayerIndex) {
         this.currentPlayerIndex = currentPlayerIndex;
+    }
+
+    public UnoPlayer getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
     }
 
     public UnoRules getRules() {
@@ -182,5 +187,13 @@ public class UnoGameState extends CardGameState {
 
     public void setMainPlayer(UnoPlayer mainPlayer) {
         this.mainPlayer = mainPlayer;
+    }
+
+    public void addStackPenalty(int cardPenalty) {
+        stackPenalty += cardPenalty;
+    }
+
+    public int getStackPenalty() {
+        return stackPenalty;
     }
 }

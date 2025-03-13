@@ -2,27 +2,27 @@ package games.cardgames.unogame;
 
 import games.Moderator;
 import games.cardgames.cards.unocards.UnoCard;
+import games.cardgames.cards.unocards.UnoValue;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
  */
 
 public class UnoModerator extends Moderator {
 
-    public boolean validatePlay(UnoRules rules, UnoCard card, UnoCard lastPlayedCard) {
-        return rules.validatePlay(card, lastPlayedCard);
+    public boolean validateCard(UnoGameState gameState, UnoCard card) {
+        return gameState.getRules().validateCard(gameState, card);
     }
 
-    public int callUnoPenalty(UnoRules rules, UnoPlayer player) {
-        return rules.getCallUnoPenalty(player);
+    public boolean evaluateCallUno(UnoGameState gameState, UnoPlayer player) {
+        return gameState.getRules().checkCallUno(player);
     }
 
-    public int getCardPenalty(UnoRules rules, UnoCard lastPlayedCard, UnoPlayer player) {
-        return rules.getCompareCardPenalty(player, lastPlayedCard);
+    public UnoValue evaluateCardValue(UnoGameState gameState, UnoCard card) {
+        return gameState.getRules().evaluateCardValue(card);
     }
 }
 

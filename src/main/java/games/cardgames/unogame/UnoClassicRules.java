@@ -2,7 +2,6 @@ package games.cardgames.unogame;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
 */
@@ -14,8 +13,19 @@ import games.players.cardplayers.unoplayers.UnoPlayer;
 
 public class UnoClassicRules implements UnoRules {
 
-    public boolean validatePlay(UnoCard card, UnoCard lastPlayedCard) {
+    public boolean validateCard(UnoGameState gameState, UnoCard card) {
         boolean match = false;
+        var numberOfPlayers = gameState.getPlayers().size();
+        UnoCard lastPlayedCard = gameState.getLastPlayedCard();
+
+        // If 2 players remain, SKIP works like REVERSE and REVERSE works like SKIP
+        if (numberOfPlayers == 2) {
+            if (card.getValue() == UnoValue.SKIP && lastPlayedCard.getValue() == UnoValue.REVERSE) {
+                return true;
+            } else if (card.getValue() == UnoValue.REVERSE && lastPlayedCard.getValue() == UnoValue.SKIP) {
+                return true;
+            }
+        }
 
         // If card is wild, match is true
         if (card.getSuit() == UnoSuit.WILD) {
@@ -33,26 +43,17 @@ public class UnoClassicRules implements UnoRules {
         return match;
     }
 
-    public int getCallUnoPenalty(UnoPlayer player) {
+    public boolean checkCallUno(UnoPlayer player) {
         int cardsRemaining = player.getTotalCardsRemaining();
+        boolean sayUno = player.getSayUno();
 
-        if (cardsRemaining > 1) {
-            return 2;
+        if (!sayUno && cardsRemaining == 1) {
+            return true;
         }
-
-        return 0;
+        return false;
     }
 
-    public int getCompareCardPenalty(UnoPlayer player, UnoCard lastPlayedCard) {
-        UnoValue value = lastPlayedCard.getValue();
-
-        if (value == UnoValue.DRAW_TWO) {
-            return 2;
-        } else if (value == UnoValue.WILD_DRAW_FOUR) {
-            return 4;
-        }
-
-        return 0;
+    public UnoValue evaluateCardValue(UnoCard card) {
+        return card.getValue();
     }
-
 }

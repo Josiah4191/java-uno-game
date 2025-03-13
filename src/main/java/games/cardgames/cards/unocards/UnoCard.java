@@ -17,7 +17,7 @@ For details about instance variables and instance methods, refer to Card class.
 
 public class UnoCard extends Card<UnoSuit, UnoValue> {
     // Access is protected so additional cards cannot be created after a deck has been made.
-    protected UnoCard(UnoSuit suit, UnoValue value) {
+    public UnoCard(UnoSuit suit, UnoValue value) {
         super(suit, value);
     }
 

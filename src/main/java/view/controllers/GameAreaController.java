@@ -1,8 +1,8 @@
 package view.controllers;
 
 import games.cardgames.cards.unocards.UnoCard;
-import games.cardgames.cards.unocards.UnoCardClassicImages;
-import games.cardgames.cards.unocards.UnoCardImageManager;
+import games.images.cardimages.UnoCardClassicImages;
+import games.images.cardimages.UnoCardImageManager;
 import games.cardgames.unogame.UnoGameManager;
 import games.cardgames.unogame.UnoGameState;
 import games.players.cardplayers.unoplayers.UnoPlayer;
@@ -108,9 +108,9 @@ public class GameAreaController {
             label.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent mouseEvent) {
                     UnoCard card = (UnoCard)label.getUserData();
-                    var player = gameManager.getCurrentPlayer();
+                    var player = gameState.getCurrentPlayer();
                     if (player.equals(gameState.getMainPlayer())) {
-                        gameManager.playCard(player, card);
+                        //gameManager.playCard(player, card);
                         gameManager.moveToNextPlayer();
                         setCurrentPlayer();
                         setDiscardPileImage();
@@ -122,7 +122,7 @@ public class GameAreaController {
     }
 
     public void setCurrentPlayer() {
-        UnoPlayer player = gameManager.getCurrentPlayer();
+        UnoPlayer player = gameState.getCurrentPlayer();
         gameAreaView.getCurrentPlayerLabel().setText(player.getName() + "'s turn");
     }
 

@@ -3,12 +3,10 @@ package games.cardgames.unogame;
 import games.Difficulty;
 import games.cardgames.CardGameManager;
 import games.cardgames.cards.unocards.UnoCard;
-import games.cardgames.cards.unocards.UnoCardImageManager;
-import games.cardgames.cards.unocards.UnoCardTheme;
 import games.cardgames.cards.unocards.UnoEdition;
+import games.cardgames.cards.unocards.UnoValue;
 import games.players.cardplayers.unoplayers.UnoPlayer;
 import games.players.cardplayers.unoplayers.UnoPlayerAI;
-import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +15,6 @@ import java.util.Random;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Author: Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
 
@@ -28,6 +25,8 @@ What this class contains:
     - Variables:
         - UnoGameState:
             - Holds all information about the current state of the game.
+        - UnoCardImageManager:
+            - Responsible for retrieving card images.
 NOTE:
     Methods and variables may be added or altered at a later date:
         - e.g., saving the game state
@@ -59,30 +58,57 @@ public class UnoGameManager extends CardGameManager {
     }
 
     public UnoCard drawCardFromDrawPile() {
-        var machine = gameState.getMachine();
         UnoCard card = gameState.drawCardFromDrawPile();
+        var machine = gameState.getCardMachine();
         machine.addCardToDiscardPile(card);
         return card;
     }
 
-    /*
-    This method will need validation added.
-    */
-    public UnoCard playCard(UnoPlayer player, UnoCard card) {
-        var playerCards = player.getPlayerHand();
-        int cardIndex = playerCards.indexOf(card);
-        player.playCard(cardIndex);
-        addCardToDiscardPile(card);
-        return card;
+    public void getPlayableCards() {
+
     }
 
-    public void addCardToDiscardPile(UnoCard card) {
-        var machine = gameState.getMachine();
-        machine.addCardToDiscardPile(card);
+    public boolean playCard(int playerIndex, int cardIndex) {
+        var player = gameState.getPlayer(playerIndex);
+        var machine = gameState.getCardMachine();
+        var moderator = gameState.getModerator();
+        UnoCard card = player.getPlayerHand().get(cardIndex);
+        boolean valid = moderator.validateCard(gameState, card);
+
+        if (valid) {
+            player.playCard(cardIndex);
+            machine.addCardToDiscardPile(card);
+
+            // Use moderator to evaluate the card value that is played. The rule set will determine the returned value.
+            UnoValue value = moderator.evaluateCardValue(gameState, card);
+            // Process the card value and take action based on the card value
+            processCardValue(value);
+            // Return true if the card was successfully played
+            return true;
+        }
+        // Return false if the card could not be played
+        return false;
     }
 
+    private void processCardValue(UnoValue value) {
+        switch (value) {
+            case UnoValue.REVERSE:
+                reversePlayDirection();
+                break;
+            case UnoValue.SKIP:
+                skipNextPlayer();
+                break;
+            case UnoValue.DRAW_TW0_STACK:
+                gameState.addStackPenalty(2);
+                break;
+            case UnoValue.WILD_DRAW_FOUR_STACK:
+                gameState.addStackPenalty(4);
+                break;
+        }
+    }
 
-    public void addCardToPlayer(UnoPlayer player, UnoCard card) {
+    public void addCardToPlayer(int playerIndex, UnoCard card) {
+        var player = gameState.getPlayer(playerIndex);
         player.addCard(card);
     }
 
@@ -129,31 +155,20 @@ public class UnoGameManager extends CardGameManager {
         gameState.setCurrentPlayerIndex(nextPlayerIndex);
     }
 
-    /*
-        Need to see if this belongs here, or belongs in GameState.
-        We also need to see if we should be passing indexes to getPlayer instead of a name.
-    */
-    public UnoPlayer getCurrentPlayer() {
-        int playerPosition = gameState.getCurrentPlayerIndex();
-        return gameState.getPlayer(playerPosition);
-    }
-
     public UnoPlayer getNextPlayer() {
         int nextPlayerPosition = getNextPlayerIndex(1);
         return gameState.getPlayer(nextPlayerPosition);
     }
 
-    public void applyPenalty(UnoPlayer player, int cardPenalty) {
+    public void applyPenalty(int playerIndex, int cardPenalty) {
         for (int i = 0; i < cardPenalty; i++) {
-            addCardToPlayer(player, drawCardFromDrawPile());
+            addCardToPlayer(playerIndex, drawCardFromDrawPile());
         }
     }
 
-    public void swapPlayerPositions(UnoPlayer player1, UnoPlayer player2) {
+    public void swapPlayerPositions(int player1Index, int player2Index) {
         var players = gameState.getPlayers();
-        int player1Position = players.indexOf(player1);
-        int player2Position = players.indexOf(player2);
-        Collections.swap(players, player1Position, player2Position);
+        Collections.swap(players, player1Index, player2Index);
     }
 
     public void initialize() {
@@ -181,7 +196,9 @@ public class UnoGameManager extends CardGameManager {
 
         // select first card
         UnoCard card = drawCardFromDrawPile();
-        addCardToDiscardPile(card);
+
+        var machine = gameState.getCardMachine();
+        machine.addCardToDiscardPile(card);
     }
 }
 

@@ -60,11 +60,9 @@ public class UnoPlayerAI extends UnoPlayer {
     private List<UnoCard> getPlayableCards() {
         ArrayList<UnoCard> playableCards = new ArrayList<>();
         UnoModerator moderator = gameState.getModerator();
-        UnoCard lastPlayedCard = gameState.getLastPlayedCard();
-        UnoRules rules = gameState.getRules();
 
         for (var card : getPlayerHand()) {
-            if (moderator.validatePlay(rules, card, lastPlayedCard)) {
+            if (moderator.validateCard(gameState, card)) {
                 playableCards.add(card);
             }
         }
