@@ -1,16 +1,16 @@
 package test;
 
-import games.Difficulty;
-import games.cardgames.cards.unocards.UnoEdition;
-import games.cardgames.unogame.UnoGameManager;
-import games.cardgames.unogame.UnoGameState;
-import games.players.cardplayers.unoplayers.UnoPlayer;
+import model.Difficulty;
+import model.cardgames.cards.unocards.UnoEdition;
+import model.cardgames.unogame.UnoGameManager;
+import model.cardgames.unogame.UnoGameState;
+import model.players.cardplayers.unoplayers.UnoPlayer;
 
 public class Test {
     public static void main(String[] args) {
 
         // create game manager
-        UnoGameManager gameManager = new UnoGameManager(UnoEdition.CLASSIC, Difficulty.EASY);
+        UnoGameManager gameManager = new UnoGameManager();
 
         // get the game state
         UnoGameState gameState = gameManager.getGameState();
@@ -26,11 +26,6 @@ public class Test {
 
         // create a player
         UnoPlayer player = new UnoPlayer();
-
-
-
-
-
 
 
     }

@@ -1,2 +1,24 @@
-Mar 13, 2025 4:02:37 PM games.images.playerimages.PlayerImageManager <clinit>
+Mar 13, 2025 4:02:37 PM model.images.playerimages.PlayerImageManager <clinit>
 INFO: [Player Image Log]: Loading images
+Mar 13, 2025 4:50:29 PM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 10:18:43 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 10:43:55 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 10:43:59 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 10:59:28 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 11:43:07 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 11:43:41 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 11:44:04 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 11:46:15 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 11:46:36 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
+Mar 15, 2025 11:47:26 AM model.images.cardimages.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
