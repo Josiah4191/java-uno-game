@@ -1,4 +1,4 @@
-package model;
+package model.cardgames.unogame;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus

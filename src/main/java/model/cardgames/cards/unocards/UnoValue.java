@@ -27,7 +27,10 @@ public enum UnoValue {
 
     // Receives an enum value and checks if it is a WILD card.
     public static boolean isWild(UnoValue value) {
-        return value.name().startsWith("WILD");
+        return switch (value) {
+            case UnoValue.WILD, UnoValue.WILD_DRAW_FOUR -> true;
+            default -> false;
+        };
     }
 
     // Receives an enum value and checks if it is an ACTION card.

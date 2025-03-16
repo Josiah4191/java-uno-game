@@ -1,6 +1,6 @@
 package model.players.cardplayers.unoplayers.unobrains;
 
-import model.Difficulty;
+import model.cardgames.unogame.Difficulty;
 
 public class UnoBrainFactory {
     /*

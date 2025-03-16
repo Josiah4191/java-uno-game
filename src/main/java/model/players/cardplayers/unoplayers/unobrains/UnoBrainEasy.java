@@ -20,9 +20,9 @@ will be added later.
 
 public class UnoBrainEasy extends UnoBrain {
 
-    public int analyze(UnoGameState gameState, List<UnoCard> playableCards) {
+    public UnoCard analyze(UnoGameState gameState, List<UnoCard> playableCards) {
         Random random = new Random();
         UnoCard card = playableCards.get(random.nextInt(playableCards.size()));
-        return playableCards.indexOf(card);
+        return card;
     }
 }

@@ -125,7 +125,7 @@ public class UnoCardClassicImages {
             )),
             UnoSuit.WILD, new HashMap<>(Map.ofEntries(
                     entry(UnoValue.WILD, "/images/cardimages/Wild.png"),
-                    entry(WILD_DRAW_FOUR, "/images/cardimages/Wild_Draw.png")
+                    entry(UnoValue.WILD_DRAW_FOUR, "/images/cardimages/Wild_Draw.png")
             )),
             GENERAL, new HashMap<>(Map.ofEntries(
                     entry(UnoValue.DECK, "/images/cardimages/Deck.png"),

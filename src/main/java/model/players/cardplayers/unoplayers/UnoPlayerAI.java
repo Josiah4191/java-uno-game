@@ -44,8 +44,12 @@ public class UnoPlayerAI extends UnoPlayer {
     @Override
     public UnoCard playCard(int cardIndex) {
         var playableCards = getPlayableCards();
-        cardIndex = brain.analyze(gameState, playableCards);
-        return super.playCard(cardIndex);
+        if (!playableCards.isEmpty()) {
+            System.out.println("Playable cards: " + playableCards.size());
+            return brain.analyze(gameState, playableCards);
+        } else {
+            return null;
+        }
     }
 
     /*

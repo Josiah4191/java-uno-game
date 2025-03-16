@@ -1,9 +1,7 @@
 package model.cardgames.unogame;
 
-import model.Difficulty;
-import model.cardgames.CardGameManager;
+import controller.GameAIListener;
 import model.cardgames.cards.unocards.UnoCard;
-import model.cardgames.cards.unocards.UnoEdition;
 import model.cardgames.cards.unocards.UnoValue;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 import model.players.cardplayers.unoplayers.UnoPlayerAI;
@@ -12,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -33,12 +35,17 @@ NOTE:
         - Future database object for saving and loading the gameState object
  */
 
-public class UnoGameManager extends CardGameManager {
+public class UnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
+    private GameAIListener gameAIListener;
 
     public UnoGameState getGameState() {
         return gameState;
+    }
+
+    public void setGameAIListener(GameAIListener gameAIListener) {
+        this.gameAIListener = gameAIListener;
     }
 
     public void addPlayer(UnoPlayer player) {
@@ -53,27 +60,24 @@ public class UnoGameManager extends CardGameManager {
         gameState.dealCards(numberOfCards, players);
     }
 
-    public UnoCard drawCardFromDrawPile() {
-        UnoCard card = gameState.drawCardFromDrawPile();
-        var machine = gameState.getCardMachine();
-        machine.addCardToDiscardPile(card);
-        return card;
-    }
+    public boolean playerDrawCard(int playerIndex) {
+        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        addCardToPlayer(playerIndex, card);
+        UnoModerator moderator = gameState.getModerator();
+        boolean playable = moderator.validateCard(gameState, card);
 
-    public void getPlayableCards() {
-
+        return playable;
     }
 
     public boolean playCard(int playerIndex, int cardIndex) {
         var player = gameState.getPlayer(playerIndex);
-        var machine = gameState.getCardMachine();
         var moderator = gameState.getModerator();
         UnoCard card = player.getPlayerHand().get(cardIndex);
         boolean valid = moderator.validateCard(gameState, card);
 
         if (valid) {
             player.playCard(cardIndex);
-            machine.addCardToDiscardPile(card);
+            gameState.getCardMachine().addCardToDiscardPile(card);
 
             // Use moderator to evaluate the card value that is played. The rule set will determine the returned value.
             UnoValue value = moderator.evaluateCardValue(gameState, card);
@@ -86,13 +90,58 @@ public class UnoGameManager extends CardGameManager {
         return false;
     }
 
-    private void processCardValue(UnoValue value) {
+    public void runAITurn() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(gameState.getPlayers().size());
+
+        for (UnoPlayer player : gameState.getPlayers()) {
+
+            if (!(player.equals(gameState.getMainPlayer()))) {
+
+                executor.scheduleAtFixedRate(new Runnable() {
+                    public void run() {
+
+                        if (player.equals(gameState.getCurrentPlayer())) {
+                            System.out.println("Last played card: " + gameState.getLastPlayedCard());
+                            UnoCard card = player.playCard(0);
+
+                            if (card == null) {
+                                System.out.println(gameState.getCurrentPlayer().getName() + " has no playable cards");
+                                moveToNextPlayer();
+                                gameAIListener.onAIMove();
+                                System.out.println();
+                            } else {
+                                System.out.println(player + " has played " + card);
+                                processCardValue(card.getValue());
+                                gameState.getCardMachine().addCardToDiscardPile(card);
+                                moveToNextPlayer();
+                                gameAIListener.onAIMove();
+                                System.out.println();
+                            }
+
+                            if (gameState.getCurrentPlayer().equals(gameState.getMainPlayer())) {
+                                executor.shutdown();
+                            }
+                        }
+                    }
+                }, 3, 5, TimeUnit.SECONDS);
+            }
+        }
+    }
+
+    private UnoValue processCardValue(UnoValue value) {
+        int nextPlayerIndex = getNextPlayerIndex(1);
         switch (value) {
             case UnoValue.REVERSE:
                 reversePlayDirection();
                 break;
             case UnoValue.SKIP:
                 skipNextPlayer();
+                break;
+            case UnoValue.DRAW_TWO:
+                applyPenalty(nextPlayerIndex, 2);
+                break;
+            case UnoValue.WILD_DRAW_FOUR:
+                applyPenalty(nextPlayerIndex, 4);
                 break;
             case UnoValue.DRAW_TW0_STACK:
                 gameState.addStackPenalty(2);
@@ -101,6 +150,7 @@ public class UnoGameManager extends CardGameManager {
                 gameState.addStackPenalty(4);
                 break;
         }
+        return value;
     }
 
     public void addCardToPlayer(int playerIndex, UnoCard card) {
@@ -158,7 +208,8 @@ public class UnoGameManager extends CardGameManager {
 
     public void applyPenalty(int playerIndex, int cardPenalty) {
         for (int i = 0; i < cardPenalty; i++) {
-            addCardToPlayer(playerIndex, drawCardFromDrawPile());
+            UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+            addCardToPlayer(playerIndex, card);
         }
     }
 
@@ -191,10 +242,8 @@ public class UnoGameManager extends CardGameManager {
         dealCards(7, players);
 
         // select first card
-        UnoCard card = drawCardFromDrawPile();
-
-        var machine = gameState.getCardMachine();
-        machine.addCardToDiscardPile(card);
+        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        gameState.getCardMachine().addCardToDiscardPile(card);
     }
 }
 

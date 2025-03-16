@@ -1,6 +1,10 @@
 package controller;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import model.cardgames.cards.unocards.UnoCard;
+import model.cardgames.unogame.PlayDirection;
 import model.images.cardimages.UnoCardClassicImages;
 import model.images.cardimages.UnoCardImageManager;
 import model.cardgames.unogame.UnoGameManager;
@@ -13,7 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import view.GameAreaView;
 
-public class GameAreaController {
+public class GameAreaController implements GameAIListener {
 
     private GameAreaView gameAreaView;
     private UnoGameManager gameManager;
@@ -23,22 +27,23 @@ public class GameAreaController {
         this.gameManager = gameManager;
         this.gameState = gameManager.getGameState();
         this.gameAreaView = gameAreaView;
+        gameManager.setGameAIListener(this);
     }
 
-    // i need to reevaluate what sort of information the game manager is returning about players, and what
-    // sort of parameters that their methods require to get information about them. like, should we really
-    // need to work with player indexes, card indexes, or pass those indexes to methods?
-
-    public void initialize() {
+    public void updateGameArea() {
         setDiscardPileImage();
         setDrawPileImage();
         setPlayerCardImage();
         setCurrentPlayer();
-        playCard();
+        setPlayerCardHandler();
+        setOpponentNames();
+        setPlayDirectionLabel();
+        setMainPlayer();
+        setDrawPileCardHandler();
     }
 
     public void setDrawPileImage() {
-        Label drawPileLbl = gameAreaView.getDrawPile();
+        Label drawPileLbl = gameAreaView.getDrawPileLbl();
         UnoCardImageManager imageManager = gameState.getCardImageManager();
 
         Image image = imageManager.getImage(UnoCardClassicImages.DECK);
@@ -50,24 +55,8 @@ public class GameAreaController {
         drawPileLbl.setGraphic(imageView);
     }
 
-    public void setLogoImage() {
-        Label logoLbl = gameAreaView.getCenterLogo();
-        UnoCardImageManager imageManager = gameState.getCardImageManager();
-        Image image = imageManager.getImage(UnoCardClassicImages.LOGO);
-        ImageView imageView = new ImageView(image);
-
-        imageView.setFitHeight(200);
-        imageView.setFitWidth(240);
-
-        logoLbl.setGraphic(imageView);
-    }
-
-    public void clearLogo() {
-        gameAreaView.getCenterLogo().setGraphic(null);
-    }
-
     public void setDiscardPileImage() {
-        Label discardPileLbl = gameAreaView.getDiscardPile();
+        Label discardPileLbl = gameAreaView.getDiscardPileLbl();
         UnoCardImageManager imageManager = gameState.getCardImageManager();
         UnoCard lastPlayedCard = gameState.getLastPlayedCard();
 
@@ -101,29 +90,89 @@ public class GameAreaController {
         }
     }
 
-    public void playCard() {
-        var labels = getGameAreaView().getPlayerCardsBox().getChildren();
-        for (var label: labels) {
+    public void setCurrentPlayer() {
+        UnoPlayer player = gameState.getCurrentPlayer();
+        gameAreaView.getCurrentPlayerLbl().setText(player.getName() + "'s turn");
+        gameAreaView.getCurrentPlayerLbl().setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+    }
+
+    public void setDrawPileCardHandler() {
+        Label drawPileLbl = getGameAreaView().getDrawPileLbl();
+        UnoPlayer currentPlayer = gameState.getCurrentPlayer();
+        int currentPlayerIndex = gameState.getCurrentPlayerIndex();
+
+        drawPileLbl.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                boolean playable = gameManager.playerDrawCard(currentPlayerIndex);
+                gameManager.moveToNextPlayer();
+                updateGameArea();
+                gameManager.runAITurn();
+            }
+        });
+    }
+
+    public void onAIMove() {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                updateGameArea();
+            }
+        });
+    }
+
+    public void setPlayerCardHandler() {
+        var playerCardLbls = getGameAreaView().getPlayerCardsBox().getChildren();
+        for (var label: playerCardLbls) {
 
             label.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent mouseEvent) {
                     UnoCard card = (UnoCard)label.getUserData();
-                    var player = gameState.getCurrentPlayer();
-                    if (player.equals(gameState.getMainPlayer())) {
-                        //gameManager.playCard(player, card);
-                        gameManager.moveToNextPlayer();
-                        setCurrentPlayer();
-                        setDiscardPileImage();
-                        setPlayerCardImage();
+                    var currentPlayer = gameState.getCurrentPlayer();
+                    int playerIndex = gameState.getPlayers().indexOf(currentPlayer);
+                    int cardIndex = currentPlayer.getPlayerHand().indexOf(card);
+
+                    if (currentPlayer.equals(gameState.getMainPlayer())) {
+
+                        boolean valid = gameManager.playCard(playerIndex, cardIndex);
+
+                        if (valid) {
+                            gameManager.moveToNextPlayer();
+                            updateGameArea();
+                            gameManager.runAITurn();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid Card", ButtonType.OK);
+                            alert.show();
+                        }
                     }
                 }
             });
         }
     }
 
-    public void setCurrentPlayer() {
-        UnoPlayer player = gameState.getCurrentPlayer();
-        gameAreaView.getCurrentPlayerLabel().setText(player.getName() + "'s turn");
+
+    public void setMainPlayer() {
+        UnoPlayer player = gameState.getMainPlayer();
+        Label playerNameLbl = new Label(player.getName());
+        playerNameLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+        gameAreaView.getMainPlayerBox().getChildren().clear();
+        gameAreaView.getMainPlayerBox().getChildren().add(playerNameLbl);
+    }
+
+    public void setOpponentNames() {
+        var players = gameState.getPlayers();
+        gameAreaView.getOpponentsPlayerBox().getChildren().clear();
+
+        for (var player: players) {
+            if (!(player.equals(gameState.getMainPlayer()))) {
+                Label opponentNameLbl = new Label(player.getName() + " : " + player.getTotalCardsRemaining());
+                opponentNameLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+                gameAreaView.getOpponentsPlayerBox().getChildren().add(opponentNameLbl);
+            }
+        }
+    }
+
+    private void setPlayDirectionLabel() {
+        PlayDirection direction = gameState.getDirection();
+        gameAreaView.getPlayDirectionLbl().setText(direction.toString());
     }
 
     public GameAreaView getGameAreaView() {

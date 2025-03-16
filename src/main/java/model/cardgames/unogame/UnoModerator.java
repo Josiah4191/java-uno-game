@@ -1,6 +1,5 @@
 package model.cardgames.unogame;
 
-import model.Moderator;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoValue;
 import model.players.cardplayers.unoplayers.UnoPlayer;
@@ -11,7 +10,7 @@ Date: 3/7/2025
 ------------------------------------------------------------------------------
  */
 
-public class UnoModerator extends Moderator {
+public class UnoModerator {
 
     public boolean validateCard(UnoGameState gameState, UnoCard card) {
         return gameState.getRules().validateCard(gameState, card);

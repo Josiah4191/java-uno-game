@@ -1,9 +1,8 @@
 package model.cardgames.unogame;
 
-import model.Difficulty;
-import model.cardgames.CardGameState;
 import model.cardgames.cards.unocards.*;
 import model.images.cardimages.UnoCardImageManager;
+import model.images.playerimages.PlayerImageManager;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.util.ArrayList;
@@ -62,14 +61,16 @@ What this class contains:
         - For implementation details, refer to UnoCardMachine, Pile, UnoDrawPile, and UnoDiscardPile.
  */
 
-public class UnoGameState extends CardGameState {
+public class UnoGameState {
 
     private UnoRules rules = new UnoClassicRules();
     private List<UnoPlayer> players = new ArrayList<>();
     private UnoModerator moderator = new UnoModerator();
     private PlayDirection direction = PlayDirection.FORWARD;
+    private UnoSuit currentSuit;
     private Difficulty difficulty = Difficulty.EASY;
     private UnoCardImageManager cardImageManager = new UnoCardImageManager();
+    private PlayerImageManager playerImageManager= new PlayerImageManager();
     private UnoCardMachine machine = new UnoCardMachine();
     private int currentPlayerIndex;
     private UnoPlayer mainPlayer;
@@ -103,6 +104,15 @@ public class UnoGameState extends CardGameState {
         return machine.getLastPlayedCard();
     }
 
+    public void setCurrentSuit() {
+        UnoCard card = getLastPlayedCard();
+        this.currentSuit = card.getSuit();
+    }
+
+    public UnoSuit getCurrentSuit() {
+        return currentSuit;
+    }
+
     public void setDirection(PlayDirection direction) {
         this.direction = direction;
     }
@@ -121,10 +131,6 @@ public class UnoGameState extends CardGameState {
 
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
         machine.dealCards(numberOfCards, players);
-    }
-
-    public UnoCard drawCardFromDrawPile() {
-        return machine.drawCardFromDrawPile();
     }
 
     public UnoEdition getEdition() {
@@ -169,6 +175,10 @@ public class UnoGameState extends CardGameState {
 
     public UnoCardImageManager getCardImageManager() {
         return cardImageManager;
+    }
+
+    public PlayerImageManager getPlayerImageManager() {
+        return playerImageManager;
     }
 
     public UnoModerator getModerator() {

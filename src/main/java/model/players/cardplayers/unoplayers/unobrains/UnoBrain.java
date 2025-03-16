@@ -1,7 +1,6 @@
 package model.players.cardplayers.unoplayers.unobrains;
 
 import model.cardgames.cards.unocards.UnoCard;
-import model.players.cardplayers.CardBrain;
 import model.cardgames.unogame.UnoGameState;
 
 import java.util.List;
@@ -27,12 +26,12 @@ NOTE:
     - This can be revisited at a later time.
 */
 
-public abstract class UnoBrain extends CardBrain {
+public abstract class UnoBrain {
     /*
     The analyze() method must be subclassed. It analyzes the gameState and returns an integer which represents
     which card the AI chooses to play.
         - Internally, each subclass will implement its own methods for processing the gameState object. Those methods
         will be called by their analyze() method to generate an integer to return.
      */
-    public abstract int analyze(UnoGameState gameState, List<UnoCard> playableCards);
+    public abstract UnoCard analyze(UnoGameState gameState, List<UnoCard> playableCards);
 }

@@ -11,50 +11,41 @@ public class GameAreaView {
     private VBox centerBox = new VBox(10);
     private Label centerLogo = new Label();
     private HBox pilesBox = new HBox(20);
-    private Label drawPile = new Label("");
-    private Label discardPile = new Label("");
-    private Label currentPlayerLabel = new Label("");
+    private Label drawPileLbl = new Label("");
+    private Label discardPileLbl = new Label("");
+    private Label currentPlayerLbl = new Label("");
     private HBox playerCardsBox = new HBox(10);
+
+    private HBox mainPlayerBox = new HBox();
+    private HBox opponentsPlayerBox = new HBox(10);
+    private Label playDirectionLbl = new Label("");
 
     public GameAreaView() {
         gameArea = new StackPane();
         gameArea.setStyle("-fx-background-color: darkgreen; -fx-padding: 10;");
         centerBox.setAlignment(Pos.CENTER);
+        playDirectionLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+        opponentsPlayerBox.setAlignment(Pos.CENTER);
+        mainPlayerBox.setAlignment(Pos.CENTER);
         centerLogo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
         pilesBox.setAlignment(Pos.CENTER);
-        pilesBox.getChildren().addAll(drawPile, discardPile);
-        currentPlayerLabel.setStyle("-fx-text-fill: white;");
+        pilesBox.getChildren().addAll(drawPileLbl, discardPileLbl);
+        currentPlayerLbl.setStyle("-fx-text-fill: white;");
         playerCardsBox.setAlignment(Pos.CENTER);
-        centerBox.getChildren().addAll(centerLogo, pilesBox, currentPlayerLabel, playerCardsBox);
+        centerBox.getChildren().addAll(playDirectionLbl, opponentsPlayerBox, centerLogo, pilesBox, currentPlayerLbl, playerCardsBox, mainPlayerBox);
         gameArea.getChildren().add(centerBox);
     }
 
-    public StackPane getGameArea() {
-        return gameArea;
+    public Label getDrawPileLbl() {
+        return drawPileLbl;
     }
 
-    public VBox getCenterBox() {
-        return centerBox;
+    public Label getDiscardPileLbl() {
+        return discardPileLbl;
     }
 
-    public Label getCenterLogo() {
-        return centerLogo;
-    }
-
-    public HBox getPilesBox() {
-        return pilesBox;
-    }
-
-    public Label getDrawPile() {
-        return drawPile;
-    }
-
-    public Label getDiscardPile() {
-        return discardPile;
-    }
-
-    public Label getCurrentPlayerLabel() {
-        return currentPlayerLabel;
+    public Label getCurrentPlayerLbl() {
+        return currentPlayerLbl;
     }
 
     public HBox getPlayerCardsBox() {
@@ -63,6 +54,18 @@ public class GameAreaView {
 
     public StackPane getView() {
         return gameArea;
+    }
+
+    public HBox getOpponentsPlayerBox() {
+        return opponentsPlayerBox;
+    }
+
+    public Label getPlayDirectionLbl() {
+        return playDirectionLbl;
+    }
+
+    public HBox getMainPlayerBox() {
+        return mainPlayerBox;
     }
 
 }

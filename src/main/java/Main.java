@@ -1,9 +1,10 @@
+import controller.GameAreaController;
+import controller.MainController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.application.Application;
-import controller.MainController;
 import model.cardgames.unogame.UnoGameManager;
-import view.MainView;
+import view.GameAreaView;
 
 public class Main extends Application {
     
@@ -17,13 +18,13 @@ public class Main extends Application {
         UnoGameManager gameManager = new UnoGameManager();
 
         // view
-        MainView mainView = new MainView();
+        GameAreaView gameAreaView = new GameAreaView();
 
         // controller
-        MainController mainController = new MainController(gameManager, mainView);
+        MainController mainController = new MainController(gameManager, gameAreaView);
 
         // set scene
-        Scene scene = new Scene(mainView.getRoot(), 800, 600);
+        Scene scene = new Scene(mainController.getRoot(), 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("UNO");
         primaryStage.show();

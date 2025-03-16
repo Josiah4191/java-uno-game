@@ -19,7 +19,7 @@ will be added later.
 
 public class UnoBrainHard extends UnoBrain {
 
-    public int analyze(UnoGameState gameState, List<UnoCard> playableCards) {
-        return 0;
+    public UnoCard analyze(UnoGameState gameState, List<UnoCard> playableCards) {
+        return null;
     }
 }

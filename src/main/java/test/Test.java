@@ -1,7 +1,6 @@
 package test;
 
-import model.Difficulty;
-import model.cardgames.cards.unocards.UnoEdition;
+import model.cardgames.cards.unocards.UnoDeck;
 import model.cardgames.unogame.UnoGameManager;
 import model.cardgames.unogame.UnoGameState;
 import model.players.cardplayers.unoplayers.UnoPlayer;
@@ -22,10 +21,17 @@ public class Test {
         deals cards to players, and adds a card to the discard pile.
         */
 
-        gameManager.initialize();
-
         // create a player
         UnoPlayer player = new UnoPlayer();
+
+        var deck = gameState.getDeck();
+        var drawPile = gameState.getDrawPile();
+
+        deck.forEach(System.out::println);
+        drawPile.forEach(System.out::println);
+
+        System.out.println(drawPile.size());
+
 
 
     }
