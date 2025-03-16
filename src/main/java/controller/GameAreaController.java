@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import model.cardgames.cards.unocards.UnoCard;
+import model.cardgames.cards.unocards.UnoValue;
 import model.cardgames.unogame.PlayDirection;
 import model.images.cardimages.UnoCardClassicImages;
 import model.images.cardimages.UnoCardImageManager;
@@ -100,23 +101,26 @@ public class GameAreaController implements GameAIListener {
         Label drawPileLbl = getGameAreaView().getDrawPileLbl();
         UnoPlayer currentPlayer = gameState.getCurrentPlayer();
         int currentPlayerIndex = gameState.getCurrentPlayerIndex();
+        currentPlayer.setPassTurn(true);
 
         drawPileLbl.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
-                boolean playable = gameManager.playerDrawCard(currentPlayerIndex);
-                gameManager.moveToNextPlayer();
-                updateGameArea();
-                gameManager.runAITurn();
+
+                if (currentPlayer.isPassTurn()) {
+                    boolean playable = gameManager.playerDrawCard(currentPlayerIndex);
+                    updateGameArea();
+                    currentPlayer.setPassTurn(false);
+                } else {
+                    gameManager.moveToNextPlayer();
+                    updateGameArea();
+                    gameManager.runAITurn();
+                }
             }
         });
     }
 
     public void onAIMove() {
-        Platform.runLater(new Runnable() {
-            public void run() {
-                updateGameArea();
-            }
-        });
+        Platform.runLater(this::updateGameArea);
     }
 
     public void setPlayerCardHandler() {
@@ -135,7 +139,11 @@ public class GameAreaController implements GameAIListener {
                         boolean valid = gameManager.playCard(playerIndex, cardIndex);
 
                         if (valid) {
-                            gameManager.moveToNextPlayer();
+                            if (card.getValue() == UnoValue.SKIP) {
+                                gameManager.skipNextPlayer();
+                            } else {
+                                gameManager.moveToNextPlayer();
+                            }
                             updateGameArea();
                             gameManager.runAITurn();
                         } else {

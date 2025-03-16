@@ -113,7 +113,13 @@ public class UnoGameManager {
                                 System.out.println(player + " has played " + card);
                                 processCardValue(card.getValue());
                                 gameState.getCardMachine().addCardToDiscardPile(card);
-                                moveToNextPlayer();
+
+                                if (card.getValue() == UnoValue.SKIP) {
+                                    skipNextPlayer();
+                                } else {
+                                    moveToNextPlayer();
+                                }
+
                                 gameAIListener.onAIMove();
                                 System.out.println();
                             }

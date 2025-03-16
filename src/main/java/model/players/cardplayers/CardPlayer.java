@@ -26,6 +26,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     - C represents Card.
      */
     private P playerHand;
+    private boolean passTurn;
 
     /*
     The constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
@@ -88,5 +89,13 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
         Collections.swap(cards, card1Index, card2Index);
     }
     */
+
+    public void setPassTurn(boolean pass) {
+        this.passTurn = pass;
+    }
+
+    public boolean isPassTurn() {
+        return passTurn;
+    }
 
 }
