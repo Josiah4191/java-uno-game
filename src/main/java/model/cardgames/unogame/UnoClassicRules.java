@@ -18,7 +18,6 @@ public class UnoClassicRules implements UnoRules {
         var numberOfPlayers = gameState.getPlayers().size();
         UnoCard lastPlayedCard = gameState.getLastPlayedCard();
 
-
         // If 2 players remain, SKIP works like REVERSE and REVERSE works like SKIP
         if (numberOfPlayers == 2) {
             if (card.getValue() == UnoValue.SKIP && lastPlayedCard.getValue() == UnoValue.REVERSE) {

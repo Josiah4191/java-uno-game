@@ -43,10 +43,13 @@ public class UnoPlayerAI extends UnoPlayer {
      */
     @Override
     public UnoCard playCard(int cardIndex) {
-        var playableCards = getPlayableCards();
+        var playableCards = getPlayableCards(gameState);
         if (!playableCards.isEmpty()) {
             System.out.println("Playable cards: " + playableCards.size());
-            return brain.analyze(gameState, playableCards);
+            System.out.println("Total cards: " + getPlayerHand().size());
+            UnoCard selectedCard = brain.analyze(gameState, playableCards);
+            int selectedCardIndex = getPlayerHand().indexOf(selectedCard);
+            return super.playCard(selectedCardIndex);
         } else {
             return null;
         }
@@ -60,18 +63,6 @@ public class UnoPlayerAI extends UnoPlayer {
      Then we can return the list of cards that are playable.
      If the player tries to play a card not in the list of playable cards, then we prevent it.
     */
-    private List<UnoCard> getPlayableCards() {
-        ArrayList<UnoCard> playableCards = new ArrayList<>();
-        UnoModerator moderator = gameState.getModerator();
-
-        for (var card : getPlayerHand()) {
-            if (moderator.validateCard(gameState, card)) {
-                playableCards.add(card);
-            }
-        }
-
-        return playableCards;
-    }
 
     public void createBrain() {
         this.brain = UnoBrainFactory.createBrain(gameState.getDifficulty());

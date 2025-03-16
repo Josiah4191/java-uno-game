@@ -13,10 +13,10 @@ public class GameAreaView {
     private HBox pilesBox = new HBox(20);
     private Label drawPileLbl = new Label("");
     private Label discardPileLbl = new Label("");
-    private Label currentPlayerLbl = new Label("");
     private HBox playerCardsBox = new HBox(10);
 
     private HBox mainPlayerBox = new HBox();
+    private Label mainPlayerNameLbl = new Label();
     private HBox opponentsPlayerBox = new HBox(10);
     private Label playDirectionLbl = new Label("");
 
@@ -27,12 +27,12 @@ public class GameAreaView {
         playDirectionLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
         opponentsPlayerBox.setAlignment(Pos.CENTER);
         mainPlayerBox.setAlignment(Pos.CENTER);
+        mainPlayerBox.getChildren().add(mainPlayerNameLbl);
         centerLogo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
         pilesBox.setAlignment(Pos.CENTER);
         pilesBox.getChildren().addAll(drawPileLbl, discardPileLbl);
-        currentPlayerLbl.setStyle("-fx-text-fill: white;");
         playerCardsBox.setAlignment(Pos.CENTER);
-        centerBox.getChildren().addAll(playDirectionLbl, opponentsPlayerBox, centerLogo, pilesBox, currentPlayerLbl, playerCardsBox, mainPlayerBox);
+        centerBox.getChildren().addAll(playDirectionLbl, opponentsPlayerBox, centerLogo, pilesBox, playerCardsBox, mainPlayerBox);
         gameArea.getChildren().add(centerBox);
     }
 
@@ -40,12 +40,12 @@ public class GameAreaView {
         return drawPileLbl;
     }
 
-    public Label getDiscardPileLbl() {
-        return discardPileLbl;
+    public Label getMainPlayerNameLbl() {
+        return mainPlayerNameLbl;
     }
 
-    public Label getCurrentPlayerLbl() {
-        return currentPlayerLbl;
+    public Label getDiscardPileLbl() {
+        return discardPileLbl;
     }
 
     public HBox getPlayerCardsBox() {

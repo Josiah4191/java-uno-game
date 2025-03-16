@@ -2,7 +2,10 @@ package model.players.cardplayers.unoplayers;
 
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoPlayerHandPile;
+import model.cardgames.unogame.UnoGameState;
 import model.players.cardplayers.CardPlayer;
+
+import java.util.List;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -29,6 +32,14 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
 
     public UnoPlayer(UnoPlayerHandPile playerHand) {
         super(playerHand);
+    }
+
+    public List<UnoCard> getPlayableCards(UnoGameState gameState) {
+        return getPlayerHand()
+                .stream()
+                .filter(e -> gameState.getModerator().validateCard(gameState, e))
+                .toList();
+
     }
 
     public void setSayUno(boolean sayUno) {

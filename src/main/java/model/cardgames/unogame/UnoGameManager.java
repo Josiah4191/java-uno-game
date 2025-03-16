@@ -1,6 +1,6 @@
 package model.cardgames.unogame;
 
-import controller.GameAIListener;
+import controller.GameAreaListener;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoValue;
 import model.players.cardplayers.unoplayers.UnoPlayer;
@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -38,13 +37,13 @@ NOTE:
 public class UnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
-    private GameAIListener gameAIListener;
+    private GameAreaListener gameAIListener;
 
     public UnoGameState getGameState() {
         return gameState;
     }
 
-    public void setGameAIListener(GameAIListener gameAIListener) {
+    public void setGameAIListener(GameAreaListener gameAIListener) {
         this.gameAIListener = gameAIListener;
     }
 
@@ -69,6 +68,11 @@ public class UnoGameManager {
         return playable;
     }
 
+    public List<UnoCard> getPlayableCards(int playerIndex) {
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+        return player.getPlayableCards(gameState);
+    }
+
     public boolean playCard(int playerIndex, int cardIndex) {
         var player = gameState.getPlayer(playerIndex);
         var moderator = gameState.getModerator();
@@ -79,11 +83,12 @@ public class UnoGameManager {
             player.playCard(cardIndex);
             gameState.getCardMachine().addCardToDiscardPile(card);
 
-            // Use moderator to evaluate the card value that is played. The rule set will determine the returned value.
             UnoValue value = moderator.evaluateCardValue(gameState, card);
-            // Process the card value and take action based on the card value
+
             processCardValue(value);
-            // Return true if the card was successfully played
+
+            gameAIListener.updateGameAreaView();
+
             return true;
         }
         // Return false if the card could not be played
@@ -106,21 +111,19 @@ public class UnoGameManager {
 
                             if (card == null) {
                                 System.out.println(gameState.getCurrentPlayer().getName() + " has no playable cards");
+
                                 moveToNextPlayer();
-                                gameAIListener.onAIMove();
+                                gameAIListener.updateGameAreaView();
+
                                 System.out.println();
                             } else {
                                 System.out.println(player + " has played " + card);
-                                processCardValue(card.getValue());
+
                                 gameState.getCardMachine().addCardToDiscardPile(card);
 
-                                if (card.getValue() == UnoValue.SKIP) {
-                                    skipNextPlayer();
-                                } else {
-                                    moveToNextPlayer();
-                                }
+                                processCardValue(card.getValue());
 
-                                gameAIListener.onAIMove();
+                                gameAIListener.updateGameAreaView();
                                 System.out.println();
                             }
 
@@ -156,6 +159,11 @@ public class UnoGameManager {
                 gameState.addStackPenalty(4);
                 break;
         }
+
+        if (!(value == UnoValue.SKIP)) {
+            moveToNextPlayer();
+        }
+
         return value;
     }
 
