@@ -6,6 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import model.cardgames.cards.unocards.UnoCard;
+import model.cardgames.cards.unocards.UnoSuit;
+import model.cardgames.cards.unocards.UnoValue;
 import model.cardgames.unogame.PlayDirection;
 import model.images.cardimages.UnoCardClassicImages;
 import model.images.cardimages.UnoCardImageManager;
@@ -44,6 +46,8 @@ public class GameAreaController implements GameAreaListener {
         setDrawPileCardHandler();
         highlightPlayableCards();
         setPassBtnHandler();
+        highlightCurrentSuitColor();
+        setSuitColorSelectionHandler();
     }
 
     public void setDrawPileImage() {
@@ -57,6 +61,16 @@ public class GameAreaController implements GameAreaListener {
         imageView.setFitWidth(100);
 
         drawPileLbl.setGraphic(imageView);
+    }
+
+    public void highlightCurrentSuitColor() {
+        Label discardPileLbl = gameAreaView.getDiscardPileLbl();
+        UnoSuit suit = gameState.getCurrentSuit();
+        if (!(suit == UnoSuit.WILD)) {
+            String color = suit.name();
+            String style = String.format("-fx-border-color: %s; -fx-border-width: 3px; -fx-border-radius: 5px;", color);
+            discardPileLbl.setStyle(style);
+        }
     }
 
     public void setDiscardPileImage() {
@@ -112,10 +126,11 @@ public class GameAreaController implements GameAreaListener {
                         setDiscardPileImage();
                         setDrawPileImage();
                         setPlayerCardImage();
+                        setMainPlayer();
 
                         if (playable) {
                             highlightDrawCard();
-                            setDrawCardHandler();
+                            setPlayableDrawCardHandler();
                         }
 
                         currentPlayer.setPassTurn(false);
@@ -149,7 +164,53 @@ public class GameAreaController implements GameAreaListener {
         Platform.runLater(this::updateGameArea);
     }
 
-    public void setDrawCardHandler() {
+    public void showSuitColorSelection() {
+        gameAreaView.getSuitColorSelectionBox().setVisible(true);
+    }
+
+    public void hideSuitColorSelection() {
+        gameAreaView.getSuitColorSelectionBox().setVisible(false);
+    }
+
+    public void setSuitColorSelectionHandler() {
+        gameAreaView.getRedLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                gameState.setCurrentSuit(UnoSuit.RED);
+                hideSuitColorSelection();
+                gameManager.moveToNextPlayer();
+                gameManager.runAITurn();
+                updateGameArea();
+            }
+        });
+
+        gameAreaView.getGreenLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                gameState.setCurrentSuit(UnoSuit.GREEN);
+                hideSuitColorSelection();
+                gameManager.runAITurn();
+                updateGameArea();
+            }
+        });
+
+        gameAreaView.getBlueLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                gameState.setCurrentSuit(UnoSuit.BLUE);
+                hideSuitColorSelection();
+                gameManager.runAITurn();
+                updateGameArea();
+            }
+        });
+        gameAreaView.getYellowLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                gameState.setCurrentSuit(UnoSuit.YELLOW);
+                hideSuitColorSelection();
+                gameManager.runAITurn();
+                updateGameArea();
+            }
+        });
+    }
+
+    public void setPlayableDrawCardHandler() {
         UnoPlayer mainPlayer = gameState.getMainPlayer();
         UnoCard lastDrawCard = mainPlayer.getLastDrawCard();
         int lastDrawCardIndex = mainPlayer.getPlayerHand().indexOf(lastDrawCard);
@@ -157,18 +218,23 @@ public class GameAreaController implements GameAreaListener {
         var cardLbls = gameAreaView.getPlayerCardsBox().getChildren();
 
         for (var label : cardLbls) {
-            if (label.getUserData().equals(lastDrawCard)) {
-
+            UnoCard card = (UnoCard) label.getUserData();
+            if (card.equals(lastDrawCard)) {
                 label.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     public void handle(MouseEvent event) {
                         boolean valid = gameManager.playCard(currentPlayerIndex, lastDrawCardIndex);
+                        hidePassBtn();
+                        updateGameArea();
 
                         if (valid) {
-                            gameManager.runAITurn();
+                            if (card.getSuit() == UnoSuit.WILD) {
+                                showSuitColorSelection();
+                            } else {
+                                gameManager.runAITurn();
+                            }
                         }
                     }
                 });
-
             }
         }
     }
@@ -190,7 +256,11 @@ public class GameAreaController implements GameAreaListener {
                         boolean valid = gameManager.playCard(currentPlayerIndex, cardIndex);
 
                         if (valid) {
-                            gameManager.runAITurn();
+                            if (card.getSuit() == UnoSuit.WILD) {
+                                showSuitColorSelection();
+                            } else {
+                                gameManager.runAITurn();
+                            }
                         }
                     }
                 }

@@ -2,6 +2,7 @@ package model.cardgames.unogame;
 
 import controller.GameAreaListener;
 import model.cardgames.cards.unocards.UnoCard;
+import model.cardgames.cards.unocards.UnoSuit;
 import model.cardgames.cards.unocards.UnoValue;
 import model.images.playerimages.PlayerImage;
 import model.players.cardplayers.unoplayers.UnoPlayer;
@@ -64,7 +65,6 @@ public class UnoGameManager {
 
         boolean playable = gameState.getModerator().validateCard(gameState, card);
 
-
         return playable;
     }
 
@@ -77,7 +77,7 @@ public class UnoGameManager {
         if (valid) {
 
             player.playCard(cardIndex);
-            gameState.getCardMachine().addCardToDiscardPile(card);
+            addCardToDiscardPile(card);
 
             UnoValue value = moderator.evaluateCardValue(gameState, card);
 
@@ -88,6 +88,11 @@ public class UnoGameManager {
             return true;
         }
         return false;
+    }
+
+    public void addCardToDiscardPile(UnoCard card) {
+        gameState.getCardMachine().addCardToDiscardPile(card);
+        gameState.setCurrentSuit(card.getSuit());
     }
 
     public void runAITurn() {
@@ -118,7 +123,7 @@ public class UnoGameManager {
                             } else {
                                 System.out.println(player + " has played " + card);
 
-                                gameState.getCardMachine().addCardToDiscardPile(card);
+                                addCardToDiscardPile(card);
 
                                 processCardValue(card.getValue());
 
@@ -148,6 +153,8 @@ public class UnoGameManager {
             case UnoValue.DRAW_TWO:
                 applyPenalty(nextPlayerIndex, 2);
                 break;
+            case UnoValue.WILD:
+                break;
             case UnoValue.WILD_DRAW_FOUR:
                 applyPenalty(nextPlayerIndex, 4);
                 break;
@@ -162,7 +169,6 @@ public class UnoGameManager {
         if (!(value == UnoValue.SKIP)) {
             moveToNextPlayer();
         }
-
     }
 
     public void addCardToPlayer(int playerIndex, UnoCard card) {
@@ -250,7 +256,7 @@ public class UnoGameManager {
 
         // select first card
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
-        gameState.getCardMachine().addCardToDiscardPile(card);
+        addCardToDiscardPile(card);
     }
 
     public void swapPlayerPositions(int player1Index, int player2Index) {

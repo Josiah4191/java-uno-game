@@ -104,9 +104,8 @@ public class UnoGameState {
         return machine.getLastPlayedCard();
     }
 
-    public void setCurrentSuit() {
-        UnoCard card = getLastPlayedCard();
-        this.currentSuit = card.getSuit();
+    public void setCurrentSuit(UnoSuit currentSuit) {
+        this.currentSuit = currentSuit;
     }
 
     public UnoSuit getCurrentSuit() {

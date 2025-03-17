@@ -1,6 +1,7 @@
 package model.players.cardplayers.unoplayers;
 
 import model.cardgames.cards.unocards.UnoCard;
+import model.cardgames.cards.unocards.UnoSuit;
 import model.cardgames.unogame.UnoGameState;
 import model.cardgames.unogame.UnoModerator;
 import model.players.cardplayers.unoplayers.unobrains.UnoBrain;
@@ -8,6 +9,7 @@ import model.players.cardplayers.unoplayers.unobrains.UnoBrainFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus

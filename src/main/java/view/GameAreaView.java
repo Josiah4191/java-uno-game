@@ -7,6 +7,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import org.w3c.dom.css.Rect;
 
 public class GameAreaView {
     private StackPane gameArea = new StackPane();
@@ -29,6 +32,12 @@ public class GameAreaView {
 
     private Button passBtn = new Button("Pass");
 
+    private HBox suitColorSelectionBox = new HBox(10);
+    private Rectangle redLbl = new Rectangle();
+    private Rectangle blueLbl = new Rectangle();
+    private Rectangle yellowLbl = new Rectangle();
+    private Rectangle greenLbl = new Rectangle();
+
     public GameAreaView() {
 
         centerBox.setAlignment(Pos.CENTER);
@@ -36,6 +45,7 @@ public class GameAreaView {
         pilesBox.setAlignment(Pos.CENTER);
         playerCardsBox.setAlignment(Pos.CENTER);
         mainPlayerBox.setAlignment(Pos.CENTER);
+        suitColorSelectionBox.setAlignment(Pos.CENTER);
 
         gameArea.getChildren().add(centerBox);
         gameArea.setStyle("-fx-background-color: darkgreen; -fx-padding: 10;");
@@ -46,15 +56,34 @@ public class GameAreaView {
                 pilesBox,
                 playerCardsBox,
                 mainPlayerBox,
-                passBtn);
+                passBtn,
+                suitColorSelectionBox);
 
         passBtn.setVisible(false);
+        passBtn.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
         playDirectionLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
         pilesBox.getChildren().addAll(drawPileLbl, discardPileLbl);
         mainPlayerBox.getChildren().addAll(mainPlayerImageLbl, mainPlayerNameLbl);
         mainPlayerBox.setMaxWidth(Region.USE_PREF_SIZE);
         mainPlayerBox.setMaxHeight(Region.USE_PREF_SIZE);
 
+        suitColorSelectionBox.setVisible(false);
+        suitColorSelectionBox.getChildren().addAll(redLbl, blueLbl, greenLbl, yellowLbl);
+        redLbl.setWidth(50);
+        redLbl.setHeight(60);
+        redLbl.setFill(Color.RED);
+
+        blueLbl.setWidth(50);
+        blueLbl.setHeight(60);
+        blueLbl.setFill(Color.BLUE);
+
+        greenLbl.setWidth(50);
+        greenLbl.setHeight(60);
+        greenLbl.setFill(Color.GREEN);
+
+        yellowLbl.setWidth(50);
+        yellowLbl.setHeight(60);
+        yellowLbl.setFill(Color.YELLOW);
     }
 
     public Label getDrawPileLbl() {
@@ -95,5 +124,25 @@ public class GameAreaView {
 
     public Button getPassBtn() {
         return passBtn;
+    }
+
+    public HBox getSuitColorSelectionBox() {
+        return suitColorSelectionBox;
+    }
+
+    public Rectangle getRedLbl() {
+        return redLbl;
+    }
+
+    public Rectangle getBlueLbl() {
+        return blueLbl;
+    }
+
+    public Rectangle getYellowLbl() {
+        return yellowLbl;
+    }
+
+    public Rectangle getGreenLbl() {
+        return greenLbl;
     }
 }

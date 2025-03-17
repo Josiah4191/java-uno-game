@@ -17,6 +17,7 @@ public class UnoClassicRules implements UnoRules {
         boolean match = false;
         var numberOfPlayers = gameState.getPlayers().size();
         UnoCard lastPlayedCard = gameState.getLastPlayedCard();
+        UnoSuit currentSuit = gameState.getCurrentSuit();
 
         // If 2 players remain, SKIP works like REVERSE and REVERSE works like SKIP
         if (numberOfPlayers == 2) {
@@ -28,7 +29,7 @@ public class UnoClassicRules implements UnoRules {
         }
 
         // If last played card is wild, match is true
-        if (lastPlayedCard.getSuit() == UnoSuit.WILD) {
+        if (currentSuit == UnoSuit.WILD) {
             match = true;
         }
         // If card is wild, match is true
@@ -36,7 +37,7 @@ public class UnoClassicRules implements UnoRules {
             match = true;
         }
         // If cards same color, match is true
-        if (card.getSuit() == lastPlayedCard.getSuit()) {
+        if (card.getSuit() == currentSuit) {
             match = true;
         }
         // If cards same value, match is true
