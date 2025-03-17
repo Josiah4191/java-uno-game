@@ -200,4 +200,5 @@ public class UnoGameState {
     public int getStackPenalty() {
         return stackPenalty;
     }
+
 }

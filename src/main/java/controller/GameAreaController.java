@@ -1,8 +1,10 @@
 package controller;
 
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.unogame.PlayDirection;
 import model.images.cardimages.UnoCardClassicImages;
@@ -35,12 +37,13 @@ public class GameAreaController implements GameAreaListener {
         setDrawPileImage();
         setPlayerCardImage();
         setPlayerCardHandler();
-        setOpponentNames();
         setPlayDirectionLabel();
         setMainPlayer();
+        setOpponentPlayers();
+        highlightCurrentPlayerImage();
         setDrawPileCardHandler();
         highlightPlayableCards();
-        highlightCurrentPlayer();
+        setPassBtnHandler();
     }
 
     public void setDrawPileImage() {
@@ -93,6 +96,7 @@ public class GameAreaController implements GameAreaListener {
 
     public void setDrawPileCardHandler() {
         Label drawPileLbl = getGameAreaView().getDrawPileLbl();
+        UnoPlayer mainPlayer = gameState.getMainPlayer();
         UnoPlayer currentPlayer = gameState.getCurrentPlayer();
         int currentPlayerIndex = gameState.getCurrentPlayerIndex();
         currentPlayer.setPassTurn(true);
@@ -100,21 +104,73 @@ public class GameAreaController implements GameAreaListener {
         drawPileLbl.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
 
-                if (currentPlayer.isPassTurn()) {
-                    boolean playable = gameManager.playerDrawCard(currentPlayerIndex);
-                    updateGameArea();
-                    currentPlayer.setPassTurn(false);
-                } else {
-                    gameManager.moveToNextPlayer();
-                    updateGameArea();
-                    gameManager.runAITurn();
+                if (currentPlayer.equals(mainPlayer)) {
+                    if (currentPlayer.isPassTurn()) {
+                        showPassBtn();
+                        boolean playable = gameManager.playerDrawCard(currentPlayerIndex);
+
+                        setDiscardPileImage();
+                        setDrawPileImage();
+                        setPlayerCardImage();
+
+                        if (playable) {
+                            highlightDrawCard();
+                            setDrawCardHandler();
+                        }
+
+                        currentPlayer.setPassTurn(false);
+                    }
                 }
             }
         });
     }
 
+    public void setPassBtnHandler() {
+        Button passBtn = gameAreaView.getPassBtn();
+        passBtn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                gameManager.moveToNextPlayer();
+                gameManager.runAITurn();
+                updateGameArea();
+                hidePassBtn();
+            }
+        });
+    }
+
+    public void hidePassBtn() {
+        gameAreaView.getPassBtn().setVisible(false);
+    }
+
+    public void showPassBtn() {
+        gameAreaView.getPassBtn().setVisible(true);
+    }
+
     public void updateGameAreaView() {
         Platform.runLater(this::updateGameArea);
+    }
+
+    public void setDrawCardHandler() {
+        UnoPlayer mainPlayer = gameState.getMainPlayer();
+        UnoCard lastDrawCard = mainPlayer.getLastDrawCard();
+        int lastDrawCardIndex = mainPlayer.getPlayerHand().indexOf(lastDrawCard);
+        int currentPlayerIndex = gameState.getCurrentPlayerIndex();
+        var cardLbls = gameAreaView.getPlayerCardsBox().getChildren();
+
+        for (var label : cardLbls) {
+            if (label.getUserData().equals(lastDrawCard)) {
+
+                label.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        boolean valid = gameManager.playCard(currentPlayerIndex, lastDrawCardIndex);
+
+                        if (valid) {
+                            gameManager.runAITurn();
+                        }
+                    }
+                });
+
+            }
+        }
     }
 
     public void setPlayerCardHandler() {
@@ -136,18 +192,25 @@ public class GameAreaController implements GameAreaListener {
                         if (valid) {
                             gameManager.runAITurn();
                         }
-                        /*
-                        if (valid) {
-                            updateGameAreaView();
-                            gameManager.runAITurn();
-                        } else {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Invalid Card", ButtonType.OK);
-                            alert.show();
-                        }
-                         */
                     }
                 }
             });
+        }
+    }
+
+    public void highlightDrawCard() {
+        UnoPlayer mainPlayer = gameState.getMainPlayer();
+        UnoPlayer currentPlayer = gameState.getCurrentPlayer();
+        UnoCard lastDrawCard = mainPlayer.getLastDrawCard();
+        var cardLbls = gameAreaView.getPlayerCardsBox().getChildren();
+
+        if (currentPlayer.equals(mainPlayer)) {
+
+            for (var label : cardLbls) {
+                if (lastDrawCard.equals(label.getUserData())) {
+                    label.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
+                }
+            }
         }
     }
 
@@ -168,23 +231,25 @@ public class GameAreaController implements GameAreaListener {
         }
     }
 
-    public void highlightCurrentPlayer() {
+    public void highlightCurrentPlayerImage() {
         UnoPlayer currentPlayer = gameState.getCurrentPlayer();
         UnoPlayer mainPlayer = gameState.getMainPlayer();
 
         if (currentPlayer.equals(mainPlayer)) {
-            gameAreaView.getMainPlayerNameLbl().setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: yellow;");
+            gameAreaView.getMainPlayerBox().setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
         } else {
-            gameAreaView.getMainPlayerNameLbl().setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+            gameAreaView.getMainPlayerBox().setStyle("-fx-border-color: white; -fx-border-width: 3px; -fx-border-radius: 5px;");
         }
 
         if (!(currentPlayer.equals(mainPlayer))) {
-            for (var label : gameAreaView.getOpponentsPlayerBox().getChildren()) {
-                if (label.getUserData().equals(currentPlayer)) {
-                    label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: yellow;");
-                } else {
-                    label.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
-                }
+
+            for (var box : gameAreaView.getOpponentPlayerBox().getChildren()) {
+
+                    if (box.getUserData().equals(currentPlayer)) {
+                        box.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
+                    } else {
+                        box.setStyle("");
+                    }
             }
         }
     }
@@ -192,21 +257,44 @@ public class GameAreaController implements GameAreaListener {
     public void setMainPlayer() {
         UnoPlayer mainPlayer = gameState.getMainPlayer();
         Label mainPlayerNameLbl = gameAreaView.getMainPlayerNameLbl();
-        mainPlayerNameLbl.setText(mainPlayer.getName());
-        mainPlayerNameLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+        Label mainPlayerImageLbl = gameAreaView.getMainPlayerImageLbl();
+
+        ImageView playerImageView = new ImageView(mainPlayer.getImage());
+
+        playerImageView.setFitHeight(60);
+        playerImageView.setFitWidth(60);
+
+        mainPlayerImageLbl.setUserData(mainPlayer);
+        mainPlayerImageLbl.setGraphic(playerImageView);
+
+        mainPlayerNameLbl.setText(mainPlayer.getName() + " | " + mainPlayer.getPlayerHand().size());
+        mainPlayerNameLbl.setStyle("-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: white;");
     }
 
-    public void setOpponentNames() {
-        var players = gameState.getPlayers();
-        gameAreaView.getOpponentsPlayerBox().getChildren().clear();
+    public void setOpponentPlayers() {
+        var opponentPlayers = gameState.getPlayers().stream()
+                .filter((player) -> !(player.equals(gameState.getMainPlayer())))
+                .toList();
 
-        for (var player : players) {
-            if (!(player.equals(gameState.getMainPlayer()))) {
-                Label opponentNameLbl = new Label(player.getName() + " : " + player.getTotalCardsRemaining());
-                opponentNameLbl.setUserData(player);
-                opponentNameLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
-                gameAreaView.getOpponentsPlayerBox().getChildren().add(opponentNameLbl);
-            }
+        gameAreaView.getOpponentPlayerBox().getChildren().clear();
+        for (UnoPlayer player : opponentPlayers) {
+            VBox playerBox = new VBox();
+            playerBox.setAlignment(Pos.CENTER);
+
+            Label playerImage = new Label();
+            Label playerNameLbl = new Label(player.getName() + " | " + player.getPlayerHand().size());
+            ImageView playerImageView = new ImageView(player.getImage());
+
+            playerNameLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+            playerImageView.setFitHeight(60);
+            playerImageView.setFitWidth(60);
+
+            playerImage.setGraphic(playerImageView);
+
+            playerBox.setUserData(player);
+            playerBox.getChildren().addAll(playerImage, playerNameLbl);
+            gameAreaView.getOpponentPlayerBox().getChildren().add(playerBox);
         }
     }
 

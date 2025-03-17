@@ -47,6 +47,7 @@ public class UnoPlayerAI extends UnoPlayer {
         if (!playableCards.isEmpty()) {
             System.out.println("Playable cards: " + playableCards.size());
             System.out.println("Total cards: " + getPlayerHand().size());
+
             UnoCard selectedCard = brain.analyze(gameState, playableCards);
             int selectedCardIndex = getPlayerHand().indexOf(selectedCard);
             return super.playCard(selectedCardIndex);

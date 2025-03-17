@@ -27,6 +27,7 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
      */
     private P playerHand;
     private boolean passTurn;
+    private C lastDrawCard;
 
     /*
     The constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
@@ -72,6 +73,14 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
      */
     public int getTotalCardsRemaining() {
         return playerHand.size();
+    }
+
+    public void setLastDrawCard(C lastDrawCard) {
+        this.lastDrawCard = lastDrawCard;
+    }
+
+    public C getLastDrawCard() {
+        return lastDrawCard;
     }
 
     /*

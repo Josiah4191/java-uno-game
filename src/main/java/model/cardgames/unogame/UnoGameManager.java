@@ -3,6 +3,7 @@ package model.cardgames.unogame;
 import controller.GameAreaListener;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoValue;
+import model.images.playerimages.PlayerImage;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 import model.players.cardplayers.unoplayers.UnoPlayerAI;
 
@@ -47,10 +48,6 @@ public class UnoGameManager {
         this.gameAIListener = gameAIListener;
     }
 
-    public void addPlayer(UnoPlayer player) {
-        gameState.addPlayer(player);
-    }
-
     public void addPlayers(List<UnoPlayer> players) {
         gameState.addPlayers(players);
     }
@@ -62,15 +59,13 @@ public class UnoGameManager {
     public boolean playerDrawCard(int playerIndex) {
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
         addCardToPlayer(playerIndex, card);
-        UnoModerator moderator = gameState.getModerator();
-        boolean playable = moderator.validateCard(gameState, card);
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+        player.setLastDrawCard(card);
+
+        boolean playable = gameState.getModerator().validateCard(gameState, card);
+
 
         return playable;
-    }
-
-    public List<UnoCard> getPlayableCards(int playerIndex) {
-        UnoPlayer player = gameState.getPlayer(playerIndex);
-        return player.getPlayableCards(gameState);
     }
 
     public boolean playCard(int playerIndex, int cardIndex) {
@@ -80,6 +75,7 @@ public class UnoGameManager {
         boolean valid = moderator.validateCard(gameState, card);
 
         if (valid) {
+
             player.playCard(cardIndex);
             gameState.getCardMachine().addCardToDiscardPile(card);
 
@@ -91,7 +87,6 @@ public class UnoGameManager {
 
             return true;
         }
-        // Return false if the card could not be played
         return false;
     }
 
@@ -111,6 +106,10 @@ public class UnoGameManager {
 
                             if (card == null) {
                                 System.out.println(gameState.getCurrentPlayer().getName() + " has no playable cards");
+
+                                // draw card
+                                int playerIndex = gameState.getPlayers().indexOf(player);
+                                playerDrawCard(playerIndex);
 
                                 moveToNextPlayer();
                                 gameAIListener.updateGameAreaView();
@@ -137,7 +136,7 @@ public class UnoGameManager {
         }
     }
 
-    private UnoValue processCardValue(UnoValue value) {
+    private void processCardValue(UnoValue value) {
         int nextPlayerIndex = getNextPlayerIndex(1);
         switch (value) {
             case UnoValue.REVERSE:
@@ -164,7 +163,6 @@ public class UnoGameManager {
             moveToNextPlayer();
         }
 
-        return value;
     }
 
     public void addCardToPlayer(int playerIndex, UnoCard card) {
@@ -215,21 +213,11 @@ public class UnoGameManager {
         gameState.setCurrentPlayerIndex(nextPlayerIndex);
     }
 
-    public UnoPlayer getNextPlayer() {
-        int nextPlayerPosition = getNextPlayerIndex(1);
-        return gameState.getPlayer(nextPlayerPosition);
-    }
-
     public void applyPenalty(int playerIndex, int cardPenalty) {
         for (int i = 0; i < cardPenalty; i++) {
             UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
             addCardToPlayer(playerIndex, card);
         }
-    }
-
-    public void swapPlayerPositions(int player1Index, int player2Index) {
-        var players = gameState.getPlayers();
-        Collections.swap(players, player1Index, player2Index);
     }
 
     public void initialize() {
@@ -242,6 +230,11 @@ public class UnoGameManager {
         player2.setName("Player 2");
         player3.setName("Player 3");
         player4.setName("Player 4");
+
+        player1.setImage(PlayerImage.BLUE_PLAYER_CARD);
+        player2.setImage(PlayerImage.GREEN_PLAYER_CARD);
+        player3.setImage(PlayerImage.RED_PLAYER_CARD);
+        player4.setImage(PlayerImage.YELLOW_PLAYER_CARD);
 
         // set the main player
         gameState.setMainPlayer(player1);
@@ -258,6 +251,16 @@ public class UnoGameManager {
         // select first card
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
         gameState.getCardMachine().addCardToDiscardPile(card);
+    }
+
+    public void swapPlayerPositions(int player1Index, int player2Index) {
+        var players = gameState.getPlayers();
+        Collections.swap(players, player1Index, player2Index);
+    }
+
+    public UnoPlayer getNextPlayer() {
+        int nextPlayerPosition = getNextPlayerIndex(1);
+        return gameState.getPlayer(nextPlayerPosition);
     }
 }
 
