@@ -5,6 +5,8 @@ import model.images.cardimages.UnoCardImageManager;
 import model.images.playerimages.PlayerImageManager;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +63,7 @@ What this class contains:
         - For implementation details, refer to UnoCardMachine, Pile, UnoDrawPile, and UnoDiscardPile.
  */
 
-public class UnoGameState {
+public class UnoGameState implements Serializable {
 
     private UnoRules rules = new UnoClassicRules();
     private List<UnoPlayer> players = new ArrayList<>();

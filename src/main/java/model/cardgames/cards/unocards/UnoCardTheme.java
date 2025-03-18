@@ -8,6 +8,8 @@ Date: 3/7/2025
 This enum contains themes that represent different sets of Images for Uno cards.
  */
 
-public enum UnoCardTheme {
+import java.io.Serializable;
+
+public enum UnoCardTheme implements Serializable {
     CLASSIC
 }

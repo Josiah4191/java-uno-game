@@ -2,6 +2,7 @@ package model.cardgames.cards.unocards;
 
 import model.players.cardplayers.unoplayers.UnoPlayer;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +36,7 @@ NOTE:
     The UnoDrawPile and UnoDiscardPile are responsible for making changes to their list of cards.
 */
 
-public class UnoCardMachine {
+public class UnoCardMachine implements Serializable {
     private UnoDrawPile drawPile;
     private UnoDiscardPile discardPile;
     private UnoDeck deck;

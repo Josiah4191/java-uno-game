@@ -8,6 +8,8 @@ Date: 3/7/2025
 This enum contains the themes which represent separate editions of UNO.
  */
 
-public enum UnoEdition {
+import java.io.Serializable;
+
+public enum UnoEdition implements Serializable {
     CLASSIC
 }

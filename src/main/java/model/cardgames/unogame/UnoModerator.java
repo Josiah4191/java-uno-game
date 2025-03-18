@@ -3,13 +3,15 @@ package model.cardgames.unogame;
 import model.cardgames.cards.unocards.UnoCard;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 
+import java.io.Serializable;
+
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
  */
 
-public class UnoModerator {
+public class UnoModerator implements Serializable {
 
     public boolean validateCard(UnoGameState gameState, UnoCard card) {
         return gameState.getRules().validateCard(gameState, card);

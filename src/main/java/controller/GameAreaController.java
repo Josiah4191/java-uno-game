@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoSuit;
 import model.cardgames.unogame.PlayDirection;
+import model.database.SimpleUnoDatabase;
 import model.images.cardimages.UnoCardClassicImages;
 import model.images.cardimages.UnoCardImageManager;
 import model.cardgames.unogame.UnoGameManager;
@@ -55,6 +56,10 @@ public class GameAreaController implements GameAreaListener {
         setSayUnoBtnHandler();
         showUnoBtn();
         displayCardInformation();
+        setMenuBtnHandler();
+        setNewGameBtnHandler();
+        setSaveGameBtnHandler();
+        setLoadGameBtnHandler();
         System.out.println();
     }
 
@@ -307,6 +312,16 @@ public class GameAreaController implements GameAreaListener {
         }
     }
 
+    public void setMenuBtnHandler() {
+        Button menuBtn = gameAreaView.getMenuBtn();
+        menuBtn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                VBox menuBtnBox = gameAreaView.getMenuBtnBox();
+                menuBtnBox.setVisible(menuBtnBox.isVisible() ? false : true);
+            }
+        });
+    }
+
     public void setPlayerCardHandler() {
         var playerCardLbls = getGameAreaView().getPlayerCardsBox().getChildren();
         for (var label : playerCardLbls) {
@@ -473,6 +488,40 @@ public class GameAreaController implements GameAreaListener {
 
     public GameAreaView getGameAreaView() {
         return gameAreaView;
+    }
+
+    public void setNewGameBtnHandler() {
+        Button newGameBtn = gameAreaView.getNewGameBtn();
+
+        newGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                gameManager.resetGame();
+
+            }
+        });
+    }
+
+    public void setSaveGameBtnHandler() {
+        Button saveGameBtn = gameAreaView.getSaveGameBtn();
+
+        saveGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                SimpleUnoDatabase.saveGame(gameState);
+            }
+        });
+
+    }
+
+    public void setLoadGameBtnHandler() {
+
+        Button loadGameBtn = gameAreaView.getLoadGameBtn();
+
+        loadGameBtn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                GameAreaController.this.gameState = SimpleUnoDatabase.loadGame();
+                updateGameArea();
+            }
+        });
     }
 
 }

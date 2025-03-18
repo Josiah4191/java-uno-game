@@ -5,7 +5,9 @@ Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Date: 3/8/2025
  */
 
-public enum PlayDirection {
+import java.io.Serializable;
+
+public enum PlayDirection implements Serializable {
     FORWARD(), REVERSE();
 
     public boolean isForward() {

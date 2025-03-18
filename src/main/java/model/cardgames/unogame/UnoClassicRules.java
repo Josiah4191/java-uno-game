@@ -11,7 +11,9 @@ import model.cardgames.cards.unocards.UnoSuit;
 import model.cardgames.cards.unocards.UnoValue;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 
-public class UnoClassicRules implements UnoRules {
+import java.io.Serializable;
+
+public class UnoClassicRules implements UnoRules, Serializable {
 
     public boolean validateCard(UnoGameState gameState, UnoCard card) {
         boolean match = false;

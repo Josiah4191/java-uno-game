@@ -18,7 +18,9 @@ NOTE:
     suits are RED, GREEN, BLUE, and YELLOW. Blackjack suits are Clubs, Diamonds, Hearts ...).
  */
 
-public abstract class Card<S extends Enum<S>, V extends Enum<V>> {
+import java.io.Serializable;
+
+public abstract class Card<S extends Enum<S>, V extends Enum<V>> implements Serializable {
 
     // Variables to refer to the suit and value.
     private S suit;

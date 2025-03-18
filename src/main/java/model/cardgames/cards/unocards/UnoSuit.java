@@ -8,7 +8,9 @@ Date: 3/7/2025
 This enum contains the suits for an Uno card deck.
  */
 
-public enum UnoSuit {
+import java.io.Serializable;
+
+public enum UnoSuit implements Serializable {
     RED, GREEN, BLUE, YELLOW, WILD, GENERAL
 }
 

@@ -1,5 +1,6 @@
 package model.cardgames.cards;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ NOTE:
     If List<UnoCard> is used, then subclasses cannot store different card types.
  */
 
-public abstract class Pile<C> {
+public abstract class Pile<C> implements Serializable {
 
     // Create variable to hold of cards.
     protected List<C> cardPile = new ArrayList<>();

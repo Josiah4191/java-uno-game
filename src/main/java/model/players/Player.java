@@ -10,7 +10,9 @@ import javafx.scene.image.Image;
 import model.images.playerimages.PlayerImage;
 import model.images.playerimages.PlayerImageManager;
 
-public abstract class Player {
+import java.io.Serializable;
+
+public abstract class Player implements Serializable {
     private String name;
     private Image playerImage;
 

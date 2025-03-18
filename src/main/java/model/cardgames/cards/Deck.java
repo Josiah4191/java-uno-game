@@ -1,5 +1,6 @@
 package model.cardgames.cards;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +25,7 @@ NOTE:
     If List<UnoCard> is used, then subclasses cannot store different card types.
  */
 
-public abstract class Deck<C, E extends Enum<E>> {
+public abstract class Deck<C, E extends Enum<E>> implements Serializable {
     // Variable to hold a list of Card objects.
     protected List<C> deck;
 

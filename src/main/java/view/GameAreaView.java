@@ -38,6 +38,14 @@ public class GameAreaView {
     private Rectangle yellowLbl = new Rectangle();
     private Rectangle greenLbl = new Rectangle();
 
+    private HBox menuBox = new HBox(5);
+    private Button menuBtn = new Button("Menu");
+
+    private VBox menuBtnBox = new VBox(5);
+    private Button newGameBtn = new Button("New Game");
+    private Button saveGameBtn = new Button("Save Game");
+    private Button loadGameBtn = new Button("Load Game");
+
     public GameAreaView() {
 
         centerBox.setAlignment(Pos.CENTER);
@@ -51,6 +59,8 @@ public class GameAreaView {
         gameArea.setStyle("-fx-background-color: darkgreen; -fx-padding: 10;");
 
         centerBox.getChildren().addAll(
+                menuBox,
+                menuBtnBox,
                 playDirectionLbl,
                 opponentPlayerBox,
                 pilesBox,
@@ -64,7 +74,6 @@ public class GameAreaView {
         passBtn.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
         unoBtn.setVisible(false);
         unoBtn.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
-
 
         playDirectionLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
         pilesBox.getChildren().addAll(drawPileLbl, discardPileLbl);
@@ -89,6 +98,10 @@ public class GameAreaView {
         yellowLbl.setWidth(50);
         yellowLbl.setHeight(60);
         yellowLbl.setFill(Color.YELLOW);
+
+        menuBox.getChildren().add(menuBtn);
+        menuBtnBox.getChildren().addAll(newGameBtn, saveGameBtn, loadGameBtn);
+        menuBtnBox.setVisible(false);
     }
 
     public Label getDrawPileLbl() {
@@ -153,5 +166,25 @@ public class GameAreaView {
 
     public Button getUnoBtn() {
         return unoBtn;
+    }
+
+    public Button getMenuBtn() {
+        return menuBtn;
+    }
+
+    public Button getNewGameBtn() {
+        return newGameBtn;
+    }
+
+    public Button getSaveGameBtn() {
+        return saveGameBtn;
+    }
+
+    public Button getLoadGameBtn() {
+        return loadGameBtn;
+    }
+
+    public VBox getMenuBtnBox() {
+        return menuBtnBox;
     }
 }

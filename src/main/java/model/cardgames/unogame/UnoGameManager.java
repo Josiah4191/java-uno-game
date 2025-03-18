@@ -285,7 +285,7 @@ public class UnoGameManager {
         addPlayers(players);
 
         // deal cards to players
-        dealCards(1, players);
+        dealCards(7, players);
 
         // select first card
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();

@@ -24,7 +24,7 @@ public class Main extends Application {
         MainController mainController = new MainController(gameManager, gameAreaView);
 
         // set scene
-        Scene scene = new Scene(mainController.getRoot(), 800, 600);
+        Scene scene = new Scene(mainController.getRoot(), 800, 700);
         primaryStage.setScene(scene);
         primaryStage.setTitle("UNO");
         primaryStage.show();

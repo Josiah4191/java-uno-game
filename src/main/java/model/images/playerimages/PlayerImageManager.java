@@ -3,9 +3,10 @@ package model.images.playerimages;
 import model.images.ImageLogger;
 import javafx.scene.image.Image;
 
+import java.io.Serializable;
 import java.net.URL;
 
-public class PlayerImageManager {
+public class PlayerImageManager implements Serializable {
 
     static {
         ImageLogger.getImageLogger().info("[Player Image Log]: Loading images");

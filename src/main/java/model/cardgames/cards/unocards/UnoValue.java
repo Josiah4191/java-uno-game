@@ -10,7 +10,9 @@ Each enum constructor sets its count to match the number of times it should appe
 suit (e.g., A RED suit in Uno has one ZERO, but it has two ONE values).
  */
 
-public enum UnoValue {
+import java.io.Serializable;
+
+public enum UnoValue implements Serializable {
     ZERO(1), ONE(2), TWO(2), THREE(2), FOUR(2), FIVE(2), SIX(2), SEVEN(2), EIGHT(2), NINE(2), REVERSE(2), SKIP(2), DRAW_TWO(2), WILD_DRAW_FOUR(4), DRAW_TW0_STACK(1), WILD_DRAW_FOUR_STACK(1), WILD(4), DECK(1), LOGO(1);
 
     private int count;

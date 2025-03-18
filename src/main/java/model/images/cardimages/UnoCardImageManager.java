@@ -23,9 +23,10 @@ import model.cardgames.cards.unocards.UnoValue;
 import model.images.ImageLogger;
 import javafx.scene.image.Image;
 
+import java.io.Serializable;
 import java.net.URL;
 
-public class UnoCardImageManager {
+public class UnoCardImageManager implements Serializable {
 
     static {
         ImageLogger.getImageLogger().info("[Card Image Log]: Loading images");

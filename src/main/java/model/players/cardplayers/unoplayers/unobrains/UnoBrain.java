@@ -3,6 +3,7 @@ package model.players.cardplayers.unoplayers.unobrains;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.unogame.UnoGameState;
 
+import java.io.Serializable;
 import java.util.List;
 
 /*
@@ -26,7 +27,7 @@ NOTE:
     - This can be revisited at a later time.
 */
 
-public abstract class UnoBrain {
+public abstract class UnoBrain implements Serializable {
     /*
     The analyze() method must be subclassed. It analyzes the gameState and returns an integer which represents
     which card the AI chooses to play.
