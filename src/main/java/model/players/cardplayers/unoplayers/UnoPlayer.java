@@ -27,6 +27,7 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
     The new UnoPlayerHandPile starts empty.
      */
     public UnoPlayer() {
+
         this(new UnoPlayerHandPile());
     }
 
@@ -37,9 +38,8 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
     public List<UnoCard> getPlayableCards(UnoGameState gameState) {
         return getPlayerHand()
                 .stream()
-                .filter(e -> gameState.getModerator().validateCard(gameState, e))
+                .filter(card -> gameState.getModerator().validateCard(gameState, card))
                 .toList();
-
     }
 
     public void setSayUno(boolean sayUno) {

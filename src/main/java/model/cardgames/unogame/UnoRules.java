@@ -16,6 +16,4 @@ public interface UnoRules {
 
     boolean checkCallUno(UnoPlayer player);
 
-    UnoValue evaluateCardValue(UnoCard card);
-
 }

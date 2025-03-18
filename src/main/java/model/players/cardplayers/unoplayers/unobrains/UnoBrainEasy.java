@@ -24,13 +24,19 @@ public class UnoBrainEasy extends UnoBrain {
     public UnoCard analyze(UnoGameState gameState, List<UnoCard> playableCards) {
         Random random = new Random();
         UnoCard card = playableCards.get(random.nextInt(playableCards.size()));
-        List<UnoSuit> suits = List.of(UnoSuit.GREEN, UnoSuit.BLUE, UnoSuit.YELLOW, UnoSuit.RED);
 
+        selectSuit(gameState, card, random);
+
+        System.out.println("AI playing: " + card);
+
+        return card;
+    }
+
+    public void selectSuit(UnoGameState gameState, UnoCard card, Random random) {
+        List<UnoSuit> suits = List.of(UnoSuit.GREEN, UnoSuit.BLUE, UnoSuit.YELLOW, UnoSuit.RED);
         if (card.getSuit() == UnoSuit.WILD) {
             gameState.setCurrentSuit(suits.get(random.nextInt(suits.size())));
             System.out.println("Player AI changing suit to: " + gameState.getCurrentSuit());
         }
-
-        return card;
     }
 }

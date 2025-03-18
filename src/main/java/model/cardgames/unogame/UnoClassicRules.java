@@ -58,7 +58,4 @@ public class UnoClassicRules implements UnoRules {
         return false;
     }
 
-    public UnoValue evaluateCardValue(UnoCard card) {
-        return card.getValue();
-    }
 }

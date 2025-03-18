@@ -20,9 +20,6 @@ public class UnoModerator {
         return gameState.getRules().checkCallUno(player);
     }
 
-    public UnoValue evaluateCardValue(UnoGameState gameState, UnoCard card) {
-        return gameState.getRules().evaluateCardValue(card);
-    }
 }
 
 /*

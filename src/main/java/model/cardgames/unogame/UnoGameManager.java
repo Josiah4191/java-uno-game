@@ -77,11 +77,9 @@ public class UnoGameManager {
         if (valid) {
 
             player.playCard(cardIndex);
-            addCardToDiscardPile(card);
+            addCardToDiscardPileAndSetCurrentSuit(card);
 
-            UnoValue value = moderator.evaluateCardValue(gameState, card);
-
-            processCardValue(value);
+            processCardValue(card);
 
             gameAIListener.updateGameAreaView();
 
@@ -90,7 +88,7 @@ public class UnoGameManager {
         return false;
     }
 
-    public void addCardToDiscardPile(UnoCard card) {
+    public void addCardToDiscardPileAndSetCurrentSuit(UnoCard card) {
         gameState.getCardMachine().addCardToDiscardPile(card);
         gameState.setCurrentSuit(card.getSuit());
     }
@@ -112,7 +110,6 @@ public class UnoGameManager {
                             if (card == null) {
                                 System.out.println(gameState.getCurrentPlayer().getName() + " has no playable cards");
 
-                                // draw card
                                 int playerIndex = gameState.getPlayers().indexOf(player);
                                 playerDrawCard(playerIndex);
 
@@ -121,11 +118,14 @@ public class UnoGameManager {
 
                                 System.out.println();
                             } else {
-                                System.out.println(player + " has played " + card);
 
-                                addCardToDiscardPile(card);
+                                if (card.getSuit() == UnoSuit.WILD) {
+                                    gameState.getCardMachine().addCardToDiscardPile(card);
+                                } else {
+                                    addCardToDiscardPileAndSetCurrentSuit(card);
+                                }
 
-                                processCardValue(card.getValue());
+                                processCardValue(card);
 
                                 gameAIListener.updateGameAreaView();
                                 System.out.println();
@@ -141,8 +141,9 @@ public class UnoGameManager {
         }
     }
 
-    private void processCardValue(UnoValue value) {
+    private void processCardValue(UnoCard card) {
         int nextPlayerIndex = getNextPlayerIndex(1);
+        UnoValue value = card.getValue();
         switch (value) {
             case UnoValue.REVERSE:
                 reversePlayDirection();
@@ -152,8 +153,6 @@ public class UnoGameManager {
                 break;
             case UnoValue.DRAW_TWO:
                 applyPenalty(nextPlayerIndex, 2);
-                break;
-            case UnoValue.WILD:
                 break;
             case UnoValue.WILD_DRAW_FOUR:
                 applyPenalty(nextPlayerIndex, 4);
@@ -256,7 +255,7 @@ public class UnoGameManager {
 
         // select first card
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
-        addCardToDiscardPile(card);
+        addCardToDiscardPileAndSetCurrentSuit(card);
     }
 
     public void swapPlayerPositions(int player1Index, int player2Index) {
