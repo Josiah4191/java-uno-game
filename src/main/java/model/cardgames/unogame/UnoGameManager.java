@@ -254,12 +254,23 @@ public class UnoGameManager {
         UnoPlayer player2 = new UnoPlayerAI(getGameState());
         UnoPlayer player3 = new UnoPlayerAI(getGameState());
         UnoPlayer player4 = new UnoPlayerAI(getGameState());
+        /*
+        UnoPlayer player5 = new UnoPlayerAI(getGameState());
+        UnoPlayer player6 = new UnoPlayerAI(getGameState());
+        UnoPlayer player7 = new UnoPlayerAI(getGameState());
+         */
         player1.setName("Josiah");
         player2.setName("Player 2");
         player3.setName("Player 3");
         player4.setName("Player 4");
+        /*
+        player5.setName("Player 5");
+        player6.setName("Player 6");
+        player7.setName("Player 7");
+         */
 
         ArrayList<UnoPlayer> players = new ArrayList<>(List.of(player1, player2, player3, player4));
+        //players.addAll(player5, player6, player7);
 
         for (UnoPlayer player : players) {
             Random random = new Random();
@@ -274,7 +285,7 @@ public class UnoGameManager {
         addPlayers(players);
 
         // deal cards to players
-        dealCards(7, players);
+        dealCards(1, players);
 
         // select first card
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();

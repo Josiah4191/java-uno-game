@@ -54,6 +54,8 @@ public class GameAreaController implements GameAreaListener {
         setCallUnoHandler();
         setSayUnoBtnHandler();
         showUnoBtn();
+        displayCardInformation();
+        System.out.println();
     }
 
     public void setGameState(UnoGameState gameState) {
@@ -93,6 +95,24 @@ public class GameAreaController implements GameAreaListener {
             String style = String.format("-fx-border-color: %s; -fx-border-width: 3px; -fx-border-radius: 5px;", color);
             discardPileLbl.setStyle(style);
         }
+    }
+
+    public void displayCardInformation() {
+        var players = gameState.getPlayers();
+        int drawPile = gameState.getDrawPile().size();
+        int discardPile = gameState.getDiscardPile().size();
+        int totalCards = drawPile + discardPile;
+
+        System.out.println("Draw Pile: " + drawPile);
+        System.out.println("Discard Pile: " + discardPile);
+
+        for (UnoPlayer player: players) {
+            totalCards += player.getPlayerHand().size();
+        }
+
+        players.forEach(p -> System.out.println(p.getName() + ": " + p.getPlayerHand().size() + " cards."));
+
+        System.out.println("Total Number of Cards: " + totalCards);
     }
 
     public void setDiscardPileImage() {
@@ -153,6 +173,7 @@ public class GameAreaController implements GameAreaListener {
                         if (playable) {
                             highlightDrawCard();
                             setPlayableDrawCardHandler();
+                            showUnoBtn();
                         }
 
                         currentPlayer.setPassTurn(false);
