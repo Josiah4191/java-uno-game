@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.w3c.dom.css.Rect;
 
 public class GameAreaView {
     private StackPane gameArea = new StackPane();
@@ -31,6 +30,7 @@ public class GameAreaView {
     private Label mainPlayerNameLbl = new Label();
 
     private Button passBtn = new Button("Pass");
+    private Button unoBtn = new Button("UNO");
 
     private HBox suitColorSelectionBox = new HBox(10);
     private Rectangle redLbl = new Rectangle();
@@ -57,10 +57,15 @@ public class GameAreaView {
                 playerCardsBox,
                 mainPlayerBox,
                 passBtn,
+                unoBtn,
                 suitColorSelectionBox);
 
         passBtn.setVisible(false);
         passBtn.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
+        unoBtn.setVisible(false);
+        unoBtn.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
+
+
         playDirectionLbl.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
         pilesBox.getChildren().addAll(drawPileLbl, discardPileLbl);
         mainPlayerBox.getChildren().addAll(mainPlayerImageLbl, mainPlayerNameLbl);
@@ -144,5 +149,9 @@ public class GameAreaView {
 
     public Rectangle getGreenLbl() {
         return greenLbl;
+    }
+
+    public Button getUnoBtn() {
+        return unoBtn;
     }
 }

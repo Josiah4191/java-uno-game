@@ -24,10 +24,7 @@ public class UnoBrainEasy extends UnoBrain {
     public UnoCard analyze(UnoGameState gameState, List<UnoCard> playableCards) {
         Random random = new Random();
         UnoCard card = playableCards.get(random.nextInt(playableCards.size()));
-
         selectSuit(gameState, card, random);
-
-        System.out.println("AI playing: " + card);
 
         return card;
     }

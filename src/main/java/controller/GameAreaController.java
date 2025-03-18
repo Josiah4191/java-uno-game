@@ -3,11 +3,12 @@ package controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoSuit;
-import model.cardgames.cards.unocards.UnoValue;
 import model.cardgames.unogame.PlayDirection;
 import model.images.cardimages.UnoCardClassicImages;
 import model.images.cardimages.UnoCardImageManager;
@@ -21,6 +22,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import view.GameAreaView;
 
+import java.util.Optional;
+
 public class GameAreaController implements GameAreaListener {
 
     private GameAreaView gameAreaView;
@@ -31,7 +34,7 @@ public class GameAreaController implements GameAreaListener {
         this.gameManager = gameManager;
         this.gameState = gameManager.getGameState();
         this.gameAreaView = gameAreaView;
-        gameManager.setGameAIListener(this);
+        gameManager.setGameAreaListener(this);
     }
 
     public void updateGameArea() {
@@ -48,6 +51,25 @@ public class GameAreaController implements GameAreaListener {
         setPassBtnHandler();
         highlightCurrentSuitColor();
         setSuitColorSelectionHandler();
+        setCallUnoHandler();
+        setSayUnoBtnHandler();
+        showUnoBtn();
+    }
+
+    public void setGameState(UnoGameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void announceWinner(UnoPlayer player) {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, player.getName() + " has won!\n\nClick 'Ok' to begin a New Game.", ButtonType.OK);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    gameManager.resetGame();
+                }
+            }
+        });
     }
 
     public void setDrawPileImage() {
@@ -172,6 +194,31 @@ public class GameAreaController implements GameAreaListener {
         gameAreaView.getSuitColorSelectionBox().setVisible(false);
     }
 
+    public void setSayUnoBtnHandler() {
+        Button unoBtn = gameAreaView.getUnoBtn();
+
+        unoBtn.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                gameState.getMainPlayer().setSayUno(true);
+                hideUnoBtn();
+            }
+        });
+    }
+
+    public void showUnoBtn() {
+        UnoPlayer mainPlayer = gameState.getMainPlayer();
+        if (mainPlayer.getPlayerHand().size() == 1 && !(mainPlayer.getSayUno())) {
+            gameAreaView.getUnoBtn().setVisible(true);
+        } else if (mainPlayer.getPlayerHand().size() > 1) {
+            mainPlayer.setSayUno(false);
+            hideUnoBtn();
+        }
+    }
+
+    public void hideUnoBtn() {
+        gameAreaView.getUnoBtn().setVisible(false);
+    }
+
     public void setSuitColorSelectionHandler() {
         gameAreaView.getRedLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
@@ -253,15 +300,45 @@ public class GameAreaController implements GameAreaListener {
 
                     if (currentPlayer.equals(mainPlayer)) {
 
+                        gameAreaView.getUnoBtn().setVisible(true);
+
                         boolean valid = gameManager.playCard(currentPlayerIndex, cardIndex);
+                        updateGameArea();
 
                         if (valid) {
+
+                            if (mainPlayer.getPlayerHand().isEmpty()) {
+                                announceWinner(mainPlayer);
+                                return;
+                            }
+
                             if (card.getSuit() == UnoSuit.WILD) {
                                 showSuitColorSelection();
                             } else {
                                 gameManager.runAITurn();
                             }
+
+                            updateGameArea();
+
                         }
+                    }
+                }
+            });
+        }
+    }
+
+    public void setCallUnoHandler() {
+        var opponentPlayers = gameAreaView.getOpponentPlayerBox();
+        for (var opponent : opponentPlayers.getChildren()) {
+            UnoPlayer player = (UnoPlayer) opponent.getUserData();
+
+            opponent.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent mouseEvent) {
+                    boolean checkCallUno = gameManager.checkCallUno(player);
+                    if (checkCallUno) {
+                        int playerIndex = gameState.getPlayers().indexOf(player);
+                        gameManager.applyPenalty(playerIndex, 2);
+                        updateGameArea();
                     }
                 }
             });
@@ -308,18 +385,18 @@ public class GameAreaController implements GameAreaListener {
         if (currentPlayer.equals(mainPlayer)) {
             gameAreaView.getMainPlayerBox().setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
         } else {
-            gameAreaView.getMainPlayerBox().setStyle("-fx-border-color: white; -fx-border-width: 3px; -fx-border-radius: 5px;");
+            gameAreaView.getMainPlayerBox().setStyle("");
         }
 
         if (!(currentPlayer.equals(mainPlayer))) {
 
             for (var box : gameAreaView.getOpponentPlayerBox().getChildren()) {
 
-                    if (box.getUserData().equals(currentPlayer)) {
-                        box.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
-                    } else {
-                        box.setStyle("");
-                    }
+                if (box.getUserData().equals(currentPlayer)) {
+                    box.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
+                } else {
+                    box.setStyle("");
+                }
             }
         }
     }

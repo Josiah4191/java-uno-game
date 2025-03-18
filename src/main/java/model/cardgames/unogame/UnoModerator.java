@@ -1,7 +1,6 @@
 package model.cardgames.unogame;
 
 import model.cardgames.cards.unocards.UnoCard;
-import model.cardgames.cards.unocards.UnoValue;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 
 /*
@@ -16,7 +15,7 @@ public class UnoModerator {
         return gameState.getRules().validateCard(gameState, card);
     }
 
-    public boolean evaluateCallUno(UnoGameState gameState, UnoPlayer player) {
+    public boolean checkCallUno(UnoGameState gameState, UnoPlayer player) {
         return gameState.getRules().checkCallUno(player);
     }
 
