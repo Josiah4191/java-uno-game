@@ -20,26 +20,13 @@ import java.util.concurrent.TimeUnit;
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
-
-This class is the controller that manages the entire UNO game. This class will be used by the MainController, which
-bridges the gap between the UI and the game logic.
-
-What this class contains:
-    - Variables:
-        - UnoGameState:
-            - Holds all information about the current state of the game.
-        - UnoCardImageManager:
-            - Responsible for retrieving card images.
-NOTE:
-    Methods and variables may be added or altered at a later date:
-        - e.g., saving the game state
-        - Future database object for saving and loading the gameState object
  */
 
 public class UnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
     private GameAreaListener gameAreaListener;
+    private volatile boolean aiIsRunning;
 
     public UnoGameState getGameState() {
         return gameState;
@@ -54,36 +41,43 @@ public class UnoGameManager {
     }
 
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
-        gameState.dealCards(numberOfCards, players);
+        gameState.getCardMachine().dealCards(numberOfCards, players);
+    }
+
+    public void setGameState(UnoGameState gameState) {
+        this.gameState = gameState;
     }
 
     public boolean playerDrawCard(int playerIndex) {
-        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
-        addCardToPlayer(playerIndex, card);
         UnoPlayer player = gameState.getPlayer(playerIndex);
+        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        UnoModerator moderator = gameState.getModerator();
+        boolean validCard = moderator.validateCard(gameState, card);
+
+        addCardToPlayer(playerIndex, card);
         player.setLastDrawCard(card);
 
-        boolean playable = gameState.getModerator().validateCard(gameState, card);
-
-        return playable;
+        return validCard;
     }
 
     public boolean playCard(int playerIndex, int cardIndex) {
-        var player = gameState.getPlayer(playerIndex);
-        var moderator = gameState.getModerator();
-        UnoCard card = player.getPlayerHand().get(cardIndex);
-        boolean valid = moderator.validateCard(gameState, card);
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+        UnoCard card = player.getCard(cardIndex);
+        UnoModerator moderator = gameState.getModerator();
+        boolean validCard = moderator.validateCard(gameState, card);
 
-        if (valid) {
-
+        if (validCard) {
             player.playCard(cardIndex);
             addCardToDiscardPileAndSetCurrentSuit(card);
-
             processCardValue(card);
-
-            return true;
         }
-        return false;
+
+        return validCard;
+    }
+
+    public void addCardToPlayer(int playerIndex, UnoCard card) {
+        var player = gameState.getPlayer(playerIndex);
+        player.addCard(card);
     }
 
     public void addCardToDiscardPileAndSetCurrentSuit(UnoCard card) {
@@ -91,77 +85,108 @@ public class UnoGameManager {
         gameState.setCurrentSuit(card.getSuit());
     }
 
-    public void runAITurn() {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(gameState.getPlayers().size());
+    public List<UnoPlayerAI> getAIPlayers() {
+        List<UnoPlayerAI> players = gameState.getPlayers()
+                .stream()
+                .filter(e -> e instanceof UnoPlayerAI)
+                .map(e -> (UnoPlayerAI) e)
+                .toList();
+        return players;
+    }
 
-        for (UnoPlayer player : gameState.getPlayers()) {
+    public List<UnoPlayer> getHumanPlayers() {
+        List<UnoPlayer> players = gameState.getPlayers()
+                .stream()
+                .filter(e -> e.getClass() == UnoPlayer.class)
+                .toList();
+        return players;
+    }
 
-            if (!(player.equals(gameState.getMainPlayer()))) {
+    public void callUno(UnoPlayer player) {
+        boolean checkCallUno = gameState.getModerator().checkCallUno(gameState, player);
 
-                executor.scheduleAtFixedRate(new Runnable() {
-                    public void run() {
-
-                        if (player.equals(gameState.getCurrentPlayer())) {
-                            System.out.println("Last played card: " + gameState.getLastPlayedCard());
-                            UnoCard card = player.playCard(0);
-
-                            for (UnoPlayer otherPlayer : gameState.getPlayers()) {
-                                if (!(player.equals(otherPlayer))) {
-                                    boolean checkCallUno = checkCallUno(otherPlayer);
-                                    if (checkCallUno) {
-                                        int otherPlayerIndex = gameState.getPlayers().indexOf(otherPlayer);
-                                        applyPenalty(otherPlayerIndex, 2);
-                                        System.out.println(player + " has called UNO on " + otherPlayer + ". " + otherPlayer + " didn't say UNO." + otherPlayer + " draws 2 cards.");
-                                        gameAreaListener.updateGameAreaView();
-                                    }
-                                }
-                            }
-
-                            if (card == null) {
-                                System.out.println(gameState.getCurrentPlayer().getName() + " has no playable cards");
-
-                                int playerIndex = gameState.getPlayers().indexOf(player);
-                                playerDrawCard(playerIndex);
-
-                                moveToNextPlayer();
-                                gameAreaListener.updateGameAreaView();
-
-                                System.out.println();
-                            } else {
-                                System.out.println(player + " is playing: " + card);
-
-                                if (card.getSuit() == UnoSuit.WILD) {
-                                    gameState.getCardMachine().addCardToDiscardPile(card);
-                                } else {
-                                    addCardToDiscardPileAndSetCurrentSuit(card);
-                                }
-
-                                if (player.getPlayerHand().isEmpty()) {
-                                    gameAreaListener.updateGameAreaView();
-                                    processCardValue(card);
-                                    gameAreaListener.announceWinner(player);
-                                    executor.shutdown();
-                                    return;
-                                }
-
-                                processCardValue(card);
-
-                                gameAreaListener.updateGameAreaView();
-                                System.out.println();
-                            }
-
-                            if (gameState.getCurrentPlayer().equals(gameState.getMainPlayer())) {
-                                executor.shutdown();
-                            }
-                        }
-                    }
-                }, 3, 5, TimeUnit.SECONDS);
-            }
+        if (checkCallUno) {
+            int playerIndex = gameState.getPlayers().indexOf(player);
+            applyPenalty(playerIndex, 2);
+            gameAreaListener.updateGameAreaView();
         }
     }
 
-    public boolean checkCallUno(UnoPlayer player) {
-        return gameState.getModerator().checkCallUno(gameState, player);
+    public boolean checkWinner(UnoPlayer player) {
+        boolean win = false;
+
+        if (player.getPlayerHand().isEmpty()) {
+            win = true;
+        }
+
+        return win;
+    }
+
+    public void aiCallUno() {
+        var humanPlayers = getHumanPlayers();
+        for (UnoPlayer player : humanPlayers) {
+            callUno(player);
+        }
+    }
+
+    public void aiCheckCardPlayed(UnoPlayer aiPlayer, UnoCard card) {
+        if (card == null) {
+            int playerIndex = gameState.getPlayerIndex(aiPlayer);
+            playerDrawCard(playerIndex);
+            aiPlayer.sayUno(false);
+
+            moveToNextPlayer();
+            gameAreaListener.updateGameAreaView();
+        } else {
+            if (card.getSuit() == UnoSuit.WILD) {
+                gameState.getCardMachine().addCardToDiscardPile(card);
+            } else {
+                addCardToDiscardPileAndSetCurrentSuit(card);
+            }
+            processCardValue(card);
+            gameAreaListener.updateGameAreaView();
+        }
+    }
+
+    public void aiTakeTurn(UnoPlayerAI aiPlayer) {
+        aiCallUno();
+        UnoCard card = aiPlayer.playCard(0);
+        aiCheckCardPlayed(aiPlayer, card);
+    }
+
+    public void stopAIRunning() {
+        this.aiIsRunning = false;
+    }
+
+    public void startAIRunning() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(gameState.getPlayers().size());
+        aiIsRunning = true;
+        var aiPlayers = getAIPlayers();
+
+        for (UnoPlayerAI aiPlayer : aiPlayers) {
+
+            executor.scheduleAtFixedRate(() -> {
+                if (aiIsRunning) {
+
+                    if (aiPlayer.equals(gameState.getCurrentPlayer())) {
+
+                        aiTakeTurn(aiPlayer);
+
+                        if (checkWinner(aiPlayer)) {
+                            gameAreaListener.announceWinner(aiPlayer);
+                            executor.shutdown();
+                        }
+                    }
+
+                    if (gameState.getCurrentPlayer().getClass() == UnoPlayer.class) {
+                        executor.shutdown();
+                    }
+
+                } else {
+                    executor.shutdown();
+                }
+            }, 3, 5, TimeUnit.SECONDS);
+        }
     }
 
     private void processCardValue(UnoCard card) {
@@ -193,22 +218,9 @@ public class UnoGameManager {
         }
     }
 
-    public void addCardToPlayer(int playerIndex, UnoCard card) {
-        var player = gameState.getPlayer(playerIndex);
-        player.addCard(card);
-    }
-
-    private void selectFirstPlayer() {
-        Random random = new Random();
-        var players = gameState.getPlayers();
-        UnoPlayer player = players.get(random.nextInt(players.size()));
-        int index = players.indexOf(player);
-        gameState.setCurrentPlayerIndex(index);
-    }
-
     public void reversePlayDirection() {
         PlayDirection direction = gameState.getDirection();
-        direction = direction == PlayDirection.FORWARD ? PlayDirection.REVERSE : PlayDirection.FORWARD;
+        direction = (direction == PlayDirection.FORWARD) ? PlayDirection.REVERSE : PlayDirection.FORWARD;
         gameState.setDirection(direction);
     }
 
@@ -249,37 +261,28 @@ public class UnoGameManager {
     }
 
     public void initialize() {
-        // create 4 players
+        // create players
         UnoPlayer player1 = new UnoPlayer();
         UnoPlayer player2 = new UnoPlayerAI(getGameState());
         UnoPlayer player3 = new UnoPlayerAI(getGameState());
         UnoPlayer player4 = new UnoPlayerAI(getGameState());
-        /*
-        UnoPlayer player5 = new UnoPlayerAI(getGameState());
-        UnoPlayer player6 = new UnoPlayerAI(getGameState());
-        UnoPlayer player7 = new UnoPlayerAI(getGameState());
-         */
         player1.setName("Josiah");
         player2.setName("Player 2");
         player3.setName("Player 3");
         player4.setName("Player 4");
-        /*
-        player5.setName("Player 5");
-        player6.setName("Player 6");
-        player7.setName("Player 7");
-         */
 
+        // set the main player
+        gameState.setMainPlayer(player1);
+
+        // create a list of players
         ArrayList<UnoPlayer> players = new ArrayList<>(List.of(player1, player2, player3, player4));
-        //players.addAll(player5, player6, player7);
 
+        // set the images for the players
         for (UnoPlayer player : players) {
             Random random = new Random();
             PlayerImage[] images = PlayerImage.values();
             player.setImage(images[random.nextInt(images.length)]);
         }
-
-        // set the main player
-        gameState.setMainPlayer(player1);
 
         // add players to game
         addPlayers(players);
@@ -287,9 +290,17 @@ public class UnoGameManager {
         // deal cards to players
         dealCards(7, players);
 
-        // select first card
+        // draw the first card and add to the discard pile
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
         addCardToDiscardPileAndSetCurrentSuit(card);
+    }
+
+    public void resetGame() {
+        stopAIRunning();
+        setGameState(new UnoGameState());
+        initialize();
+        gameAreaListener.setGameState(gameState);
+        gameAreaListener.updateGameAreaView();
     }
 
     public void swapPlayerPositions(int player1Index, int player2Index) {
@@ -302,35 +313,11 @@ public class UnoGameManager {
         return gameState.getPlayer(nextPlayerPosition);
     }
 
-    public void resetGame() {
-        this.gameState = new UnoGameState();
-        initialize();
-        gameAreaListener.setGameState(gameState);
-        gameAreaListener.updateGameAreaView();
+    private void selectFirstPlayer() {
+        Random random = new Random();
+        var players = gameState.getPlayers();
+        UnoPlayer player = players.get(random.nextInt(players.size()));
+        int index = players.indexOf(player);
+        gameState.setCurrentPlayerIndex(index);
     }
 }
-
-/*
-    In a new game, we need to keep track of:
-        - points for each player
-        - total number of rounds?
-        - current round?
-        - time limit?
-
-        When the game starts, what do we need?:
-            - we need players
-            - we need to know how many players there are for dealing cards
-            - we need to deal cards to the players
-            - we need to set the draw pile
-            - we need to set the discard pile
-            - we need to select who the first player is
-            - if there is an action card that is drawn first, the first player must
-            play that action card
-
-            todo: (this is temporary for testing the code)
-            - create AI players in start method to play against each other
-            - for now, create popup windows that display information about what's happening in the game
-                - later, we will update the game view to reflect changes
-                - e.g., after drawing a card, popup window says "RED Action card drawn"
-                        after playing a card, popup window says "Opponent draws 2 cards. Opponent total cards: 5"
- */

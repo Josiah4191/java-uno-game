@@ -5,7 +5,6 @@ import model.images.cardimages.UnoCardImageManager;
 import model.images.playerimages.PlayerImageManager;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,25 +68,49 @@ public class UnoGameState implements Serializable {
     private List<UnoPlayer> players = new ArrayList<>();
     private UnoModerator moderator = new UnoModerator();
     private PlayDirection direction = PlayDirection.FORWARD;
-    private UnoSuit currentSuit;
     private Difficulty difficulty = Difficulty.EASY;
-    private UnoCardImageManager cardImageManager = new UnoCardImageManager();
-    private PlayerImageManager playerImageManager= new PlayerImageManager();
+    private UnoSuit currentSuit;
+    private transient UnoCardImageManager cardImageManager = new UnoCardImageManager();
+    private transient PlayerImageManager playerImageManager= new PlayerImageManager();
     private UnoCardMachine machine = new UnoCardMachine();
     private int currentPlayerIndex;
     private UnoPlayer mainPlayer;
     private int stackPenalty = 0;
 
-    public void addPlayer(UnoPlayer player) {
-        players.add(player);
+    public UnoPlayer getPlayer(int playerIndex) {
+        return players.get(playerIndex);
+    }
+
+    public int getPlayerIndex(UnoPlayer player) {
+        return players.indexOf(player);
+    }
+
+    public List<UnoPlayer> getPlayers() {
+        return players;
     }
 
     public void addPlayers(List<UnoPlayer> players) {
         this.players.addAll(players);
     }
 
-    public UnoPlayer getPlayer(int playerIndex) {
-        return players.get(playerIndex);
+    public UnoPlayer getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
+    }
+
+    public UnoPlayer getMainPlayer() {
+        return mainPlayer;
+    }
+
+    public void setMainPlayer(UnoPlayer mainPlayer) {
+        this.mainPlayer = mainPlayer;
     }
 
     public UnoCardTheme getTheme() {
@@ -98,40 +121,32 @@ public class UnoGameState implements Serializable {
         cardImageManager.setTheme(theme);
     }
 
-    public List<UnoPlayer> getPlayers() {
-        return players;
-    }
-
     public UnoCard getLastPlayedCard() {
-        return machine.getLastPlayedCard();
-    }
-
-    public void setCurrentSuit(UnoSuit currentSuit) {
-        this.currentSuit = currentSuit;
+        return getCardMachine().getLastPlayedCard();
     }
 
     public UnoSuit getCurrentSuit() {
         return currentSuit;
     }
 
-    public void setDirection(PlayDirection direction) {
-        this.direction = direction;
+    public void setCurrentSuit(UnoSuit currentSuit) {
+        this.currentSuit = currentSuit;
     }
 
     public PlayDirection getDirection() {
         return direction;
     }
 
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
+    public void setDirection(PlayDirection direction) {
+        this.direction = direction;
     }
 
     public Difficulty getDifficulty() {
         return difficulty;
     }
 
-    public void dealCards(int numberOfCards, List<UnoPlayer> players) {
-        machine.dealCards(numberOfCards, players);
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public UnoEdition getEdition() {
@@ -154,18 +169,6 @@ public class UnoGameState implements Serializable {
         return machine;
     }
 
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
-    }
-
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
-    }
-
-    public UnoPlayer getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
-    }
-
     public UnoRules getRules() {
         return rules;
     }
@@ -178,20 +181,20 @@ public class UnoGameState implements Serializable {
         return cardImageManager;
     }
 
+    public void setCardImageManager(UnoCardImageManager cardImageManager) {
+        this.cardImageManager = cardImageManager;
+    }
+
     public PlayerImageManager getPlayerImageManager() {
         return playerImageManager;
     }
 
+    public void setPlayerImageManager(PlayerImageManager playerImageManager) {
+        this.playerImageManager = playerImageManager;
+    }
+
     public UnoModerator getModerator() {
         return moderator;
-    }
-
-    public UnoPlayer getMainPlayer() {
-        return mainPlayer;
-    }
-
-    public void setMainPlayer(UnoPlayer mainPlayer) {
-        this.mainPlayer = mainPlayer;
     }
 
     public void addStackPenalty(int cardPenalty) {

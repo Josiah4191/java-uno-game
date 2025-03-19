@@ -33,7 +33,6 @@ public class UnoBrainEasy extends UnoBrain {
         List<UnoSuit> suits = List.of(UnoSuit.GREEN, UnoSuit.BLUE, UnoSuit.YELLOW, UnoSuit.RED);
         if (card.getSuit() == UnoSuit.WILD) {
             gameState.setCurrentSuit(suits.get(random.nextInt(suits.size())));
-            System.out.println("Player AI changing suit to: " + gameState.getCurrentSuit());
         }
     }
 }

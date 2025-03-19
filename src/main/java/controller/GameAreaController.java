@@ -55,16 +55,19 @@ public class GameAreaController implements GameAreaListener {
         setCallUnoHandler();
         setSayUnoBtnHandler();
         showUnoBtn();
-        displayCardInformation();
+        //displayCardInformation();
         setMenuBtnHandler();
         setNewGameBtnHandler();
         setSaveGameBtnHandler();
         setLoadGameBtnHandler();
-        System.out.println();
     }
 
     public void setGameState(UnoGameState gameState) {
         this.gameState = gameState;
+    }
+
+    public GameAreaView getGameAreaView() {
+        return gameAreaView;
     }
 
     public void announceWinner(UnoPlayer player) {
@@ -193,7 +196,7 @@ public class GameAreaController implements GameAreaListener {
         passBtn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
                 gameManager.moveToNextPlayer();
-                gameManager.runAITurn();
+                gameManager.startAIRunning();
                 updateGameArea();
                 hidePassBtn();
             }
@@ -225,7 +228,7 @@ public class GameAreaController implements GameAreaListener {
 
         unoBtn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
-                gameState.getMainPlayer().setSayUno(true);
+                gameState.getMainPlayer().sayUno(true);
                 hideUnoBtn();
             }
         });
@@ -236,7 +239,7 @@ public class GameAreaController implements GameAreaListener {
         if (mainPlayer.getPlayerHand().size() == 1 && !(mainPlayer.getSayUno())) {
             gameAreaView.getUnoBtn().setVisible(true);
         } else if (mainPlayer.getPlayerHand().size() > 1) {
-            mainPlayer.setSayUno(false);
+            mainPlayer.sayUno(false);
             hideUnoBtn();
         }
     }
@@ -246,38 +249,37 @@ public class GameAreaController implements GameAreaListener {
     }
 
     public void setSuitColorSelectionHandler() {
-        gameAreaView.getRedLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        gameAreaView.getRedRect().setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
                 gameState.setCurrentSuit(UnoSuit.RED);
                 hideSuitColorSelection();
-                gameManager.moveToNextPlayer();
-                gameManager.runAITurn();
+                gameManager.startAIRunning();
                 updateGameArea();
             }
         });
 
-        gameAreaView.getGreenLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        gameAreaView.getGreenRect().setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
                 gameState.setCurrentSuit(UnoSuit.GREEN);
                 hideSuitColorSelection();
-                gameManager.runAITurn();
+                gameManager.startAIRunning();
                 updateGameArea();
             }
         });
 
-        gameAreaView.getBlueLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        gameAreaView.getBlueRect().setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
                 gameState.setCurrentSuit(UnoSuit.BLUE);
                 hideSuitColorSelection();
-                gameManager.runAITurn();
+                gameManager.startAIRunning();
                 updateGameArea();
             }
         });
-        gameAreaView.getYellowLbl().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        gameAreaView.getYellowRect().setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
                 gameState.setCurrentSuit(UnoSuit.YELLOW);
                 hideSuitColorSelection();
-                gameManager.runAITurn();
+                gameManager.startAIRunning();
                 updateGameArea();
             }
         });
@@ -303,7 +305,7 @@ public class GameAreaController implements GameAreaListener {
                             if (card.getSuit() == UnoSuit.WILD) {
                                 showSuitColorSelection();
                             } else {
-                                gameManager.runAITurn();
+                                gameManager.startAIRunning();
                             }
                         }
                     }
@@ -338,12 +340,12 @@ public class GameAreaController implements GameAreaListener {
 
                         gameAreaView.getUnoBtn().setVisible(true);
 
-                        boolean valid = gameManager.playCard(currentPlayerIndex, cardIndex);
+                        boolean validCard = gameManager.playCard(currentPlayerIndex, cardIndex);
                         updateGameArea();
 
-                        if (valid) {
+                        if (validCard) {
 
-                            if (mainPlayer.getPlayerHand().isEmpty()) {
+                            if (gameManager.checkWinner(mainPlayer)) {
                                 announceWinner(mainPlayer);
                                 return;
                             }
@@ -351,7 +353,7 @@ public class GameAreaController implements GameAreaListener {
                             if (card.getSuit() == UnoSuit.WILD) {
                                 showSuitColorSelection();
                             } else {
-                                gameManager.runAITurn();
+                                gameManager.startAIRunning();
                             }
 
                             updateGameArea();
@@ -370,12 +372,7 @@ public class GameAreaController implements GameAreaListener {
 
             opponent.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 public void handle(MouseEvent mouseEvent) {
-                    boolean checkCallUno = gameManager.checkCallUno(player);
-                    if (checkCallUno) {
-                        int playerIndex = gameState.getPlayers().indexOf(player);
-                        gameManager.applyPenalty(playerIndex, 2);
-                        updateGameArea();
-                    }
+                    gameManager.callUno(player);
                 }
             });
         }
@@ -388,7 +385,6 @@ public class GameAreaController implements GameAreaListener {
         var cardLbls = gameAreaView.getPlayerCardsBox().getChildren();
 
         if (currentPlayer.equals(mainPlayer)) {
-
             for (var label : cardLbls) {
                 if (lastDrawCard.equals(label.getUserData())) {
                     label.setStyle("-fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 5px;");
@@ -442,7 +438,8 @@ public class GameAreaController implements GameAreaListener {
         Label mainPlayerNameLbl = gameAreaView.getMainPlayerNameLbl();
         Label mainPlayerImageLbl = gameAreaView.getMainPlayerImageLbl();
 
-        ImageView playerImageView = new ImageView(mainPlayer.getImage());
+        Image playerImage = gameState.getPlayerImageManager().getImage(mainPlayer.getImage());
+        ImageView playerImageView = new ImageView(playerImage);
 
         playerImageView.setFitHeight(60);
         playerImageView.setFitWidth(60);
@@ -464,19 +461,20 @@ public class GameAreaController implements GameAreaListener {
             VBox playerBox = new VBox();
             playerBox.setAlignment(Pos.CENTER);
 
-            Label playerImage = new Label();
+            Label playerImageLbl = new Label();
             Label playerNameLbl = new Label(player.getName() + " | " + player.getPlayerHand().size());
-            ImageView playerImageView = new ImageView(player.getImage());
 
+            Image playerImage = gameState.getPlayerImageManager().getImage(player.getImage());
+            ImageView playerImageView = new ImageView(playerImage);
             playerNameLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;");
 
             playerImageView.setFitHeight(60);
             playerImageView.setFitWidth(60);
 
-            playerImage.setGraphic(playerImageView);
+            playerImageLbl.setGraphic(playerImageView);
 
             playerBox.setUserData(player);
-            playerBox.getChildren().addAll(playerImage, playerNameLbl);
+            playerBox.getChildren().addAll(playerImageLbl, playerNameLbl);
             gameAreaView.getOpponentPlayerBox().getChildren().add(playerBox);
         }
     }
@@ -484,10 +482,6 @@ public class GameAreaController implements GameAreaListener {
     private void setPlayDirectionLabel() {
         PlayDirection direction = gameState.getDirection();
         gameAreaView.getPlayDirectionLbl().setText(direction.toString());
-    }
-
-    public GameAreaView getGameAreaView() {
-        return gameAreaView;
     }
 
     public void setNewGameBtnHandler() {
@@ -509,7 +503,6 @@ public class GameAreaController implements GameAreaListener {
                 SimpleUnoDatabase.saveGame(gameState);
             }
         });
-
     }
 
     public void setLoadGameBtnHandler() {
@@ -518,10 +511,12 @@ public class GameAreaController implements GameAreaListener {
 
         loadGameBtn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
+                gameManager.stopAIRunning();
                 GameAreaController.this.gameState = SimpleUnoDatabase.loadGame();
+                gameManager.setGameState(gameState);
+                gameManager.startAIRunning();
                 updateGameArea();
             }
         });
     }
-
 }

@@ -56,7 +56,8 @@ public class UnoCardMachine implements Serializable {
         if (drawPile.isEmpty()) {
             transferDiscardPileToDrawPile();
             shuffleDrawPile();
-            drawCardFromDrawPile();
+            UnoCard card = drawCardFromDrawPile();
+            addCardToDiscardPile(card);
         }
         return drawPile.drawCard();
     }

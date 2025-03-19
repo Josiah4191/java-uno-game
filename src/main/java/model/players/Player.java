@@ -6,15 +6,13 @@ Date: 3/7/2025
 ------------------------------------------------------------------------------
 */
 
-import javafx.scene.image.Image;
 import model.images.playerimages.PlayerImage;
-import model.images.playerimages.PlayerImageManager;
 
 import java.io.Serializable;
 
 public abstract class Player implements Serializable {
     private String name;
-    private Image playerImage;
+    private PlayerImage playerImage;
 
     public void setName(String name) {
         this.name = name;
@@ -29,12 +27,10 @@ public abstract class Player implements Serializable {
     }
 
     public void setImage(PlayerImage playerImage) {
-        PlayerImageManager playerImageManager = new PlayerImageManager();
-        Image image = playerImageManager.getImage(playerImage);
-        this.playerImage = image;
+        this.playerImage = playerImage;
     }
 
-    public Image getImage() {
+    public PlayerImage getImage() {
         return playerImage;
     }
 }

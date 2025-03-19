@@ -26,7 +26,7 @@ import javafx.scene.image.Image;
 import java.io.Serializable;
 import java.net.URL;
 
-public class UnoCardImageManager implements Serializable {
+public class UnoCardImageManager {
 
     static {
         ImageLogger.getImageLogger().info("[Card Image Log]: Loading images");

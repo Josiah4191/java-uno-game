@@ -1,6 +1,8 @@
 package model.database;
 
 import model.cardgames.unogame.UnoGameState;
+import model.images.cardimages.UnoCardImageManager;
+import model.images.playerimages.PlayerImageManager;
 
 import java.io.*;
 
@@ -28,22 +30,15 @@ public class SimpleUnoDatabase {
     }
 
     public static UnoGameState loadGame() {
-
-        UnoGameState gameState = null;
-
         try {
             FileInputStream fis = new FileInputStream(save_file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            gameState = (UnoGameState) ois.readObject();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+            UnoGameState gameState = (UnoGameState) ois.readObject();
+            gameState.setPlayerImageManager(new PlayerImageManager());
+            gameState.setCardImageManager(new UnoCardImageManager());
+            return gameState;
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        return gameState;
-
     }
 }

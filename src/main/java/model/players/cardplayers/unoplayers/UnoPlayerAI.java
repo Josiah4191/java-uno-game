@@ -55,6 +55,7 @@ public class UnoPlayerAI extends UnoPlayer {
         }
     }
 
+
     /*
      It might make sense to define this method in game manager, so that it could work for any player's
      hand of cards.

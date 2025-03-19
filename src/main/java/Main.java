@@ -1,4 +1,3 @@
-import controller.GameAreaController;
 import controller.MainController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

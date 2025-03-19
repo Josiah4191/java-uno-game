@@ -3,6 +3,7 @@ package model.players.cardplayers.unoplayers;
 import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoPlayerHandPile;
 import model.cardgames.unogame.UnoGameState;
+import model.cardgames.unogame.UnoModerator;
 import model.players.cardplayers.CardPlayer;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
                 .toList();
     }
 
-    public void setSayUno(boolean sayUno) {
+    public void sayUno(boolean sayUno) {
         this.sayUno = sayUno;
     }
 
@@ -50,6 +51,10 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
         return sayUno;
     }
 
+    public boolean callUno(UnoGameState gameState, UnoPlayer player) {
+        UnoModerator moderator = gameState.getModerator();
+        return moderator.checkCallUno(gameState, player);
+    }
 
 
 }

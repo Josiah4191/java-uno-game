@@ -1,6 +1,7 @@
 package model.players.cardplayers;
 
 import model.cardgames.cards.Pile;
+import model.cardgames.cards.unocards.UnoCard;
 import model.players.Player;
 
 import java.util.Collections;
@@ -75,19 +76,16 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
         return playerHand.size();
     }
 
+    public C getCard(int cardIndex) {
+        return getPlayerHand().get(cardIndex);
+    }
+
     public void setLastDrawCard(C lastDrawCard) {
         this.lastDrawCard = lastDrawCard;
     }
 
     public C getLastDrawCard() {
         return lastDrawCard;
-    }
-
-    /*
-    The isEmpty() method returns a boolean that indicates if the player's Pile of cards is empty.
-     */
-    public boolean isEmpty() {
-        return playerHand.isEmpty();
     }
 
     /*
