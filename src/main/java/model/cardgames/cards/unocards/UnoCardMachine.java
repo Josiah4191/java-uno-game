@@ -41,10 +41,6 @@ public class UnoCardMachine implements Serializable {
     private UnoDiscardPile discardPile;
     private UnoDeck deck;
 
-    public UnoCardMachine() {
-        createMachine(UnoEdition.CLASSIC);
-    }
-
     public void createMachine(UnoEdition edition) {
         this.drawPile = new UnoDrawPile();
         this.discardPile = new UnoDiscardPile();
@@ -80,10 +76,6 @@ public class UnoCardMachine implements Serializable {
 
     private void transferDiscardPileToDrawPile() {
         discardPile.transferDiscardPileToDrawPile(drawPile);
-    }
-
-    public UnoEdition getEdition() {
-        return deck.getEdition();
     }
 
     public List<UnoCard> getDrawPile() {

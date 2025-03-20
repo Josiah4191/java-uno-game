@@ -1,14 +1,11 @@
 package model.cardgames.unogame;
 
 import controller.GameAreaListener;
-import model.cardgames.cards.unocards.UnoCard;
-import model.cardgames.cards.unocards.UnoSuit;
-import model.cardgames.cards.unocards.UnoValue;
+import model.cardgames.cards.unocards.*;
 import model.images.playerimages.PlayerImage;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 import model.players.cardplayers.unoplayers.UnoPlayerAI;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -36,8 +33,11 @@ public class UnoGameManager {
         this.gameAreaListener = gameAreaListener;
     }
 
-    public void addPlayers(List<UnoPlayer> players) {
-        gameState.addPlayers(players);
+    public void createAIPlayers(int numberOfOpponents) {
+        for (int i = 0; i < numberOfOpponents; i++) {
+            UnoPlayerAI player = new UnoPlayerAI(gameState);
+            gameState.addPlayer(player);
+        }
     }
 
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
@@ -261,6 +261,7 @@ public class UnoGameManager {
     }
 
     public void initialize() {
+        /*
         // create players
         UnoPlayer player1 = new UnoPlayer();
         UnoPlayer player2 = new UnoPlayerAI(getGameState());
@@ -288,17 +289,18 @@ public class UnoGameManager {
         addPlayers(players);
 
         // deal cards to players
-        dealCards(7, players);
+        //dealCards(7, players);
 
         // draw the first card and add to the discard pile
-        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        //UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
         addCardToDiscardPileAndSetCurrentSuit(card);
+         */
     }
 
     public void resetGame() {
         stopAIRunning();
         setGameState(new UnoGameState());
-        initialize();
+        //initialize();
         gameAreaListener.setGameState(gameState);
         gameAreaListener.updateGameAreaView();
     }

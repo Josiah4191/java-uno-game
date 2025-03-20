@@ -28,6 +28,7 @@ public abstract class Player implements Serializable {
 
     public void setImage(PlayerImage playerImage) {
         this.playerImage = playerImage;
+        setName(playerImage.getName());
     }
 
     public PlayerImage getImage() {

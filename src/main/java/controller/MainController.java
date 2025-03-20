@@ -23,7 +23,7 @@ public class MainController {
     }
 
     public void initialize() {
-        gameManager.initialize();
+        //gameManager.initialize();
         gameAreaController.updateGameArea();
     }
 

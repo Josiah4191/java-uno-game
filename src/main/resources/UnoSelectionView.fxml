@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.UnoSelectionController"
+      prefHeight="400.0" prefWidth="600.0"
+      stylesheets="@styles.css">
+
+    <VBox fx:id="selectionScreen" alignment="CENTER">
+        <VBox fx:id="playerNameBox" alignment="CENTER">
+            <Label fx:id="playerNameLbl" text="Select Avatar" alignment="CENTER"/>
+            <HBox fx:id="playerImagesBox" alignment="CENTER"/>
+        </VBox>
+
+        <HBox fx:id="row2Box" alignment="CENTER">
+
+            <VBox fx:id="editionBox" alignment="CENTER">
+                <Label fx:id="editionLbl" text="Select Game Edition" alignment="CENTER"/>
+                <HBox fx:id="editionSelection" alignment="CENTER">
+                    <ToggleButton fx:id="classicEditionBtn" userData="CLASSIC" onAction="#setSelectedEdition">
+                        <graphic>
+                            <ImageView fitWidth="50" fitHeight="50">
+                                <Image url="/images/cardimages/Deck.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="themeBox" alignment="CENTER">
+                <Label fx:id="themeLbl" text="Select Card Theme" alignment="CENTER"/>
+                <HBox fx:id="cardThemeSelection" alignment="CENTER">
+                    <ToggleButton fx:id="classicThemeBtn" userData="CLASSIC" onAction="#setSelectedTheme">
+                        <graphic>
+                            <ImageView fitWidth="50" fitHeight="50">
+                                <Image url="/images/cardimages/Deck.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <HBox fx:id="difficultyBox" alignment="BOTTOM_RIGHT">
+            <VBox fx:id="difficultySelectionBox" alignment="CENTER">
+                <Label fx:id="difficultyLbl" text="Select Difficulty" alignment="CENTER"/>
+                <HBox fx:id="difficultySelection" alignment="CENTER">
+                    <ToggleButton fx:id="easyBtn" userData="EASY" text="Easy" onAction="#setSelectedDifficulty"/>
+                    <ToggleButton fx:id="mediumBtn" userData="MEDIUM" text="Medium" onAction="#setSelectedDifficulty"/>
+                    <ToggleButton fx:id="hardBtn" userData="HARD" text="Hard" onAction="#setSelectedDifficulty"/>
+                </HBox>
+            </VBox>
+            <HBox fx:id="playBtnBox" alignment="BOTTOM_LEFT">
+                <Button fx:id="playBtn" text="PLAY">
+                </Button>
+            </HBox>
+        </HBox>
+    </VBox>
+</VBox>

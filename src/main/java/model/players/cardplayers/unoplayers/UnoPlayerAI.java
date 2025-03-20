@@ -4,6 +4,8 @@ import model.cardgames.cards.unocards.UnoCard;
 import model.cardgames.cards.unocards.UnoSuit;
 import model.cardgames.unogame.UnoGameState;
 import model.cardgames.unogame.UnoModerator;
+import model.images.playerimages.PlayerImage;
+import model.images.playerimages.PlayerImages;
 import model.players.cardplayers.unoplayers.unobrains.UnoBrain;
 import model.players.cardplayers.unoplayers.unobrains.UnoBrainFactory;
 
@@ -36,6 +38,7 @@ public class UnoPlayerAI extends UnoPlayer {
     public UnoPlayerAI(UnoGameState gameState) {
         this.gameState = gameState;
         createBrain();
+        setImage();
     }
 
     /*
@@ -53,6 +56,12 @@ public class UnoPlayerAI extends UnoPlayer {
         } else {
             return null;
         }
+    }
+
+    public void setImage() {
+        PlayerImage[] images = PlayerImage.values();
+        PlayerImage image = images[new Random().nextInt(images.length)];
+        super.setImage(image);
     }
 
 

@@ -65,16 +65,17 @@ What this class contains:
 public class UnoGameState implements Serializable {
 
     private UnoRules rules = new UnoClassicRules();
+    private UnoPlayer mainPlayer = new UnoPlayer();
     private List<UnoPlayer> players = new ArrayList<>();
     private UnoModerator moderator = new UnoModerator();
     private PlayDirection direction = PlayDirection.FORWARD;
     private Difficulty difficulty = Difficulty.EASY;
     private UnoSuit currentSuit;
+    private UnoEdition edition;
     private transient UnoCardImageManager cardImageManager = new UnoCardImageManager();
     private transient PlayerImageManager playerImageManager= new PlayerImageManager();
     private UnoCardMachine machine = new UnoCardMachine();
     private int currentPlayerIndex;
-    private UnoPlayer mainPlayer;
     private int stackPenalty = 0;
 
     public UnoPlayer getPlayer(int playerIndex) {
@@ -91,6 +92,10 @@ public class UnoGameState implements Serializable {
 
     public void addPlayers(List<UnoPlayer> players) {
         this.players.addAll(players);
+    }
+
+    public void addPlayer(UnoPlayer player) {
+        players.add(player);
     }
 
     public UnoPlayer getCurrentPlayer() {
@@ -150,7 +155,11 @@ public class UnoGameState implements Serializable {
     }
 
     public UnoEdition getEdition() {
-        return machine.getEdition();
+        return edition;
+    }
+
+    public void setEdition(UnoEdition edition) {
+        this.edition = edition;
     }
 
     public List<UnoCard> getDrawPile() {
@@ -167,6 +176,10 @@ public class UnoGameState implements Serializable {
 
     public UnoCardMachine getCardMachine() {
         return machine;
+    }
+
+    public void setCardMachine(UnoCardMachine machine) {
+        this.machine = machine;
     }
 
     public UnoRules getRules() {
