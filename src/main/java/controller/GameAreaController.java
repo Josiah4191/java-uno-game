@@ -350,7 +350,7 @@ public class GameAreaController implements GameAreaListener {
         UnoPlayer mainPlayer = gameState.getMainPlayer();
 
         if (currentPlayer.equals(mainPlayer)) {
-            playerBox.setStyle("-fx-effect: dropshadow(three-pass-box, yellow, 30, 0.6, 0, 0);");
+            playerBox.setStyle("-fx-effect: dropshadow(three-pass-box, white, 30, 0.6, 0, 0);");
         } else if (nextPlayer.equals(mainPlayer)) {
             playerBox.setStyle("-fx-effect: dropshadow(three-pass-box, lightskyblue, 10, 0.5, 0, 0);");
         } else {
@@ -360,7 +360,7 @@ public class GameAreaController implements GameAreaListener {
         for (var box : opponentPlayerBox.getChildren()) {
 
             if (box.getUserData().equals(currentPlayer)) {
-                box.setStyle("-fx-effect: dropshadow(three-pass-box, yellow, 30, 0.6, 0, 0);" +
+                box.setStyle("-fx-effect: dropshadow(three-pass-box, white, 30, 0.6, 0, 0);" +
                         "-fx-scale-x: 1.2;" +
                         "-fx-scale-y: 1.2;");
             } else if (box.getUserData().equals(nextPlayer)) {
