@@ -2,10 +2,13 @@ package view;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.net.URL;
 
 public class GameAreaView {
     private StackPane gameArea = new StackPane();
@@ -104,7 +107,13 @@ public class GameAreaView {
 
         // Add the center box to the stack pane game area
         gameArea.getChildren().add(centerBox);
-        gameArea.setStyle("-fx-background-color: darkgreen; -fx-padding: 10;");
+
+        URL bgURL = getClass().getResource("/images/cardimages/Table_3.png");
+        Image image = new Image(bgURL.toString());
+
+        BackgroundImage bgImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(bgImage);
+        gameArea.setBackground(background);
     }
 
     public FlowPane getPlayerCardsBox() {

@@ -1,12 +1,19 @@
 package controller;
 
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
+import javafx.stage.Stage;
+import main.Main;
 import model.cardgames.cards.unocards.UnoCardTheme;
 import model.cardgames.cards.unocards.UnoEdition;
 import model.cardgames.unogame.Difficulty;
@@ -15,11 +22,20 @@ import model.cardgames.unogame.UnoGameState;
 import model.images.playerimages.PlayerImage;
 import model.images.playerimages.PlayerImageManager;
 
-public class UnoSelectionController {
+import java.io.IOException;
+
+public class SelectionController {
 
     private UnoGameManager gameManager;
     private UnoGameState gameState;
 
+    private AudioClip click1 = new AudioClip(getClass().getResource("/audio/click.wav").toString());
+    private AudioClip click2 = new AudioClip(getClass().getResource("/audio/click3.wav").toString());
+    private AudioClip error1 = new AudioClip(getClass().getResource("/audio/Retro12.wav").toString());
+    private AudioClip confirm1 = new AudioClip(getClass().getResource("/audio/confirm.wav").toString());
+
+    @FXML
+    private AnchorPane centerBox;
     @FXML
     private VBox playerNameBox;
     @FXML
@@ -49,7 +65,7 @@ public class UnoSelectionController {
     @FXML
     private ToggleButton classicEditionBtn;
     @FXML
-    private HBox playerImagesBox;
+    private FlowPane playerImagesBox;
     @FXML
     private Label playerNameLbl;
     @FXML
@@ -72,14 +88,44 @@ public class UnoSelectionController {
     private ToggleGroup editionButtonGroup = new ToggleGroup();
     @FXML
     private ToggleGroup difficultyButtonGroup = new ToggleGroup();
+    @FXML
+    private VBox menuVBox;
+    @FXML
+    private Label menuBtnLbl;
+    @FXML
+    private VBox menuBtnVBox = new VBox();
+    @FXML
+    private Button backBtn;
+    @FXML
+    private Button quitBtn;
 
     public void setGameManager(UnoGameManager gameManager) {
         this.gameManager = gameManager;
     }
 
+    public void initialize() {
+        initializeMenu();
+    }
+
     public void setGameState(UnoGameState gameState) {
         this.gameState = gameState;
         setupSelectionView();
+    }
+
+    public void playClick1() {
+        click1.play();
+    }
+
+    public void playClick2() {
+        click2.play();
+    }
+
+    public void playConfirm1() {
+        confirm1.play();
+    }
+
+    public void playError1() {
+        error1.play();
     }
 
     public void generatePlayerImages() {
@@ -102,6 +148,8 @@ public class UnoSelectionController {
             toggleButton.setOnAction(e -> setSelectedAvatar());
             toggleButton.isSelected();
 
+            toggleButton.setOnMouseEntered(e -> playClick1());
+
             playerImagesBox.getChildren().add(toggleButton);
         }
     }
@@ -112,6 +160,7 @@ public class UnoSelectionController {
             PlayerImage playerImage = (PlayerImage) selectedPlayerImage.getUserData();
             gameState.getMainPlayer().setImage(playerImage);
             System.out.println(gameState.getMainPlayer().getImage());
+            playClick2();
         }
     }
 
@@ -122,6 +171,7 @@ public class UnoSelectionController {
             UnoCardTheme theme = UnoCardTheme.valueOf(text);
             gameState.setTheme(theme);
             System.out.println(gameState.getTheme());
+            playClick2();
         }
     }
 
@@ -132,6 +182,7 @@ public class UnoSelectionController {
             UnoEdition edition = UnoEdition.valueOf(text);
             gameState.setEdition(edition);
             System.out.println(gameState.getEdition());
+            playClick2();
         }
     }
 
@@ -142,6 +193,7 @@ public class UnoSelectionController {
             Difficulty difficulty = Difficulty.valueOf(text);
             gameState.setDifficulty(difficulty);
             System.out.println(gameState.getDifficulty());
+            playClick2();
         }
     }
 
@@ -150,8 +202,8 @@ public class UnoSelectionController {
             generatePlayerImages();
         }
 
-        playerImagesBox.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        editionBox.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        playerImagesBox.setMaxWidth(Region.USE_PREF_SIZE);
+        editionBox.setMaxWidth(Region.USE_PREF_SIZE);
         cardThemeSelection.setMaxWidth(Region.USE_COMPUTED_SIZE);
         difficultySelection.setMaxWidth(Region.USE_COMPUTED_SIZE);
         selectionScreen.setMaxWidth(Region.USE_PREF_SIZE);
@@ -162,7 +214,55 @@ public class UnoSelectionController {
 
         classicThemeBtn.setToggleGroup(themeButtonGroup);
         classicEditionBtn.setToggleGroup(editionButtonGroup);
-
     }
 
+    public void switchToGameAreaView() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameAreaView.fxml"));
+            Parent root = loader.load();
+            GameAreaController gameAreaControllerFXML = loader.getController();
+
+            gameManager.initialize();
+            gameAreaControllerFXML.setGameManager(gameManager);
+            gameAreaControllerFXML.setGameState(gameState);
+
+            playConfirm1();
+            Stage stage = Main.getPrimaryStage();
+            Scene scene = new Scene(root, 900, 800);
+            stage.setScene(scene);
+            stage.show();
+        } catch (NullPointerException e) {
+            playError1();
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error loading FXML file: /Resources/GameAreaView.fxml");
+        }
+    }
+
+    public void initializeMenu() {
+        menuBtnVBox.setVisible(false);
+        menuVBox.toFront();
+        hideMenu();
+    }
+
+    public void toggleMenu() {
+        menuBtnVBox.setVisible(!menuBtnVBox.isVisible());
+    }
+
+    public void hideMenu() {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                if (menuBtnVBox.getScene() != null) {
+                    menuBtnVBox.getScene().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        public void handle(MouseEvent mouseEvent) {
+                            if (menuBtnVBox.isVisible() && !menuBtnVBox.contains(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
+                                menuBtnVBox.setVisible(false);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

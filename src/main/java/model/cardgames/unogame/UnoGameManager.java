@@ -167,6 +167,7 @@ public class UnoGameManager {
 
             executor.scheduleAtFixedRate(() -> {
                 if (aiIsRunning) {
+                    gameAreaListener.playClick1();
 
                     if (aiPlayer.equals(gameState.getCurrentPlayer())) {
 
@@ -195,6 +196,7 @@ public class UnoGameManager {
         switch (value) {
             case UnoValue.REVERSE:
                 reversePlayDirection();
+                gameAreaListener.updatePlayDirection();
                 break;
             case UnoValue.SKIP:
                 skipNextPlayer();
@@ -260,7 +262,64 @@ public class UnoGameManager {
         }
     }
 
+    public void initializeTest() {
+        gameState.setDifficulty(Difficulty.EASY);
+        gameState.setEdition(UnoEdition.CLASSIC);
+        gameState.setTheme(UnoCardTheme.CLASSIC);
+        gameState.getMainPlayer().setImage(PlayerImage.P6);
+        gameState.addPlayer(gameState.getMainPlayer());
+        createAIPlayers(9);
+        gameState.getCardMachine().createMachine(gameState.getEdition());
+        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        addCardToDiscardPileAndSetCurrentSuit(card);
+        dealCards(7, gameState.getPlayers());
+        System.out.println(gameState.getPlayers());
+
+        /*
+        // create players
+        UnoPlayer player1 = new UnoPlayer();
+        UnoPlayer player2 = new UnoPlayerAI(getGameState());
+        UnoPlayer player3 = new UnoPlayerAI(getGameState());
+        UnoPlayer player4 = new UnoPlayerAI(getGameState());
+        player1.setName("Josiah");
+        player2.setName("Player 2");
+        player3.setName("Player 3");
+        player4.setName("Player 4");
+
+        // set the main player
+        gameState.setMainPlayer(player1);
+
+        // create a list of players
+        ArrayList<UnoPlayer> players = new ArrayList<>(List.of(player1, player2, player3, player4));
+
+        // set the images for the players
+        for (UnoPlayer player : players) {
+            Random random = new Random();
+            PlayerImage[] images = PlayerImage.values();
+            player.setImage(images[random.nextInt(images.length)]);
+        }
+
+        // add players to game
+        addPlayers(players);
+
+        // deal cards to players
+        //dealCards(7, players);
+
+        // draw the first card and add to the discard pile
+        //UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        addCardToDiscardPileAndSetCurrentSuit(card);
+         */
+    }
+
     public void initialize() {
+
+        gameState.addPlayer(gameState.getMainPlayer());
+        createAIPlayers(4);
+        gameState.getCardMachine().createMachine(gameState.getEdition());
+        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        addCardToDiscardPileAndSetCurrentSuit(card);
+        dealCards(7, gameState.getPlayers());
+
         /*
         // create players
         UnoPlayer player1 = new UnoPlayer();
@@ -298,11 +357,13 @@ public class UnoGameManager {
     }
 
     public void resetGame() {
+        /*
         stopAIRunning();
         setGameState(new UnoGameState());
-        //initialize();
+        initialize();
         gameAreaListener.setGameState(gameState);
         gameAreaListener.updateGameAreaView();
+         */
     }
 
     public void swapPlayerPositions(int player1Index, int player2Index) {
@@ -321,5 +382,9 @@ public class UnoGameManager {
         UnoPlayer player = players.get(random.nextInt(players.size()));
         int index = players.indexOf(player);
         gameState.setCurrentPlayerIndex(index);
+
+        if (!(gameState.getCurrentPlayer().equals(gameState.getMainPlayer()))) {
+            startAIRunning();
+        }
     }
 }
