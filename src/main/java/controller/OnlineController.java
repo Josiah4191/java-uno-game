@@ -12,8 +12,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
-import model.images.playerimages.PlayerImage;
-import model.images.playerimages.PlayerImageManager;
+import model.image.playerimage.PlayerImage;
+import model.image.playerimage.PlayerImageManager;
 
 public class OnlineController {
 
@@ -39,11 +39,20 @@ public class OnlineController {
     private VBox backBox;
     @FXML
     private Button backBtn;
+    @FXML
+    private VBox settingsBox;
+    @FXML
+    private Button settingsBtn;
 
     public void initialize() {
-        backBox.toFront();
+        initializeMenu();
         generatePlayerImages();
         avatarImageBox.setMaxWidth(Region.USE_PREF_SIZE);
+    }
+
+    public void initializeMenu() {
+        backBox.toFront();
+        settingsBox.toFront();
     }
 
     public void playClick1() {

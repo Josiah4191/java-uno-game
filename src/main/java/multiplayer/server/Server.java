@@ -7,7 +7,7 @@ import multiplayer.client.unoclient.CallUno;
 import multiplayer.client.unoclient.DrawCard;
 import multiplayer.client.unoclient.PlayCard;
 import multiplayer.server.unoserver.ServerUnoGameManager;
-import model.cardgames.unogame.UnoGameState;
+import model.cardgame.unogame.UnoGameState;
 
 import java.io.IOException;
 import java.net.ServerSocket;

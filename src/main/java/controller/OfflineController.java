@@ -8,12 +8,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import multiplayer.client.unoclient.ClientUnoGameManager;
-import model.cardgames.cards.unocards.UnoCardTheme;
-import model.cardgames.cards.unocards.UnoEdition;
-import model.cardgames.unogame.Difficulty;
-import model.cardgames.unogame.UnoGameState;
-import model.images.playerimages.PlayerImage;
-import model.images.playerimages.PlayerImageManager;
+import model.cardgame.card.unocard.UnoCardTheme;
+import model.cardgame.card.unocard.UnoEdition;
+import model.cardgame.unogame.Difficulty;
+import model.cardgame.unogame.UnoGameState;
+import model.image.playerimage.PlayerImage;
+import model.image.playerimage.PlayerImageManager;
 
 public class OfflineController {
 
@@ -86,6 +86,10 @@ public class OfflineController {
     private VBox backBox;
     @FXML
     private Button backBtn;
+    @FXML
+    private VBox settingsBox;
+    @FXML
+    private Button settingsBtn;
 
     public void setGameManager(ClientUnoGameManager gameManager) {
         this.gameManager = gameManager;
@@ -208,6 +212,7 @@ public class OfflineController {
 
     public void initializeMenu() {
         backBox.toFront();
+        settingsBox.toFront();
     }
 
     public void goBack() {

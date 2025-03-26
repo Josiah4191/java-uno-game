@@ -2,12 +2,10 @@ package multiplayer.client;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import model.cardgames.unogame.UnoGameState;
+import model.cardgame.unogame.UnoGameState;
 import multiplayer.client.unoclient.ClientMessageHandler;
 import multiplayer.client.unoclient.ClientUnoGameManager;
-import multiplayer.server.Server;
 import multiplayer.server.unoserver.GameEventType;
-import multiplayer.server.unoserver.ServerUnoGameManager;
 
 import java.io.*;
 import java.net.Socket;

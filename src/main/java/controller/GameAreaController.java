@@ -11,13 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
-import model.cardgames.cards.unocards.UnoCard;
-import model.cardgames.cards.unocards.UnoSuit;
-import model.cardgames.unogame.PlayDirection;
+import model.cardgame.card.unocard.UnoCard;
+import model.cardgame.card.unocard.UnoSuit;
+import model.cardgame.unogame.PlayDirection;
 import multiplayer.server.unoserver.ServerUnoGameManager;
-import model.cardgames.unogame.UnoGameState;
-import model.images.cardimages.UnoCardImageManager;
-import model.players.cardplayers.unoplayers.UnoPlayer;
+import model.cardgame.unogame.UnoGameState;
+import model.image.cardimage.UnoCardImageManager;
+import model.player.cardplayer.unoplayer.UnoPlayer;
 
 import java.util.Optional;
 

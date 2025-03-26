@@ -1,7 +1,7 @@
 package controller;
 
-import model.cardgames.unogame.UnoGameState;
-import model.players.cardplayers.unoplayers.UnoPlayer;
+import model.cardgame.unogame.UnoGameState;
+import model.player.cardplayer.unoplayer.UnoPlayer;
 
 public interface GameAreaListener {
     void updateGameAreaView();

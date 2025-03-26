@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
-import model.cardgames.CardGame;
+import model.cardgame.CardGame;
 
 public class GameSelectionController {
 
@@ -30,12 +30,6 @@ public class GameSelectionController {
     @FXML
     private Label titleLbl;
     @FXML
-    private VBox menuBtnVBox;
-    @FXML
-    private VBox backBox;
-    @FXML
-    private Button backBtn;
-    @FXML
     private HBox playBtnBox;
     @FXML
     private Button playBtn;
@@ -51,6 +45,10 @@ public class GameSelectionController {
     private ToggleButton offlineBtn;
     @FXML
     private Label gameModeLbl;
+    @FXML
+    private VBox settingsBox;
+    @FXML
+    private Button settingsBtn;
 
     public void initialize() {
         initializeMenu();
@@ -58,7 +56,7 @@ public class GameSelectionController {
     }
 
     public void initializeMenu() {
-       backBox.toFront();
+       settingsBox.toFront();
     }
 
     public void initializeToggleBtns() {
@@ -79,7 +77,6 @@ public class GameSelectionController {
 
         offlineBtn.setToggleGroup(gameModeBtnGroup);
         offlineBtn.setOnMouseClicked(gameModeEvent);
-
 
     }
 
@@ -117,10 +114,6 @@ public class GameSelectionController {
 
     public void playError1() {
         error1.play();
-    }
-
-    public void toggleMenu() {
-        menuBtnVBox.setVisible(!menuBtnVBox.isVisible());
     }
 
     public void launchGame() {

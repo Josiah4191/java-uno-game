@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="controller.OfflineController"
+        prefHeight="400.0" prefWidth="600.0"
+        stylesheets="@/style/OfflineView_Styles.css">
+
+    <VBox fx:id="backBox" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0">
+        <Button fx:id="backBtn" onMouseClicked="#goBack">
+            <graphic>
+                <ImageView fitWidth="25" fitHeight="25">
+                    <Image url="/image/buttonimage/back_button.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <VBox fx:id="settingsBox" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <Button fx:id="settingsBtn">
+            <graphic>
+                <ImageView fitWidth="35" fitHeight="35">
+                    <Image url="/image/buttonimage/settings.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <VBox fx:id="selectionScreen" alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <VBox fx:id="playerNameBox" alignment="CENTER">
+            <Label fx:id="playerNameLbl" text="Select Avatar" alignment="CENTER"/>
+            <FlowPane fx:id="playerImagesBox" alignment="CENTER"/>
+        </VBox>
+
+        <HBox fx:id="row2Box" alignment="CENTER">
+
+            <VBox fx:id="editionBox" alignment="CENTER">
+                <Label fx:id="editionLbl" text="Select Game Edition" alignment="CENTER"/>
+                <HBox fx:id="editionSelection" alignment="CENTER">
+                    <ToggleButton fx:id="classicEditionBtn" userData="CLASSIC" onMouseClicked="#setSelectedEdition"
+                                  onMouseEntered="#playClick1">
+                        <graphic>
+                            <ImageView fitWidth="50" fitHeight="50">
+                                <Image url="/image/cardimage/deck.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="themeBox" alignment="CENTER">
+                <Label fx:id="themeLbl" text="Select Card Theme" alignment="CENTER"/>
+                <HBox fx:id="cardThemeSelection" alignment="CENTER">
+                    <ToggleButton fx:id="classicThemeBtn" userData="CLASSIC" onAction="#setSelectedTheme"
+                                  onMouseEntered="#playClick1">
+                        <graphic>
+                            <ImageView fitWidth="50" fitHeight="50">
+                                <Image url="/image/cardimage/deck.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <HBox fx:id="difficultyBox" alignment="CENTER">
+            <VBox fx:id="difficultySelectionBox" alignment="CENTER">
+                <Label fx:id="difficultyLbl" text="Select Difficulty" alignment="CENTER"/>
+                <HBox fx:id="difficultySelection" alignment="CENTER">
+                    <ToggleButton fx:id="easyBtn" userData="EASY" text="Easy" onAction="#setSelectedDifficulty"
+                                  onMouseEntered="#playClick1"/>
+                    <ToggleButton fx:id="mediumBtn" userData="MEDIUM" text="Medium"
+                                  onAction="#setSelectedDifficulty" onMouseDragOver="#playClick1"/>
+                    <ToggleButton fx:id="hardBtn" userData="HARD" text="Hard" onAction="#setSelectedDifficulty"
+                                  onMouseEntered="#playClick1"/>
+                </HBox>
+            </VBox>
+            <HBox fx:id="playBtnBox" alignment="BOTTOM_LEFT">
+                <Button fx:id="playBtn" text="PLAY" onAction="#switchToGameAreaView" onMouseEntered="#playClick1">
+                </Button>
+            </HBox>
+        </HBox>
+    </VBox>
+</AnchorPane>

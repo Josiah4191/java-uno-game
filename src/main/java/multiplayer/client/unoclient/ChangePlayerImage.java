@@ -1,6 +1,6 @@
 package multiplayer.client.unoclient;
 
-import model.images.playerimages.PlayerImage;
+import model.image.playerimage.PlayerImage;
 
 public class ChangePlayerImage extends ClientAction {
 

@@ -18,7 +18,7 @@ public class Main extends Application {
 
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "OfflineView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "view/OfflineView.fxml"));
         Parent root = loader.load();
         OfflineController controller = loader.getController();
 

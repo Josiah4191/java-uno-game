@@ -1,14 +1,14 @@
 package multiplayer.client.unoclient;
 
-import model.cardgames.cards.unocards.UnoCard;
-import model.cardgames.cards.unocards.UnoEdition;
-import model.cardgames.cards.unocards.UnoSuit;
-import model.cardgames.unogame.Difficulty;
-import model.cardgames.unogame.PlayDirection;
-import model.cardgames.unogame.UnoGameState;
-import model.cardgames.unogame.UnoRules;
-import model.images.playerimages.PlayerImage;
-import model.players.cardplayers.unoplayers.UnoPlayer;
+import model.cardgame.card.unocard.UnoCard;
+import model.cardgame.card.unocard.UnoEdition;
+import model.cardgame.card.unocard.UnoSuit;
+import model.cardgame.unogame.Difficulty;
+import model.cardgame.unogame.PlayDirection;
+import model.cardgame.unogame.UnoGameState;
+import model.cardgame.unogame.UnoRules;
+import model.image.playerimage.PlayerImage;
+import model.player.cardplayer.unoplayer.UnoPlayer;
 
 public class ClientUnoGameManager {
 

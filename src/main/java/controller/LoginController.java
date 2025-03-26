@@ -48,6 +48,10 @@ public class LoginController {
     private Label createLbl;
     @FXML
     private Button createBtn;
+    @FXML
+    private VBox settingsBox;
+    @FXML
+    private Button settingsBtn;
 
     public void playClick1() {
         click1.play();
@@ -65,6 +69,10 @@ public class LoginController {
         error1.play();
     }
 
+    public void initialize() {
+        initializeMenu();
+    }
+
     public void login() {
         sceneManager.loadGameSelectionScene();
         sceneManager.switchScene("gameSelection");
@@ -76,6 +84,10 @@ public class LoginController {
 
     public void setSceneManager(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
+    }
+
+    public void initializeMenu() {
+        settingsBox.toFront();
     }
 
 }

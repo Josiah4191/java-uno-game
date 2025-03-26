@@ -31,7 +31,7 @@ public class SceneManager {
     }
 
     public void loadLoginScene() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "LoginView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "view/LoginView.fxml"));
         try {
             Parent root = loader.load();
             loginScene = new Scene(root, 900, 700);
@@ -47,7 +47,7 @@ public class SceneManager {
     }
 
     public void loadOfflineScene() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "OfflineView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "view/OfflineView.fxml"));
         try {
             Parent root = loader.load();
             offlineScene = new Scene(root, 900, 700);
@@ -63,7 +63,7 @@ public class SceneManager {
     }
 
     public void loadOnlineScene() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "OnlineView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "view/OnlineView.fxml"));
         try {
             Parent root = loader.load();
             onlineScene = new Scene(root, 900, 700);
@@ -79,7 +79,7 @@ public class SceneManager {
     }
 
     public void loadGameSelectionScene() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "GameSelectionView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "view/GameSelectionView.fxml"));
         try {
             Parent root = loader.load();
             gameSelectionScene = new Scene(root, 900, 700);
@@ -95,7 +95,7 @@ public class SceneManager {
     }
 
     public void loadGameAreaScene() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "GameAreaView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "view/GameAreaView.fxml"));
         try {
             Parent root = loader.load();
             gameAreaScene = new Scene(root, 900, 700);

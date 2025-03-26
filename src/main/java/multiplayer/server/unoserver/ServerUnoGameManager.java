@@ -1,14 +1,14 @@
 package multiplayer.server.unoserver;
 
 import controller.GameAreaListener;
-import model.cardgames.cards.unocards.*;
-import model.cardgames.unogame.PlayDirection;
-import model.cardgames.unogame.UnoGameState;
-import model.cardgames.unogame.UnoModerator;
-import model.images.playerimages.PlayerImage;
-import model.players.cardplayers.unoplayers.UnoHumanPlayer;
-import model.players.cardplayers.unoplayers.UnoPlayer;
-import model.players.cardplayers.unoplayers.UnoPlayerAI;
+import model.cardgame.card.unocard.*;
+import model.cardgame.unogame.PlayDirection;
+import model.cardgame.unogame.UnoGameState;
+import model.cardgame.unogame.UnoModerator;
+import model.image.playerimage.PlayerImage;
+import model.player.cardplayer.unoplayer.UnoHumanPlayer;
+import model.player.cardplayer.unoplayer.UnoPlayer;
+import model.player.cardplayer.unoplayer.UnoPlayerAI;
 
 import java.util.Collections;
 import java.util.List;
