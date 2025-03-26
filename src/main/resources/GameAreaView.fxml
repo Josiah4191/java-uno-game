@@ -33,7 +33,7 @@
             <Label fx:id="playDirectionLbl" alignment="CENTER">
                 <graphic>
                     <ImageView fitWidth="100" fitHeight="100">
-                        <Image url="/images/play_direction.png"/>
+                        <Image url="/images/direction_button.png"/>
                     </ImageView>
                 </graphic>
             </Label>
@@ -95,7 +95,7 @@
             <Button fx:id="unoBtn" visible="false" onMouseClicked="#setSayUnoBtnHandler">
                 <graphic>
                     <ImageView fitWidth="100" fitHeight="60">
-                        <Image url="/images/UNO.png"/>
+                        <Image url="/images/uno_button.png"/>
                     </ImageView>
                 </graphic>
             </Button>
@@ -109,7 +109,7 @@
         <Button fx:id="passBtn" visible="false" >
             <graphic>
                 <ImageView fitWidth="100" fitHeight="60">
-                    <Image url="/images/Pass.png"/>
+                    <Image url="/images/pass_button.png"/>
                 </ImageView>
             </graphic>
         </Button>

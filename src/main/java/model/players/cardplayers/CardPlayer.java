@@ -2,6 +2,7 @@ package model.players.cardplayers;
 
 import model.cardgames.cards.Pile;
 import model.cardgames.cards.unocards.UnoCard;
+import model.images.playerimages.PlayerImage;
 import model.players.Player;
 
 import java.util.Collections;
@@ -33,7 +34,8 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     /*
     The constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
      */
-    public CardPlayer(P playerHand) {
+    public CardPlayer(P playerHand, int playerID) {
+        super(playerID);
         this.playerHand = playerHand;
     }
     /*

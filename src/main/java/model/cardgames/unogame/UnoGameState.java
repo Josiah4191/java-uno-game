@@ -7,7 +7,9 @@ import model.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
@@ -18,10 +20,12 @@ Date: 3/7/2025
 public class UnoGameState implements Serializable {
 
     private UnoRules rules = new UnoClassicRules();
-    private UnoPlayer mainPlayer = new UnoPlayer();
+    private UnoPlayer localPlayer;
     private List<UnoPlayer> players = new ArrayList<>();
+    private Map<Integer, Integer> playerIdToIndex = new HashMap<>();
+    private Map<Integer, Integer> playerIndexToCardNumber = new HashMap<>();
     private UnoModerator moderator = new UnoModerator();
-    private PlayDirection direction = PlayDirection.FORWARD;
+    private PlayDirection playDirection = PlayDirection.FORWARD;
     private Difficulty difficulty = Difficulty.EASY;
     private UnoSuit currentSuit;
     private UnoEdition edition;
@@ -29,7 +33,22 @@ public class UnoGameState implements Serializable {
     private transient PlayerImageManager playerImageManager= new PlayerImageManager();
     private UnoCardMachine machine = new UnoCardMachine();
     private int currentPlayerIndex;
+    private UnoCard lastPlayedCard;
+    private int nextPlayerIndex;
+
+    public void setStackPenalty(int stackPenalty) {
+        this.stackPenalty = stackPenalty;
+    }
+
     private int stackPenalty = 0;
+
+    public int getNextPlayerIndex() {
+        return nextPlayerIndex;
+    }
+
+    public void setNextPlayerIndex(int nextPlayerIndex) {
+        this.nextPlayerIndex = nextPlayerIndex;
+    }
 
     public UnoPlayer getPlayer(int playerIndex) {
         return players.get(playerIndex);
@@ -39,16 +58,25 @@ public class UnoGameState implements Serializable {
         return players.indexOf(player);
     }
 
+    public int getPlayerIndex(int playerID) {
+        return playerIdToIndex.get(playerID);
+    }
+
     public List<UnoPlayer> getPlayers() {
         return players;
     }
 
     public void addPlayers(List<UnoPlayer> players) {
-        this.players.addAll(players);
+        for (var player: players) {
+            addPlayer(player);
+        }
     }
 
     public void addPlayer(UnoPlayer player) {
         players.add(player);
+        if (!player.isAI()) {
+            playerIdToIndex.put(player.getPlayerID(), players.indexOf(player));
+        }
     }
 
     public UnoPlayer getCurrentPlayer() {
@@ -63,12 +91,12 @@ public class UnoGameState implements Serializable {
         this.currentPlayerIndex = currentPlayerIndex;
     }
 
-    public UnoPlayer getMainPlayer() {
-        return mainPlayer;
+    public UnoPlayer getLocalPlayer() {
+        return localPlayer;
     }
 
-    public void setMainPlayer(UnoPlayer mainPlayer) {
-        this.mainPlayer = mainPlayer;
+    public void setLocalPlayer(UnoPlayer localPlayer) {
+        this.localPlayer = localPlayer;
     }
 
     public UnoCardTheme getTheme() {
@@ -91,12 +119,12 @@ public class UnoGameState implements Serializable {
         this.currentSuit = currentSuit;
     }
 
-    public PlayDirection getDirection() {
-        return direction;
+    public PlayDirection getPlayDirection() {
+        return playDirection;
     }
 
-    public void setDirection(PlayDirection direction) {
-        this.direction = direction;
+    public void setPlayDirection(PlayDirection playDirection) {
+        this.playDirection = playDirection;
     }
 
     public Difficulty getDifficulty() {
@@ -171,4 +199,15 @@ public class UnoGameState implements Serializable {
         return stackPenalty;
     }
 
+    public void setLastPlayedCard(UnoCard lastPlayedCard) {
+        this.lastPlayedCard = lastPlayedCard;
+    }
+
+    public Map<Integer, Integer> getPlayerIndexToCardNumber() {
+        return playerIndexToCardNumber;
+    }
+
+    public void setPlayerIndexToCardNumber(Map<Integer, Integer> playerIndexToCardNumber) {
+        this.playerIndexToCardNumber = playerIndexToCardNumber;
+    }
 }

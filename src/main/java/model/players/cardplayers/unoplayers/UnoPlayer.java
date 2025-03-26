@@ -27,19 +27,21 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
     The new UnoPlayerHandPile represents the player's Pile cards.
     The new UnoPlayerHandPile starts empty.
      */
-    public UnoPlayer() {
-
-        this(new UnoPlayerHandPile());
-    }
-
-    public UnoPlayer(UnoPlayerHandPile playerHand) {
-        super(playerHand);
+    public UnoPlayer(int playerID) {
+        super(new UnoPlayerHandPile(), playerID);
     }
 
     public List<UnoCard> getPlayableCards(UnoGameState gameState) {
         return getPlayerHand()
                 .stream()
                 .filter(card -> gameState.getModerator().validateCard(gameState, card))
+                .toList();
+    }
+
+    public List<UnoCard> getNonPlayableCards(UnoGameState gameState) {
+        return getPlayerHand()
+                .stream()
+                .filter(card -> !gameState.getModerator().validateCard(gameState, card))
                 .toList();
     }
 
@@ -51,10 +53,9 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
         return sayUno;
     }
 
-    public boolean callUno(UnoGameState gameState, UnoPlayer player) {
+    public boolean callUno(UnoGameState gameState, int playerIndex) {
         UnoModerator moderator = gameState.getModerator();
-        return moderator.checkCallUno(gameState, player);
+        return moderator.checkCallUno(gameState, playerIndex);
     }
-
 
 }

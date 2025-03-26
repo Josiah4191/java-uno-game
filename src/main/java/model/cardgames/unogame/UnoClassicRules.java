@@ -50,7 +50,8 @@ public class UnoClassicRules implements UnoRules, Serializable {
         return match;
     }
 
-    public boolean checkCallUno(UnoPlayer player) {
+    public boolean checkCallUno(UnoGameState gameState, int playerIndex) {
+        UnoPlayer player = gameState.getPlayer(playerIndex);
         int cardsRemaining = player.getTotalCardsRemaining();
         boolean sayUno = player.getSayUno();
 

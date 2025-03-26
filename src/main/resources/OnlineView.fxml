@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Button?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.OnlineController"
+            stylesheets="OnlineView_Styles.css"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox fx:id="backBox" layoutX="20" layoutY="20">
+        <Button fx:id="backBtn" onMouseClicked="#goBack">
+            <graphic>
+                <ImageView fitWidth="50" fitHeight="50">
+                    <Image url="/images/buttonimages/back.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <VBox fx:id="centerBox" alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <VBox fx:id="avatarBox" alignment="CENTER">
+            <Label fx:id="avatarLbl" text="Select Avatar" alignment="CENTER"/>
+            <FlowPane fx:id="avatarImageBox" alignment="CENTER"/>
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>

@@ -1,8 +1,12 @@
-package model.cardgames.unogame;
+package multiplayer.server.unoserver;
 
 import controller.GameAreaListener;
 import model.cardgames.cards.unocards.*;
+import model.cardgames.unogame.PlayDirection;
+import model.cardgames.unogame.UnoGameState;
+import model.cardgames.unogame.UnoModerator;
 import model.images.playerimages.PlayerImage;
+import model.players.cardplayers.unoplayers.UnoHumanPlayer;
 import model.players.cardplayers.unoplayers.UnoPlayer;
 import model.players.cardplayers.unoplayers.UnoPlayerAI;
 
@@ -19,11 +23,10 @@ Date: 3/7/2025
 ------------------------------------------------------------------------------
  */
 
-public class UnoGameManager {
+public class ServerUnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
     private GameAreaListener gameAreaListener;
-    private volatile boolean aiIsRunning;
 
     public UnoGameState getGameState() {
         return gameState;
@@ -33,11 +36,34 @@ public class UnoGameManager {
         this.gameAreaListener = gameAreaListener;
     }
 
-    public void createAIPlayers(int numberOfOpponents) {
-        for (int i = 0; i < numberOfOpponents; i++) {
+    public void createHumanPlayer(String playerName, int playerID, PlayerImage playerImage) {
+        // create the player
+        UnoHumanPlayer player = new UnoHumanPlayer(playerID);
+        player.setName(playerName);
+        player.setImage(playerImage);
+        // add player to gameState
+        gameState.addPlayer(player);
+    }
+
+    public void createAIPlayers(int numberOfPlayers) {
+        for (int i = 0; i < numberOfPlayers; i++) {
             UnoPlayerAI player = new UnoPlayerAI(gameState);
             gameState.addPlayer(player);
         }
+    }
+
+    public void startGame() {
+
+
+    }
+
+    public void continueTurnCycle() {
+        UnoPlayer currentPlayer = gameState.getCurrentPlayer();
+
+        if (currentPlayer.isAI()) {
+            aiPlayCard(currentPlayer);
+        }
+
     }
 
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
@@ -48,7 +74,7 @@ public class UnoGameManager {
         this.gameState = gameState;
     }
 
-    public boolean playerDrawCard(int playerIndex) {
+    public boolean playerDrawCardFromDrawPile(int playerIndex) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
         UnoModerator moderator = gameState.getModerator();
@@ -60,7 +86,8 @@ public class UnoGameManager {
         return validCard;
     }
 
-    public boolean playCard(int playerIndex, int cardIndex) {
+
+    public boolean humanPlayCard(int playerIndex, int cardIndex) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         UnoCard card = player.getCard(cardIndex);
         UnoModerator moderator = gameState.getModerator();
@@ -85,28 +112,24 @@ public class UnoGameManager {
         gameState.setCurrentSuit(card.getSuit());
     }
 
-    public List<UnoPlayerAI> getAIPlayers() {
-        List<UnoPlayerAI> players = gameState.getPlayers()
+    public List<UnoPlayer> getAIPlayers() {
+        return gameState.getPlayers()
                 .stream()
-                .filter(e -> e instanceof UnoPlayerAI)
-                .map(e -> (UnoPlayerAI) e)
+                .filter(UnoPlayer::isAI)
                 .toList();
-        return players;
     }
 
     public List<UnoPlayer> getHumanPlayers() {
-        List<UnoPlayer> players = gameState.getPlayers()
+        return gameState.getPlayers()
                 .stream()
-                .filter(e -> e.getClass() == UnoPlayer.class)
+                .filter(player -> !(player.isAI()))
                 .toList();
-        return players;
     }
 
-    public void callUno(UnoPlayer player) {
-        boolean checkCallUno = gameState.getModerator().checkCallUno(gameState, player);
+    public void callUno(int playerIndex) {
+        boolean checkCallUno = gameState.getModerator().checkCallUno(gameState, playerIndex);
 
         if (checkCallUno) {
-            int playerIndex = gameState.getPlayers().indexOf(player);
             applyPenalty(playerIndex, 2);
             gameAreaListener.updateGameAreaView();
         }
@@ -125,15 +148,15 @@ public class UnoGameManager {
     public void aiCallUno() {
         var humanPlayers = getHumanPlayers();
         for (UnoPlayer player : humanPlayers) {
-            callUno(player);
+            int playerIndex = gameState.getPlayerIndex(player);
+            callUno(playerIndex);
         }
     }
 
-    public void aiCheckCardPlayed(UnoPlayer aiPlayer, UnoCard card) {
+    public void processAICardPlayed(UnoPlayer player, UnoCard card) {
         if (card == null) {
-            int playerIndex = gameState.getPlayerIndex(aiPlayer);
-            playerDrawCard(playerIndex);
-            aiPlayer.sayUno(false);
+            int playerIndex = gameState.getPlayerIndex(player);
+            playerDrawCardFromDrawPile(playerIndex);
 
             moveToNextPlayer();
             gameAreaListener.updateGameAreaView();
@@ -147,47 +170,40 @@ public class UnoGameManager {
             gameAreaListener.updateGameAreaView();
         }
     }
+    /*
+        public boolean humanPlayCard(int playerIndex, int cardIndex) {
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+        UnoCard card = player.getCard(cardIndex);
+        UnoModerator moderator = gameState.getModerator();
+        boolean validCard = moderator.validateCard(gameState, card);
 
-    public void aiTakeTurn(UnoPlayerAI aiPlayer) {
-        aiCallUno();
-        UnoCard card = aiPlayer.playCard(0);
-        aiCheckCardPlayed(aiPlayer, card);
-    }
-
-    public void stopAIRunning() {
-        this.aiIsRunning = false;
-    }
-
-    public void startAIRunning() {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(gameState.getPlayers().size());
-        aiIsRunning = true;
-        var aiPlayers = getAIPlayers();
-
-        for (UnoPlayerAI aiPlayer : aiPlayers) {
-
-            executor.scheduleAtFixedRate(() -> {
-                if (aiIsRunning) {
-                    gameAreaListener.playClick1();
-
-                    if (aiPlayer.equals(gameState.getCurrentPlayer())) {
-
-                        aiTakeTurn(aiPlayer);
-
-                        if (checkWinner(aiPlayer)) {
-                            gameAreaListener.announceWinner(aiPlayer);
-                            executor.shutdown();
-                        }
-                    }
-
-                    if (gameState.getCurrentPlayer().getClass() == UnoPlayer.class) {
-                        executor.shutdown();
-                    }
-
-                } else {
-                    executor.shutdown();
-                }
-            }, 3, 5, TimeUnit.SECONDS);
+        if (validCard) {
+            player.playCard(cardIndex);
+            addCardToDiscardPileAndSetCurrentSuit(card);
+            processCardValue(card);
         }
+
+        return validCard;
+    }
+     */
+    public void aiPlayCard(UnoPlayer player) {
+        ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+        service.scheduleWithFixedDelay(new Runnable() {
+            public void run() {
+                gameAreaListener.playClick1();
+                aiCallUno();
+                UnoCard card = player.playCard(0);
+                processAICardPlayed(player, card);
+
+                if (checkWinner(player)) {
+                    gameAreaListener.announceWinner(player);
+                }
+
+                service.shutdown();
+
+                continueTurnCycle();
+            }
+        }, 3, 5, TimeUnit.SECONDS);
     }
 
     private void processCardValue(UnoCard card) {
@@ -203,9 +219,11 @@ public class UnoGameManager {
                 break;
             case UnoValue.DRAW_TWO:
                 applyPenalty(nextPlayerIndex, 2);
+                skipNextPlayer();
                 break;
             case UnoValue.WILD_DRAW_FOUR:
                 applyPenalty(nextPlayerIndex, 4);
+                skipNextPlayer();
                 break;
             case UnoValue.DRAW_TW0_STACK:
                 gameState.addStackPenalty(2);
@@ -215,22 +233,22 @@ public class UnoGameManager {
                 break;
         }
 
-        if (!(value == UnoValue.SKIP)) {
+        if (!(value == UnoValue.DRAW_TWO) && !(value == UnoValue.WILD_DRAW_FOUR) && !(value == UnoValue.SKIP)) {
             moveToNextPlayer();
         }
     }
 
     public void reversePlayDirection() {
-        PlayDirection direction = gameState.getDirection();
+        PlayDirection direction = gameState.getPlayDirection();
         direction = (direction == PlayDirection.FORWARD) ? PlayDirection.REVERSE : PlayDirection.FORWARD;
-        gameState.setDirection(direction);
+        gameState.setPlayDirection(direction);
     }
 
     public int getNextPlayerIndex(int numberToSkipAhead) {
         int currentPlayerIndex = gameState.getCurrentPlayerIndex();
         int numberOfPlayers = gameState.getPlayers().size();
 
-        if (gameState.getDirection().isForward()) {
+        if (gameState.getPlayDirection().isForward()) {
             currentPlayerIndex += numberToSkipAhead;
         } else {
             currentPlayerIndex -= numberToSkipAhead;
@@ -262,98 +280,13 @@ public class UnoGameManager {
         }
     }
 
-    public void initializeTest() {
-        gameState.setDifficulty(Difficulty.EASY);
-        gameState.setEdition(UnoEdition.CLASSIC);
-        gameState.setTheme(UnoCardTheme.CLASSIC);
-        gameState.getMainPlayer().setImage(PlayerImage.P6);
-        gameState.addPlayer(gameState.getMainPlayer());
-        createAIPlayers(9);
-        gameState.getCardMachine().createMachine(gameState.getEdition());
-        UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
-        addCardToDiscardPileAndSetCurrentSuit(card);
-        dealCards(7, gameState.getPlayers());
-        System.out.println(gameState.getPlayers());
-
-        /*
-        // create players
-        UnoPlayer player1 = new UnoPlayer();
-        UnoPlayer player2 = new UnoPlayerAI(getGameState());
-        UnoPlayer player3 = new UnoPlayerAI(getGameState());
-        UnoPlayer player4 = new UnoPlayerAI(getGameState());
-        player1.setName("Josiah");
-        player2.setName("Player 2");
-        player3.setName("Player 3");
-        player4.setName("Player 4");
-
-        // set the main player
-        gameState.setMainPlayer(player1);
-
-        // create a list of players
-        ArrayList<UnoPlayer> players = new ArrayList<>(List.of(player1, player2, player3, player4));
-
-        // set the images for the players
-        for (UnoPlayer player : players) {
-            Random random = new Random();
-            PlayerImage[] images = PlayerImage.values();
-            player.setImage(images[random.nextInt(images.length)]);
-        }
-
-        // add players to game
-        addPlayers(players);
-
-        // deal cards to players
-        //dealCards(7, players);
-
-        // draw the first card and add to the discard pile
-        //UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
-        addCardToDiscardPileAndSetCurrentSuit(card);
-         */
-    }
-
     public void initialize() {
-
-        gameState.addPlayer(gameState.getMainPlayer());
+        gameState.addPlayer(gameState.getLocalPlayer());
         createAIPlayers(4);
         gameState.getCardMachine().createMachine(gameState.getEdition());
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
         addCardToDiscardPileAndSetCurrentSuit(card);
         dealCards(7, gameState.getPlayers());
-
-        /*
-        // create players
-        UnoPlayer player1 = new UnoPlayer();
-        UnoPlayer player2 = new UnoPlayerAI(getGameState());
-        UnoPlayer player3 = new UnoPlayerAI(getGameState());
-        UnoPlayer player4 = new UnoPlayerAI(getGameState());
-        player1.setName("Josiah");
-        player2.setName("Player 2");
-        player3.setName("Player 3");
-        player4.setName("Player 4");
-
-        // set the main player
-        gameState.setMainPlayer(player1);
-
-        // create a list of players
-        ArrayList<UnoPlayer> players = new ArrayList<>(List.of(player1, player2, player3, player4));
-
-        // set the images for the players
-        for (UnoPlayer player : players) {
-            Random random = new Random();
-            PlayerImage[] images = PlayerImage.values();
-            player.setImage(images[random.nextInt(images.length)]);
-        }
-
-        // add players to game
-        addPlayers(players);
-
-        // deal cards to players
-        //dealCards(7, players);
-
-        // draw the first card and add to the discard pile
-        //UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
-        addCardToDiscardPileAndSetCurrentSuit(card);
-         */
     }
 
     public void resetGame() {
@@ -382,9 +315,16 @@ public class UnoGameManager {
         UnoPlayer player = players.get(random.nextInt(players.size()));
         int index = players.indexOf(player);
         gameState.setCurrentPlayerIndex(index);
-
-        if (!(gameState.getCurrentPlayer().equals(gameState.getMainPlayer()))) {
-            startAIRunning();
-        }
     }
+
+    public void sayUno(int playerIndex) {
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+        player.sayUno(true);
+    }
+
+    public void passTurn(int playerIndex) {
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+        player.setPassTurn(true);
+    }
+
 }

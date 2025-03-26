@@ -1,16 +1,11 @@
 package model.players.cardplayers.unoplayers;
 
 import model.cardgames.cards.unocards.UnoCard;
-import model.cardgames.cards.unocards.UnoSuit;
 import model.cardgames.unogame.UnoGameState;
-import model.cardgames.unogame.UnoModerator;
 import model.images.playerimages.PlayerImage;
-import model.images.playerimages.PlayerImages;
 import model.players.cardplayers.unoplayers.unobrains.UnoBrain;
 import model.players.cardplayers.unoplayers.unobrains.UnoBrainFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /*
@@ -36,7 +31,9 @@ public class UnoPlayerAI extends UnoPlayer {
     The AI player will need information about the game to process and make a decision.
      */
     public UnoPlayerAI(UnoGameState gameState) {
+        super(0 );
         this.gameState = gameState;
+        setIsAI(true);
         createBrain();
         setImage();
     }

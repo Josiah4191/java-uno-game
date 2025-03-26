@@ -1,7 +1,6 @@
 package model.cardgames.unogame;
 
 import model.cardgames.cards.unocards.UnoCard;
-import model.players.cardplayers.unoplayers.UnoPlayer;
 
 import java.io.Serializable;
 
@@ -17,8 +16,8 @@ public class UnoModerator implements Serializable {
         return gameState.getRules().validateCard(gameState, card);
     }
 
-    public boolean checkCallUno(UnoGameState gameState, UnoPlayer player) {
-        return gameState.getRules().checkCallUno(player);
+    public boolean checkCallUno(UnoGameState gameState, int playerIndex) {
+        return gameState.getRules().checkCallUno(gameState, playerIndex);
     }
 
 }

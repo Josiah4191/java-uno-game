@@ -8,22 +8,18 @@
 <AnchorPane
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controller.SelectionController"
+           fx:controller="controller.OfflineController"
            prefHeight="400.0" prefWidth="600.0"
-           stylesheets="@SelectionView_Styles.css">
+           stylesheets="@OfflineView_Styles.css">
 
-        <VBox fx:id="menuVBox" layoutX="20" layoutY="20">
-            <Label fx:id="menuBtnLbl" onMouseClicked="#toggleMenu" onMouseEntered="#playClick1">
+        <VBox fx:id="backBox" layoutX="20" layoutY="20">
+            <Button fx:id="backBtn" onMouseClicked="#goBack">
                 <graphic>
-                    <ImageView fitWidth="60" fitHeight="60">
-                        <Image url="/images/buttonimages/uno_menu.png"/>
+                    <ImageView fitWidth="50" fitHeight="50">
+                        <Image url="/images/buttonimages/back.png"/>
                     </ImageView>
                 </graphic>
-            </Label>
-            <VBox fx:id="menuBtnVBox" translateX="50">
-                <Button fx:id="backBtn" text="Back"/>
-                <Button fx:id="quitBtn" text="Quit "/>
-            </VBox>
+            </Button>
         </VBox>
 
         <VBox fx:id="selectionScreen" alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"

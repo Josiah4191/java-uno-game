@@ -23,6 +23,7 @@
 
 #playerNameBox {
     -fx-spacing: 10px;
+    -fx-padding: 20px;
 }
 
 #playerImagesBox {
@@ -166,46 +167,27 @@
        -fx-scale-y: 1;
 }
 
-#menuVBox {
-    -fx-spacing: 5;
+#backBox {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
 }
 
-#menuBtnLbl {
-    -fx-opacity: 0.8;
-}
-
-#menuBtnLbl:hover {
-    -fx-opacity: 0.70;
-}
-
-#menuBtnLbl:pressed {
-    -fx-scale-x: 0.98;
-    -fx-scale-y: 0.98;
-}
-
-#menuBtnVBox {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
-    -fx-background-color: #292525;
-    -fx-border-color: black;
-    -fx-font-size: 15px;
-    -fx-opacity: 0.8;
-}
-
-#menuBtnVBox > .button {
+#backBtn {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-padding: 10px 20px;
+    -fx-opacity: 0.8;
 }
 
-#menuBtnVBox > .button:hover {
-    -fx-background-color: #3C3838;
+#backBtn:hover {
+    -fx-opacity: 1;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
 }
 
-#menuBtnVBox > .button:pressed {
+#backBtn:pressed {
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
 }
+
+
 
 
 

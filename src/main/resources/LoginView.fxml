@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.LoginController"
+            stylesheets="LoginView_Styles.css"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <HBox fx:id="centerBox"
+          alignment="CENTER"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0"
+          AnchorPane.topAnchor="0">
+
+        <VBox fx:id="welcomeBox" alignment="CENTER">
+            <Label fx:id="titleLbl" text="Welcome!"/>
+        </VBox>
+
+        <GridPane fx:id="loginBox" alignment="CENTER">
+            <!-- First Row -->
+            <Label fx:id="loginLbl" text="Login" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+
+            <!-- Second Row -->
+            <Label fx:id="usernameLbl" text="Username" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="usernameTextField" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+
+            <!-- Third Row -->
+            <Label fx:id="passwordLbl" text="Password" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="passwordTextField" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+
+            <!-- Fourth Row-->
+            <Label fx:id="forgotPasswordLbl" text="Forgot password?" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+
+            <!-- Fifth Row-->
+            <Button fx:id="loginBtn" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.columnIndex="0"
+            onMouseClicked="#login"/>
+
+            <!-- Sixth Row-->
+            <Label fx:id="createLbl" text="Don't have an account?" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+            <Button fx:id="createBtn" text="Create one." GridPane.halignment="LEFT" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+        </GridPane>
+
+    </HBox>
+
+
+</AnchorPane>

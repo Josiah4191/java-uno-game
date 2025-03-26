@@ -1,6 +1,5 @@
 package model.database;
 
-import model.cardgames.cards.unocards.UnoSuit;
 import model.cardgames.unogame.UnoGameState;
 
 public class Test {

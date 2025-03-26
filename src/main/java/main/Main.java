@@ -1,12 +1,12 @@
 package main;
 
-import controller.SelectionController;
+import controller.OfflineController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.application.Application;
-import model.cardgames.unogame.UnoGameManager;
+import multiplayer.client.unoclient.ClientUnoGameManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,15 +23,15 @@ public class Main extends Application {
     public void run(Stage primaryStage) throws IOException {
 
         // model
-        UnoGameManager gameManager = new UnoGameManager();
+        ClientUnoGameManager gameManager = new ClientUnoGameManager();
 
         // view
         // load the fxml file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "SelectionView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "OfflineView.fxml"));
         Parent root = loader.load();
 
         // get the controller from the fxml file
-        SelectionController controller = loader.getController();
+        OfflineController controller = loader.getController();
         controller.setGameManager(gameManager);
         controller.setGameState(gameManager.getGameState());
 
