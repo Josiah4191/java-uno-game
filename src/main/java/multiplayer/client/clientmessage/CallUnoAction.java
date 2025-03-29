@@ -1,11 +1,11 @@
-package multiplayer.client.unoclient;
+package multiplayer.client.clientmessage;
 
-public class CallUno extends ClientAction {
+public class CallUnoAction extends GameAction {
 
     int playerIndex;
 
-    public CallUno(int playerIndex) {
-        setType(ClientActionType.CALL_UNO);
+    public CallUnoAction(int playerIndex) {
+        setType(GameActionType.CALL_UNO);
     }
 
     public int getPlayerIndex() {

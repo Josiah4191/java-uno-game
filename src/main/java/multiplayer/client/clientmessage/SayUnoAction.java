@@ -1,11 +1,11 @@
-package multiplayer.client.unoclient;
+package multiplayer.client.clientmessage;
 
-public class SayUno extends ClientAction {
+public class SayUnoAction extends GameAction {
     private boolean sayUno;
 
-    public SayUno(boolean sayUno) {
+    public SayUnoAction(boolean sayUno) {
         this.sayUno = sayUno;
-        setType(ClientActionType.SAY_UNO);
+        setType(GameActionType.SAY_UNO);
     }
 
     public boolean isSayUno() {

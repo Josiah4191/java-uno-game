@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.cardgame.unogame.ClientUnoGameManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +95,7 @@ public class SceneManager {
         }
     }
 
-    public void loadGameAreaScene() {
+    public void loadGameAreaScene(ClientUnoGameManager gameManager) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + "view/GameAreaView.fxml"));
         try {
             Parent root = loader.load();
@@ -102,6 +103,8 @@ public class SceneManager {
 
             GameAreaController controller = loader.getController();
             controller.setSceneManager(this);
+            controller.setGameManager(gameManager);
+            controller.setGameState(gameManager.getGameState());
 
             scenes.put("gameArea", gameAreaScene);
 

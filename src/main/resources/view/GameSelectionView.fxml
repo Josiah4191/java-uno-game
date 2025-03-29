@@ -42,7 +42,7 @@
         <VBox fx:id="gameModeBox" alignment="CENTER">
             <Label fx:id="gameModeLbl" text="Select Game Mode" alignment="CENTER"/>
             <HBox fx:id="gameModeBtnBox" alignment="CENTER">
-                <ToggleButton fx:id="onlineBtn" userData="ONLINE" text="Online"/>
+                <ToggleButton fx:id="onlineBtn" userData="ONLINE" text="Online" disable="true"/>
                 <ToggleButton fx:id="offlineBtn" userData="OFFLINE" text="Offline"/>
             </HBox>
         </VBox>

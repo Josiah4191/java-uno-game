@@ -1,13 +1,13 @@
-package multiplayer.client.unoclient;
+package multiplayer.client.clientmessage;
 
 import model.image.playerimage.PlayerImage;
 
-public class ChangePlayerImage extends ClientAction {
+public class ChangeImageAction extends GameAction {
 
     private PlayerImage playerImage;
 
-    public ChangePlayerImage(PlayerImage playerImage) {
-        setType(ClientActionType.CHANGE_IMAGE);
+    public ChangeImageAction(PlayerImage playerImage) {
+        setType(GameActionType.CHANGE_IMAGE);
         this.playerImage = playerImage;
     }
 

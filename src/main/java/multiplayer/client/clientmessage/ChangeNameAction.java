@@ -1,11 +1,11 @@
-package multiplayer.client.unoclient;
+package multiplayer.client.clientmessage;
 
-public class ChangePlayerName extends ClientAction {
+public class ChangeNameAction extends GameAction {
 
     private String name;
 
-    public ChangePlayerName(String name) {
-        setType(ClientActionType.CHANGE_NAME);
+    public ChangeNameAction(String name) {
+        setType(GameActionType.CHANGE_NAME);
         this.name = name;
     }
 

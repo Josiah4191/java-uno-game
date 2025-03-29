@@ -58,10 +58,6 @@ public class UnoCardMachine implements Serializable {
         return drawPile.drawCard();
     }
 
-    public UnoCard getLastPlayedCard() {
-        return discardPile.getLastPlayedCard();
-    }
-
     private void shuffleDrawPile() {
         drawPile.shuffle();
     }
@@ -80,6 +76,10 @@ public class UnoCardMachine implements Serializable {
 
     public List<UnoCard> getDrawPile() {
         return Collections.unmodifiableList(drawPile.getCardPile());
+    }
+
+    public void removeCardFromDrawPile(UnoCard card) {
+        drawPile.getCardPile().remove(card);
     }
 
     public List<UnoCard> getDiscardPile() {

@@ -19,21 +19,21 @@ Date: 3/7/2025
 
 public class UnoGameState implements Serializable {
 
-    private UnoRules rules = new UnoClassicRules();
-    private UnoPlayer localPlayer;
     private List<UnoPlayer> players = new ArrayList<>();
-    private Map<Integer, Integer> playerIdToIndex = new HashMap<>();
+    private Map<Integer, UnoPlayer> playerIdToPlayer = new HashMap<>();
     private Map<Integer, Integer> playerIndexToCardNumber = new HashMap<>();
+    private UnoPlayer localPlayer;
     private UnoModerator moderator = new UnoModerator();
+    private UnoRules rules = new UnoClassicRules();
     private PlayDirection playDirection = PlayDirection.FORWARD;
-    private Difficulty difficulty = Difficulty.EASY;
+    private Difficulty difficulty;
     private UnoSuit currentSuit;
     private UnoEdition edition;
+    private UnoCardMachine cardMachine = new UnoCardMachine();
     private transient UnoCardImageManager cardImageManager = new UnoCardImageManager();
-    private transient PlayerImageManager playerImageManager= new PlayerImageManager();
-    private UnoCardMachine machine = new UnoCardMachine();
-    private int currentPlayerIndex;
+    private transient PlayerImageManager playerImageManager = new PlayerImageManager();
     private UnoCard lastPlayedCard;
+    private int currentPlayerIndex;
     private int nextPlayerIndex;
 
     public void setStackPenalty(int stackPenalty) {
@@ -58,8 +58,8 @@ public class UnoGameState implements Serializable {
         return players.indexOf(player);
     }
 
-    public int getPlayerIndex(int playerID) {
-        return playerIdToIndex.get(playerID);
+    public UnoPlayer getPlayerFromPlayerID(int playerID) {
+        return playerIdToPlayer.get(playerID);
     }
 
     public List<UnoPlayer> getPlayers() {
@@ -67,7 +67,7 @@ public class UnoGameState implements Serializable {
     }
 
     public void addPlayers(List<UnoPlayer> players) {
-        for (var player: players) {
+        for (var player : players) {
             addPlayer(player);
         }
     }
@@ -75,7 +75,7 @@ public class UnoGameState implements Serializable {
     public void addPlayer(UnoPlayer player) {
         players.add(player);
         if (!player.isAI()) {
-            playerIdToIndex.put(player.getPlayerID(), players.indexOf(player));
+            playerIdToPlayer.put(player.getPlayerID(), player);
         }
     }
 
@@ -95,6 +95,10 @@ public class UnoGameState implements Serializable {
         return localPlayer;
     }
 
+    public int getLocalPlayerIndex() {
+        return players.indexOf(localPlayer);
+    }
+
     public void setLocalPlayer(UnoPlayer localPlayer) {
         this.localPlayer = localPlayer;
     }
@@ -105,10 +109,6 @@ public class UnoGameState implements Serializable {
 
     public void setTheme(UnoCardTheme theme) {
         cardImageManager.setTheme(theme);
-    }
-
-    public UnoCard getLastPlayedCard() {
-        return getCardMachine().getLastPlayedCard();
     }
 
     public UnoSuit getCurrentSuit() {
@@ -144,23 +144,23 @@ public class UnoGameState implements Serializable {
     }
 
     public List<UnoCard> getDrawPile() {
-        return machine.getDrawPile();
+        return cardMachine.getDrawPile();
     }
 
     public List<UnoCard> getDiscardPile() {
-        return machine.getDiscardPile();
+        return cardMachine.getDiscardPile();
     }
 
     public List<UnoCard> getDeck() {
-        return machine.getDeck();
+        return cardMachine.getDeck();
     }
 
     public UnoCardMachine getCardMachine() {
-        return machine;
+        return cardMachine;
     }
 
     public void setCardMachine(UnoCardMachine machine) {
-        this.machine = machine;
+        this.cardMachine = machine;
     }
 
     public UnoRules getRules() {
@@ -187,6 +187,10 @@ public class UnoGameState implements Serializable {
         this.playerImageManager = playerImageManager;
     }
 
+    public void setPlayers(List<UnoPlayer> players) {
+        this.players = players;
+    }
+
     public UnoModerator getModerator() {
         return moderator;
     }
@@ -199,6 +203,10 @@ public class UnoGameState implements Serializable {
         return stackPenalty;
     }
 
+    public UnoCard getLastPlayedCard() {
+        return lastPlayedCard;
+    }
+
     public void setLastPlayedCard(UnoCard lastPlayedCard) {
         this.lastPlayedCard = lastPlayedCard;
     }
@@ -209,5 +217,13 @@ public class UnoGameState implements Serializable {
 
     public void setPlayerIndexToCardNumber(Map<Integer, Integer> playerIndexToCardNumber) {
         this.playerIndexToCardNumber = playerIndexToCardNumber;
+    }
+
+    public Map<Integer, UnoPlayer> getPlayerIdToPlayer() {
+        return playerIdToPlayer;
+    }
+
+    public void setPlayerIdToPlayer(Map<Integer, UnoPlayer> playerIdToPlayer) {
+        this.playerIdToPlayer = playerIdToPlayer;
     }
 }

@@ -9,6 +9,7 @@ Date: 3/7/2025
 import model.image.playerimage.PlayerImage;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public abstract class Player implements Serializable {
 
@@ -55,5 +56,13 @@ public abstract class Player implements Serializable {
         return isAI;
     }
 
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return playerID == player.playerID && isAI == player.isAI && Objects.equals(name, player.name) && playerImage == player.playerImage;
+    }
 
+    public int hashCode() {
+        return Objects.hash(playerID, isAI, name, playerImage);
+    }
 }

@@ -1,0 +1,6 @@
+package multiplayer.server.servermessage;
+
+public enum GameEventType {
+    SETUP_GAME, CARD_PLAYED, CARD_DRAWN, TURN_PASSED, SAID_UNO, NAME_CHANGED,
+    IMAGE_CHANGED, APPLY_PENALTY, LAST_CARD_PLAYED, ADD_LOCAL_PLAYER, ANNOUNCE_WINNER, NO_OP
+}

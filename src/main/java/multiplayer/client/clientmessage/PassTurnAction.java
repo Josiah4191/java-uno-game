@@ -1,11 +1,11 @@
-package multiplayer.client.unoclient;
+package multiplayer.client.clientmessage;
 
-public class PassTurn extends ClientAction {
+public class PassTurnAction extends GameAction {
     boolean isPassTurn;
 
-    public PassTurn(boolean isPassTurn) {
+    public PassTurnAction(boolean isPassTurn) {
         this.isPassTurn = isPassTurn;
-        setType(ClientActionType.PASS_TURN);
+        setType(GameActionType.PASS_TURN);
     }
 
     public boolean isPassTurn() {

@@ -10,16 +10,10 @@ public interface GameAreaListener {
 
     void announceWinner(UnoPlayer player);
 
+    void updatePlayDirection();
+    
     void setGameState(UnoGameState gameState);
 
-    void updatePlayDirection();
 
-    void playClick1();
-
-    void playClick2();
-
-    void playConfirm1();
-
-    void playError1();
 
 }

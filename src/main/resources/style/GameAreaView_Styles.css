@@ -7,111 +7,72 @@
     -fx-spacing: 20;
 }
 
-#menuBox {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
-    -fx-spacing: 5;
+#centerGridPane {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
 }
 
-#menuBtn {
-    -fx-opacity: 0.9;
-}
-
-#menuBtn:hover {
-    -fx-scale-x: 1.01;
-    -fx-scale-y: 1.01;
-    -fx-opacity: 0.70;
-}
-
-#menuBtn:pressed {
-    -fx-scale-x: 0.99;
-    -fx-scale-y: 0.99;
-}
-
-#menuBtnBox {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
-    -fx-background-color: #292525;
-    -fx-border-color: black;
-    -fx-font-size: 15px;
-    -fx-opacity: 0.8;
-}
-
-#menuBtnBox > .button {
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-padding: 10px 20px;
-}
-
-#menuBtnBox > .button:hover {
-    -fx-background-color: #3C3838;
-}
-
-#menuBtnBox > .button:pressed {
-    -fx-scale-x: 0.95;
-    -fx-scale-y: 0.95;
-}
-
-#opponentPlayerBox {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
-    -fx-padding: 12;
-    -fx-spacing: 10;
-}
-
-#playerCardsBox {
+#playerCardsFlowPane {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
     -fx-padding: 10px;
 }
 
-#playerCardsBox > .button {
+#playerCardsFlowPane > .button {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
     -fx-opacity: 0.9;
     -fx-background-color: transparent;
 }
 
-#playerCardsBox > .button:hover {
+#playerCardsFlowPane > .button:hover {
     -fx-opacity: 1;
     -fx-scale-x: 1.01;
     -fx-scale-y: 1.01;
 }
 
-#playerCardsBox > .button:pressed {
+#playerCardsFlowPane > .button:pressed {
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
 }
 
-#playerBox {
+#localPlayerVbox {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
     -fx-padding: 5px;
 }
 
-#playerBox > .label:pressed {
+#localPlayerVbox > .label:pressed {
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
 }
 
-#opponentPlayerBox > VBox {
-    -fx-opacity: 0.9;
+#opponentPlayerFlowPane {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
 }
 
-#opponentPlayerBox > VBox > .label {
+#opponentPlayerFlowPane > VBox {
+    -fx-opacity: 0.9;
+    -fx-pref-width: 150px;
+}
+
+#opponentPlayerFlowPane > VBox > .label {
     -fx-padding: 5px;
 }
 
-#opponentPlayerBox > VBox:hover {
+#opponentPlayerFlowPane > VBox:hover {
     -fx-opacity: 1;
 }
 
-#opponentPlayerBox > VBox > .label:hover {
+#opponentPlayerFlowPane > VBox > .label:hover {
     -fx-scale-x: 1.01;
     -fx-scale-y: 1.01;
     -fx-opacity: 1;
 }
 
-#opponentPlayerBox > VBox > .label:pressed {
+#opponentPlayerFlowPane > VBox > .label:pressed {
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
 }
 
-#pilesBox {
+#pilesHbox {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
     -fx-spacing: 5;
     -fx-padding: 5;
@@ -133,7 +94,8 @@
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
 }
-#playDirectionBox {
+
+#playDirectionHbox {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
 }
 
@@ -154,60 +116,71 @@
     -fx-padding: 10;
 }
 
-#suitColorSelectionBox > .label {
+#suitColorSelectionFlowPane > .label {
     -fx-opacity: 0.8;
 }
 
-#suitColorSelectionBox:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.5, 0, 0);
-}
-
-#suitColorSelectionBox > .label:hover {
+#suitColorSelectionFlowPane > .label:hover {
     -fx-scale-x: 1.01;
     -fx-scale-y: 1.01;
     -fx-opacity: 1;
 }
 
-#suitColorSelectionBox > .label:pressed {
+#suitColorSelectionFlowPane > .label:pressed {
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
 }
 
-#passBtnBox {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.5, 0, 0);
+#passTurnHbox, #sayUnoBtnHbox {
+    -padding: 5;
 }
 
-#passBtn {
+#passTurnBtn {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.5, 0, 0);
     -fx-opacity: 0.9;
     -fx-background-color: transparent;
 }
 
-#passBtn:hover {
+#passTurnBtn:hover {
     -fx-scale-x: 1.01;
     -fx-scale-y: 1.01;
 }
 
-#passBtn:pressed {
+#passTurnBtn:pressed {
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
 }
 
-#unoBtnBox {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.5, 0, 0);
-}
-
-#unoBtn {
+#sayUnoBtn {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.5, 0, 0);
     -fx-background-color: transparent;
 }
 
-#unoBtn:hover {
+#sayUnoBtn:hover {
     -fx-scale-x: 1.01;
     -fx-scale-y: 1.01;
+    -fx-opacity: 1;
 }
 
-#unoBtn:pressed {
+#sayUnoBtn:pressed {
     -fx-scale-x: 0.99;
     -fx-scale-y: 0.99;
+}
+
+#settingsVbox {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+}
+
+#settingsBtn {
+    -fx-background-color: transparent;
+}
+
+#settingsBtn:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+#settingsBtn:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
 }

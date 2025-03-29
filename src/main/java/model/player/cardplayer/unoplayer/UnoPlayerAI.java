@@ -21,7 +21,8 @@ public class UnoPlayerAI extends UnoPlayer {
     The UnoBrain object processes the gameState information and makes a decision for which card to play
      */
     private UnoBrain brain;
-    private UnoGameState gameState;
+    private transient UnoGameState gameState;
+    private static int ID = -1;
 
     /*
     The UnoPlayerAI constructor receives an UnoGameState object.
@@ -31,7 +32,8 @@ public class UnoPlayerAI extends UnoPlayer {
     The AI player will need information about the game to process and make a decision.
      */
     public UnoPlayerAI(UnoGameState gameState) {
-        super(0 );
+        super(ID);
+        ID++;
         this.gameState = gameState;
         setIsAI(true);
         createBrain();
@@ -43,13 +45,11 @@ public class UnoPlayerAI extends UnoPlayer {
     The playCard(int index) method is defined in CardPlayer.
     The brain analyze() method returns an integer to select which card to return.
      */
-    @Override
-    public UnoCard playCard(int cardIndex) {
+
+    public UnoCard selectCard() {
         var playableCards = getPlayableCards(gameState);
         if (!playableCards.isEmpty()) {
-            UnoCard selectedCard = brain.analyze(gameState, playableCards);
-            int selectedCardIndex = getPlayerHand().indexOf(selectedCard);
-            return super.playCard(selectedCardIndex);
+            return brain.analyze(gameState, playableCards);
         } else {
             return null;
         }
@@ -60,7 +60,6 @@ public class UnoPlayerAI extends UnoPlayer {
         PlayerImage image = images[new Random().nextInt(images.length)];
         super.setImage(image);
     }
-
 
     /*
      It might make sense to define this method in game manager, so that it could work for any player's

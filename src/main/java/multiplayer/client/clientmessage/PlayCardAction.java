@@ -1,11 +1,11 @@
-package multiplayer.client.unoclient;
+package multiplayer.client.clientmessage;
 
-public class PlayCard extends ClientAction {
+public class PlayCardAction extends GameAction {
     private int cardIndex;
 
-    public PlayCard(int cardIndex) {
+    public PlayCardAction(int cardIndex) {
         this.cardIndex = cardIndex;
-        setType(ClientActionType.PLAY_CARD);
+        setType(GameActionType.PLAY_CARD);
     }
 
     public int getCardIndex() {

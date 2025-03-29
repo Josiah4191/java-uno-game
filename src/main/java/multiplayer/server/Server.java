@@ -2,11 +2,16 @@ package multiplayer.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import multiplayer.client.unoclient.ClientActionType;
-import multiplayer.client.unoclient.CallUno;
-import multiplayer.client.unoclient.DrawCard;
-import multiplayer.client.unoclient.PlayCard;
-import multiplayer.server.unoserver.ServerUnoGameManager;
+import multiplayer.client.clientmessage.*;
+import multiplayer.server.servermessage.AIActionListener;
+import model.cardgame.card.unocard.UnoCardTheme;
+import model.cardgame.card.unocard.UnoEdition;
+import model.cardgame.unogame.Difficulty;
+import model.image.playerimage.PlayerImage;
+import model.player.cardplayer.unoplayer.UnoPlayer;
+import multiplayer.server.servermessage.ApplyPenaltyEvent;
+import multiplayer.server.servermessage.GameEvent;
+import model.cardgame.unogame.ServerUnoGameManager;
 import model.cardgame.unogame.UnoGameState;
 
 import java.io.IOException;
@@ -15,134 +20,24 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Server {
+/*
+    Need to create a message sender class that queues messages to the clients
+    Need to think about sending updates to all clients as well for information that matters to all clients
+ */
+
+public class Server implements AIActionListener {
 
     private ServerSocket serverSocket;
     private volatile boolean running = true;
-    private Map<Integer, ClientHandler> clientHandlers = new HashMap<>();
+    private Map<Integer, ServerMessageReader> clientHandlerReaders = new HashMap<>();
+    private Map<Integer, ServerMessageWriter> clientHandlerWriters = new HashMap<>();
     private int playerID = 1;
     private ServerUnoGameManager gameManager;
     private UnoGameState gameState;
     private int port = 12345;
 
-    public void run() {
+    public void start() {
         openConnection();
-    }
-
-    public void openConnection() {
-
-        while (running) {
-            try {
-                serverSocket = new ServerSocket(12345);
-
-                while (running) {
-                    Socket socket = serverSocket.accept();
-                    ClientHandler client = new ClientHandler(this, socket);
-                    client.setID(1);
-                    clientHandlers.put(playerID, client);
-                    client.listen();
-                    playerID++;
-                }
-            } catch (IOException e) {
-                if (!running) {
-                    break;
-                }
-                System.out.println("Error opening server connection");
-            }
-        }
-    }
-
-    public void readMessage(String greeting) {
-        System.out.println(greeting);
-    }
-
-    public void handleMessage(String message, int playerID) {
-        // checks the message and calls the correct game manager method
-        ClientActionType type = getActionType(message);
-
-        switch (type) {
-            case ClientActionType.PLAY_CARD:
-                handlePlayCard(message, playerID);
-                break;
-            case ClientActionType.PASS_TURN:
-                handlePassTurn(playerID);
-                break;
-            case ClientActionType.CALL_UNO:
-                handleCallUno(message, playerID);
-                break;
-            case ClientActionType.SAY_UNO:
-                handleSayUno(playerID);
-                break;
-            case ClientActionType.DRAW_CARD:
-                handleDrawCard(message, playerID);
-                break;
-            default:
-                System.out.println("Unknown Action Type");
-        };
-    }
-
-    public ClientActionType getActionType(String message) {
-        Gson gson = new Gson();
-        JsonObject json = gson.fromJson(message, JsonObject.class);
-        String type = json.get("type").getAsString();
-        return ClientActionType.valueOf(type);
-    }
-
-    public void handlePlayCard(String message, int playerID) {
-        Gson gson = new Gson();
-        PlayCard playCard = gson.fromJson(message, PlayCard.class);
-        int cardIndex = playCard.getCardIndex();
-        int playerIndex = gameState.getPlayerIndex(playerID);
-
-        // call game manager method
-        gameManager.humanPlayCard(playerIndex, cardIndex);
-    }
-
-    public void handleCallUno(String message, int playerID) {
-        Gson gson = new Gson();
-        CallUno callUno = gson.fromJson(message, CallUno.class);
-        int playerIndex = callUno.getPlayerIndex();
-
-        // call game manager method
-        gameManager.callUno(playerIndex);
-
-    }
-
-    /*
-    this might be handled client side, and handled differently than here. i need to send the card
-    that they draw if its not played, but otherwise if it is played, i need to just send the card that was played.
-     */
-    public void handleDrawCard(String message, int playerID) {
-        Gson gson = new Gson();
-        DrawCard drawCard = gson.fromJson(message, DrawCard.class);
-        int playerIndex = gameState.getPlayerIndex(playerID);
-
-        // call game manager method
-        gameManager.playerDrawCardFromDrawPile(playerIndex);
-
-    }
-
-    public void handleSayUno(int playerID) {
-        int playerIndex = gameState.getPlayerIndex(playerID);
-        // call game manager method
-        gameManager.sayUno(playerIndex);
-    }
-
-    public void handlePassTurn(int playerID) {
-        int playerIndex = gameState.getPlayerIndex(playerID);
-        // call game manager method
-        gameManager.passTurn(playerIndex);
-    }
-
-    public void closeConnection() {
-        running = false;
-        try {
-            if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close();
-            }
-        } catch (IOException e) {
-            System.out.println("Error closing server connection");
-        }
     }
 
     public int getPort() {
@@ -157,6 +52,255 @@ public class Server {
         this.gameState = gameState;
     }
 
+    public void openConnection() {
+
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                while (running) {
+                    try {
+                        serverSocket = new ServerSocket(port);
+                        while (running) {
+                            Socket socket = serverSocket.accept();
+
+                            System.out.println("Client connected");
+
+                            ServerMessageReader clientHandlerReader = new ServerMessageReader(Server.this, socket);
+                            clientHandlerReader.setPlayerID(1);
+                            System.out.println("Client handler (reader) created with playerID: " + playerID);
+
+                            ServerMessageWriter clientHandlerWriter = new ServerMessageWriter(socket);
+                            clientHandlerWriter.setPlayerID(1);
+                            System.out.println("Client handler (writer) created with playerID: " + playerID);
+
+                            clientHandlerWriters.put(playerID, clientHandlerWriter);
+                            clientHandlerWriter.startWriting();
+
+                            clientHandlerReaders.put(playerID, clientHandlerReader);
+                            clientHandlerReader.listen();
+
+                            playerID++;
+                        }
+                    } catch (IOException e) {
+                        if (!running) {
+                            break;
+                        }
+                        System.out.println("Error opening server connection");
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
+    public void closeConnection() {
+        running = false;
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing server connection");
+        }
+    }
+
+    public void sendMessage(String message, int playerID) {
+        ServerMessageWriter clientHandlerWriter = clientHandlerWriters.get(playerID);
+        clientHandlerWriter.storeMessage(message);
+    }
+
+    public void sendMessageToAllClients(String message) {
+        for (var clientHandlerWriter: clientHandlerWriters.values()) {
+            clientHandlerWriter.storeMessage(message);
+        }
+    }
+
+    public synchronized void handleMessage(String message, int playerID) {
+        GameActionType type = getActionType(message);
+
+        switch (type) {
+            case GameActionType.SETUP_GAME:
+                handleSetupGame(message, playerID);
+                break;
+            case GameActionType.JOIN_GAME:
+                handleJoinGame(message, playerID);
+                break;
+            case GameActionType.CHANGE_NAME:
+                handleChangeName(message, playerID);
+                break;
+            case GameActionType.CHANGE_IMAGE:
+                handleChangeImage(message, playerID);
+                break;
+            case GameActionType.PASS_TURN:
+                handlePassTurn(playerID);
+                break;
+            case GameActionType.SAY_UNO:
+                handleSayUno(message, playerID);
+                break;
+            case GameActionType.CALL_UNO:
+                handleCallUno(message, playerID);
+                break;
+            case GameActionType.PLAY_CARD:
+                handlePlayCard(message, playerID);
+                break;
+            case GameActionType.DRAW_CARD:
+                handleDrawCard(message, playerID);
+                break;
+            default:
+                System.out.println("Unknown Action Type");
+        }
+    }
+
+    public void handleSetupGame(String message, int playerID) {
+        Gson gson = new Gson();
+        SetupGameAction setupGame = gson.fromJson(message, SetupGameAction.class);
+        Difficulty difficulty = setupGame.getDifficulty();
+        UnoEdition edition = setupGame.getEdition();
+        UnoCardTheme theme = setupGame.getTheme();
+        int numberOfOpponents = setupGame.getNumberOfOpponents();
+
+        // call game manager method
+        GameEvent setupEvent = gameManager.setupGame(edition, theme, difficulty, numberOfOpponents, playerID);
+
+        // send event to client
+        String setupEventMessage = setupEvent.toJson();
+        sendMessage(setupEventMessage, playerID);
+    }
+
+    public void handleJoinGame(String message, int playerID) {
+        Gson gson = new Gson();
+        JoinGameAction joinGame = gson.fromJson(message, JoinGameAction.class);
+        String name = joinGame.getName();
+        PlayerImage playerImage = joinGame.getPlayerImage();
+
+        // call game manager method
+        GameEvent addLocalPlayerEvent = gameManager.addLocalPlayer(name, playerID, playerImage);
+
+        // send event to client
+        String addLocalPlayerEventMessage = addLocalPlayerEvent.toJson();
+        sendMessage(addLocalPlayerEventMessage, playerID);
+    }
+
+    public void handleChangeName(String message, int playerID) {
+        Gson gson = new Gson();
+        ChangeNameAction changeNameAction = gson.fromJson(message, ChangeNameAction.class);
+        String name = changeNameAction.getName();
+        UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
+        int playerIndex = gameState.getPlayerIndex(player);
+
+        // call game manager method
+        GameEvent changeNameEvent = gameManager.updatePlayerName(playerIndex, name);
+
+        // send event to client
+        String changeNameEventMessage = changeNameEvent.toJson();
+        sendMessage(changeNameEventMessage, playerID);
+    }
+
+    public void handleChangeImage(String message, int playerID) {
+        Gson gson = new Gson();
+        ChangeImageAction changeImageAction = gson.fromJson(message, ChangeImageAction.class);
+        UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
+        int playerIndex = gameState.getPlayerIndex(player);
+        PlayerImage image = changeImageAction.getPlayerImage();
+
+        // call game manager method
+        GameEvent changeImageEvent = gameManager.updatePlayerImage(playerIndex, image);
+
+        // send event to client
+        String changeImageEventMessage = changeImageEvent.toJson();
+        sendMessage(changeImageEventMessage, playerID);
+
+    }
+
+    public void handlePassTurn(int playerID) {
+        UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
+        int playerIndex = gameState.getPlayerIndex(player);
+
+        // call game manager method
+        GameEvent turnPassedEvent = gameManager.passTurn(playerIndex);
+
+        // send event to client
+        String turnPassedEventMessage = turnPassedEvent.toJson();
+        sendMessage(turnPassedEventMessage, playerID);
+    }
+
+    public void handleSayUno(String message, int playerID) {
+        Gson gson = new Gson();
+        SayUnoAction sayUnoAction = gson.fromJson(message, SayUnoAction.class);
+        boolean sayUno = sayUnoAction.isSayUno();
+        UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
+        int playerIndex = gameState.getPlayerIndex(player);
+
+        // call game manager method
+        GameEvent saidUnoEvent = gameManager.sayUno(playerIndex, sayUno);
+
+        // send event to client
+        String saidUnoEventMessage = saidUnoEvent.toJson();
+        sendMessage(saidUnoEventMessage, playerID);
+    }
+
+    public void handleCallUno(String message, int playerID) {
+        Gson gson = new Gson();
+        CallUnoAction callUno = gson.fromJson(message, CallUnoAction.class);
+        int playerIndex = callUno.getPlayerIndex();
+
+        // call game manager method
+        GameEvent penaltyEvent = gameManager.callUno(playerIndex);
+        // send event to client
+        String penaltyEventMessage = penaltyEvent.toJson();
+        sendMessage(penaltyEventMessage, playerID);
+
+        // check if ApplyPenaltyEvent
+        if (penaltyEvent instanceof ApplyPenaltyEvent) {
+            // call game manager method
+            GameEvent saidUnoEvent = gameManager.sayUno(playerIndex, false);
+            // send event to client
+            String saidUnoEventMessage = saidUnoEvent.toJson();
+            sendMessage(saidUnoEventMessage, playerID);
+        }
+    }
+
+    public void handlePlayCard(String message, int playerID) {
+        Gson gson = new Gson();
+        PlayCardAction playCard = gson.fromJson(message, PlayCardAction.class);
+        int cardIndex = playCard.getCardIndex();
+        UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
+        int playerIndex = gameState.getPlayers().indexOf(player);
+
+        // call game manager method
+        GameEvent playCardEvent = gameManager.playCard(playerIndex, cardIndex);
+
+        // send event to client
+        String playCardEventMessage = playCardEvent.toJson();
+        sendMessage(playCardEventMessage, playerID);
+    }
+
+    public void handleDrawCard(String message, int playerID) {
+        UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
+        int playerIndex = gameState.getPlayers().indexOf(player);
+
+        // call game manager method
+        GameEvent drawCardEvent = gameManager.playerDrawCardFromDrawPile(playerIndex);
+        GameEvent saidUnoEvent = gameManager.sayUno(playerIndex, false);
+
+        // send events to client
+        String drawCardEventMessage = drawCardEvent.toJson();
+        String saidUnoEventMessage = saidUnoEvent.toJson();
+        sendMessage(drawCardEventMessage, playerID);
+        sendMessage(saidUnoEventMessage, playerID);
+    }
+
+    public void aiSendEventMessage(GameEvent event) {
+        // send event to client
+        String message = event.toJson();
+        sendMessageToAllClients(message);
+    }
+
+    public GameActionType getActionType(String message) {
+        Gson gson = new Gson();
+        JsonObject json = gson.fromJson(message, JsonObject.class);
+        String type = json.get("type").getAsString();
+        return GameActionType.valueOf(type);
+    }
 
 }
 

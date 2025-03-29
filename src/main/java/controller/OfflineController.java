@@ -7,21 +7,28 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
-import multiplayer.client.unoclient.ClientUnoGameManager;
+import multiplayer.client.Client;
+import model.cardgame.unogame.ClientUnoGameManager;
 import model.cardgame.card.unocard.UnoCardTheme;
 import model.cardgame.card.unocard.UnoEdition;
 import model.cardgame.unogame.Difficulty;
-import model.cardgame.unogame.UnoGameState;
 import model.image.playerimage.PlayerImage;
 import model.image.playerimage.PlayerImageManager;
+import multiplayer.client.clientmessage.GameAction;
 
 public class OfflineController {
 
-
+    private Client client;
     private SceneManager sceneManager;
     private ClientUnoGameManager gameManager;
-    private UnoGameState gameState;
     private PlayerImageManager playerImageManager = new PlayerImageManager();
+
+    private UnoEdition selectedEdition;
+    private UnoCardTheme selectedTheme;
+    private Difficulty selectedDifficulty;
+    private PlayerImage selectedAvatar;
+    private String selectedName;
+    private int numberOfOpponents;
 
     private AudioClip click1 = new AudioClip(getClass().getResource("/audio/click1.wav").toString());
     private AudioClip click2 = new AudioClip(getClass().getResource("/audio/click3.wav").toString());
@@ -31,23 +38,23 @@ public class OfflineController {
     @FXML
     private AnchorPane centerBox;
     @FXML
-    private VBox playerNameBox;
+    private VBox avatarImageBox;
     @FXML
     private VBox editionBox;
     @FXML
-    private VBox selectionScreen;
+    private StackPane centerPane;
     @FXML
-    private HBox playBtnBox;
+    private GridPane centerGrid;
+    @FXML
+    private VBox playBtnBox;
     @FXML
     private HBox row2Box;
     @FXML
-    private VBox difficultySelectionBox;
+    private VBox difficultyVBox;
     @FXML
-    private HBox difficultyBox;
+    private HBox difficultyHBox;
     @FXML
     private VBox themeBox;
-    @FXML
-    private HBox difficultySelection;
     @FXML
     private ToggleButton easyBtn;
     @FXML
@@ -59,9 +66,15 @@ public class OfflineController {
     @FXML
     private ToggleButton classicEditionBtn;
     @FXML
-    private FlowPane playerImagesBox;
+    private FlowPane avatarImagePane;
+    @FXML
+    private Label avatarImageLbl;
+    @FXML
+    private HBox playerNameBox;
     @FXML
     private Label playerNameLbl;
+    @FXML
+    private TextField playerNameTextField;
     @FXML
     private Label difficultyLbl;
     @FXML
@@ -90,18 +103,64 @@ public class OfflineController {
     private VBox settingsBox;
     @FXML
     private Button settingsBtn;
+    @FXML
+    private VBox numberOfOpponentsBox;
+    @FXML
+    private Label numberOfOpponentsLbl;
+    @FXML
+    SpinnerValueFactory<Integer> spinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9, 1);
+    @FXML
+    private Spinner<Integer> numberOfOpponentsSpinner;
+    @FXML
+    private VBox separationBox1;
+    @FXML
+    private VBox separationBox2;
 
     public void setGameManager(ClientUnoGameManager gameManager) {
         this.gameManager = gameManager;
     }
 
-    public void initialize() {
-        initializeMenu();
-        setupSelectionView();
+    public SceneManager getSceneManager() {
+        return sceneManager;
     }
 
-    public void setGameState(UnoGameState gameState) {
-        this.gameState = gameState;
+    public void setSceneManager(SceneManager sceneManager) {
+        this.sceneManager = sceneManager;
+    }
+
+    public void initialize() {
+        generatePlayerImages();
+        initializeMenu();
+        initializeToggleGroup();
+        initializeSpinner();
+        createClient();
+    }
+
+    public void initializeMenu() {
+        backBox.toFront();
+        settingsBox.toFront();
+    }
+
+    public void initializeToggleGroup() {
+        easyBtn.setToggleGroup(difficultyButtonGroup);
+        mediumBtn.setToggleGroup(difficultyButtonGroup);
+        hardBtn.setToggleGroup(difficultyButtonGroup);
+
+        classicThemeBtn.setToggleGroup(themeButtonGroup);
+        classicEditionBtn.setToggleGroup(editionButtonGroup);
+    }
+
+    public void initializeSpinner() {
+        numberOfOpponentsSpinner.setValueFactory(spinnerFactory);
+    }
+
+    public void createClient() {
+        gameManager = new ClientUnoGameManager();
+
+        client = new Client();
+        client.setGameManager(gameManager);
+
+        client.createServer();
     }
 
     public void playClick1() {
@@ -121,7 +180,7 @@ public class OfflineController {
     }
 
     public void generatePlayerImages() {
-        playerImagesBox.getChildren().clear();
+        avatarImagePane.getChildren().clear();
 
         for (PlayerImage playerImage : PlayerImage.values()) {
             ToggleButton toggleButton = new ToggleButton();
@@ -141,78 +200,65 @@ public class OfflineController {
 
             toggleButton.setOnMouseEntered(e -> playClick1());
 
-            playerImagesBox.getChildren().add(toggleButton);
+            avatarImagePane.getChildren().add(toggleButton);
         }
     }
 
     public void setSelectedAvatar() {
-        ToggleButton selectedPlayerImage = (ToggleButton) playerImageButtonGroup.getSelectedToggle();
-        if (selectedPlayerImage != null) {
-            PlayerImage playerImage = (PlayerImage) selectedPlayerImage.getUserData();
-            //gameState.getLocalPlayer().setImage(playerImage);
-            //System.out.println(gameState.getLocalPlayer().getImage());
+        ToggleButton selectedAvatarButton = (ToggleButton) playerImageButtonGroup.getSelectedToggle();
+        if (selectedAvatarButton != null) {
             playClick2();
+            selectedAvatar = (PlayerImage) selectedAvatarButton.getUserData();
+            playerNameTextField.setText(selectedAvatar.getName());
+
+            System.out.println(selectedAvatar);
+        } else {
+            selectedAvatar = null;
         }
     }
 
     public void setSelectedTheme() {
-        ToggleButton selectedTheme = (ToggleButton) themeButtonGroup.getSelectedToggle();
-        if (selectedTheme != null) {
-            String text = (String) selectedTheme.getUserData();
-            UnoCardTheme theme = UnoCardTheme.valueOf(text);
-            //gameState.setTheme(theme);
-            //System.out.println(gameState.getTheme());
+        ToggleButton selectedThemeButton = (ToggleButton) themeButtonGroup.getSelectedToggle();
+        if (selectedThemeButton != null) {
             playClick2();
+            String text = (String) selectedThemeButton.getUserData();
+            selectedTheme = UnoCardTheme.valueOf(text);
+            System.out.println(selectedTheme);
+        } else {
+            selectedTheme = null;
         }
     }
 
     public void setSelectedEdition() {
-        ToggleButton selectedEdition = (ToggleButton) editionButtonGroup.getSelectedToggle();
-        if (selectedEdition != null) {
-            String text = (String) selectedEdition.getUserData();
-            UnoEdition edition = UnoEdition.valueOf(text);
-            //gameState.setEdition(edition);
-            //System.out.println(gameState.getEdition());
+        ToggleButton selectedEditionButton = (ToggleButton) editionButtonGroup.getSelectedToggle();
+        if (selectedEditionButton != null) {
             playClick2();
+            String text = (String) selectedEditionButton.getUserData();
+            selectedEdition = UnoEdition.valueOf(text);
+            System.out.println(selectedEdition);
+        } else {
+            selectedEdition = null;
         }
     }
 
     public void setSelectedDifficulty() {
-        ToggleButton selectedDifficulty = (ToggleButton) difficultyButtonGroup.getSelectedToggle();
-        if (selectedDifficulty != null) {
-            String text = (String) selectedDifficulty.getUserData();
-            Difficulty difficulty = Difficulty.valueOf(text);
-            //gameState.setDifficulty(difficulty);
-            //System.out.println(gameState.getDifficulty());
+        ToggleButton selectedDifficultyButton = (ToggleButton) difficultyButtonGroup.getSelectedToggle();
+        if (selectedDifficultyButton != null) {
             playClick2();
+            String text = (String) selectedDifficultyButton.getUserData();
+            selectedDifficulty = Difficulty.valueOf(text);
+            System.out.println(selectedDifficulty);
+        } else {
+            selectedDifficulty = null;
         }
     }
 
-    public void setupSelectionView() {
-        generatePlayerImages();
-
-        playerImagesBox.setMaxWidth(Region.USE_PREF_SIZE);
-        editionBox.setMaxWidth(Region.USE_PREF_SIZE);
-        cardThemeSelection.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        difficultySelection.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        selectionScreen.setMaxWidth(Region.USE_PREF_SIZE);
-
-        easyBtn.setToggleGroup(difficultyButtonGroup);
-        mediumBtn.setToggleGroup(difficultyButtonGroup);
-        hardBtn.setToggleGroup(difficultyButtonGroup);
-
-        classicThemeBtn.setToggleGroup(themeButtonGroup);
-        classicEditionBtn.setToggleGroup(editionButtonGroup);
+    public void setSelectedName() {
+        selectedName = playerNameTextField.getText();
     }
 
-    public void switchToGameAreaView() {
-        sceneManager.loadGameAreaScene();
-        sceneManager.switchScene("gameArea");
-    }
-
-    public void initializeMenu() {
-        backBox.toFront();
-        settingsBox.toFront();
+    public void setNumberOfOpponents() {
+        numberOfOpponents = numberOfOpponentsSpinner.getValue();
     }
 
     public void goBack() {
@@ -223,16 +269,37 @@ public class OfflineController {
         Platform.exit();
     }
 
-    public SceneManager getSceneManager() {
-        return sceneManager;
-    }
+    public void setupGame() {
+        playClick2();
+        setSelectedName();
+        setNumberOfOpponents();
 
-    public void setSceneManager(SceneManager sceneManager) {
-        this.sceneManager = sceneManager;
+        if (!(
+                selectedEdition == null ||
+                selectedTheme == null ||
+                selectedDifficulty == null ||
+                selectedAvatar == null ||
+                selectedName == null
+        )) {
+
+        GameAction joinAction = gameManager.joinGame(selectedName, selectedAvatar);
+        GameAction setupAction = gameManager.setupGame(selectedEdition, selectedTheme, selectedDifficulty, numberOfOpponents);
+
+        String joinActionMessage = joinAction.toJson();
+        String setupActionMessage = setupAction.toJson();
+
+        client.sendMessage(joinActionMessage);
+        client.sendMessage(setupActionMessage);
+
+        sceneManager.loadGameAreaScene(gameManager);
+        sceneManager.switchScene("gameArea");
+
+        } else {
+            playError1();
+        }
+
     }
 }
-
-
 
     /*
     public void hideMenu() {

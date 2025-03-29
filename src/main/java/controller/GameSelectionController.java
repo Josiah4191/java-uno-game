@@ -23,6 +23,8 @@ public class GameSelectionController {
     private AudioClip error1 = new AudioClip(getClass().getResource("/audio/retro.wav").toString());
     private AudioClip confirm1 = new AudioClip(getClass().getResource("/audio/confirm.wav").toString());
 
+    private AudioClip GameMenuMusic = new AudioClip(getClass().getResource("/audio/Cuddle_clouds.mp3").toString());
+
     @FXML
     private ToggleGroup gameBtnGroup = new ToggleGroup();
     @FXML
@@ -53,10 +55,15 @@ public class GameSelectionController {
     public void initialize() {
         initializeMenu();
         initializeToggleBtns();
+        playGameMenuMusic();
+    }
+
+    public void playGameMenuMusic() {
+        GameMenuMusic.play();
     }
 
     public void initializeMenu() {
-       settingsBox.toFront();
+        settingsBox.toFront();
     }
 
     public void initializeToggleBtns() {
