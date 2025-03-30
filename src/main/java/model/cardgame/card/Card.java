@@ -19,6 +19,7 @@ NOTE:
  */
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public abstract class Card<S extends Enum<S>, V extends Enum<V>> implements Serializable {
 
@@ -47,4 +48,13 @@ public abstract class Card<S extends Enum<S>, V extends Enum<V>> implements Seri
         return "Suit: " + suit + " | " + "Value: " + value;
     }
 
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Card<?, ?> card = (Card<?, ?>) o;
+        return Objects.equals(suit, card.suit) && Objects.equals(value, card.value);
+    }
+
+    public int hashCode() {
+        return Objects.hash(suit, value);
+    }
 }

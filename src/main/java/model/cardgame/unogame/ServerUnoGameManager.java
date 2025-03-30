@@ -76,7 +76,7 @@ public class ServerUnoGameManager {
         UnoSuit currentSuit = gameState.getCurrentSuit();
 
         // deal 7 cards to each player
-        dealCards(7, gameState.getPlayers());
+        dealCards(15, gameState.getPlayers());
 
         // get the local player's cards
         UnoPlayer localPlayer = gameState.getPlayerFromPlayerID(playerID);
@@ -150,7 +150,9 @@ public class ServerUnoGameManager {
         }
 
         if (!(player.isAI())) {
-            continueTurnCycle();
+            if (!(card.getSuit() == UnoSuit.WILD)) {
+                continueTurnCycle();
+            }
         }
 
     }
@@ -214,6 +216,13 @@ public class ServerUnoGameManager {
         gameEventListener.sendEventMessageToAll(applyPenaltyEvent);
     }
 
+    public void changeSuit(UnoSuit suit) {
+        gameState.setCurrentSuit(suit);
+        SuitChangedEvent suitChangedEvent = new SuitChangedEvent(suit);
+        gameEventListener.sendEventMessageToAll(suitChangedEvent);
+        continueTurnCycle();
+    }
+
     public void aiCallUno() {
         var humanPlayers = getLocalPlayers();
         for (UnoPlayer player : humanPlayers) {
@@ -262,6 +271,8 @@ public class ServerUnoGameManager {
     private void dealCards(int numberOfCards, List<UnoPlayer> players) {
         gameState.getCardMachine().dealCards(numberOfCards, players);
     }
+
+
 
     private void addCardToPlayer(int playerIndex, UnoCard card) {
         var player = gameState.getPlayer(playerIndex);

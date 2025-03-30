@@ -75,6 +75,10 @@ public class ClientUnoGameManager {
         return new PassTurnAction(true);
     }
 
+    public GameAction changeSuitColor(UnoSuit suit) {
+        return new ChangeSuitAction(suit);
+    }
+
     public void updateGameView(GameEvent event) {
         gameAreaListener.updateGameView(event);
     }

@@ -2,6 +2,7 @@ package multiplayer.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import model.cardgame.card.unocard.UnoSuit;
 import multiplayer.client.clientmessage.*;
 import multiplayer.server.servermessage.*;
 import model.cardgame.card.unocard.UnoCardTheme;
@@ -147,8 +148,11 @@ public class Server implements AIActionListener, GameEventListener {
             case GameActionType.DRAW_CARD:
                 handleDrawCard(message, playerID);
                 break;
+            case GameActionType.CHANGE_SUIT:
+                handleSuitChange(message, playerID);
+                break;
             default:
-                System.out.println("Unknown Action Type");
+                System.out.println("Server received unknown action type");
         }
     }
 
@@ -245,6 +249,15 @@ public class Server implements AIActionListener, GameEventListener {
 
         // call game manager method
         gameManager.playerDrawCardFromDrawPile(playerIndex);
+    }
+
+    public void handleSuitChange(String message, int playerID) {
+        Gson gson = new Gson();
+        ChangeSuitAction changeSuitAction = gson.fromJson(message, ChangeSuitAction.class);
+        UnoSuit suit = changeSuitAction.getSuit();
+
+        // call game manager method
+        gameManager.changeSuit(suit);
     }
 
     public void aiSendEventMessage(GameEvent event) {

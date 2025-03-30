@@ -84,7 +84,7 @@
                       GridPane.columnIndex="0"
                       GridPane.valignment="CENTER"
                       GridPane.halignment="CENTER">
-                <Label fx:id="yellowCardLbl">
+                <Label fx:id="yellowCardLbl" userData="YELLOW">
                     <graphic>
                         <ImageView fitWidth="60" fitHeight="60">
                             <Image url="/image/cardimage/yellow_card.png"/>
@@ -92,7 +92,7 @@
                     </graphic>
                 </Label>
 
-                <Label fx:id="redCardLbl">
+                <Label fx:id="redCardLbl" userData="RED">
                     <graphic>
                         <ImageView fitWidth="60" fitHeight="60">
                             <Image url="/image/cardimage/red_card.png"/>
@@ -100,7 +100,7 @@
                     </graphic>
                 </Label>
 
-                <Label fx:id="blueCardLbl">
+                <Label fx:id="blueCardLbl" userData="BLUE">
                     <graphic>
                         <ImageView fitWidth="60" fitHeight="60">
                             <Image url="/image/cardimage/blue_card.png"/>
@@ -108,7 +108,7 @@
                     </graphic>
                 </Label>
 
-                <Label fx:id="greenCardLbl">
+                <Label fx:id="greenCardLbl" userData="GREEN">
                     <graphic>
                         <ImageView fitWidth="60" fitHeight="60">
                             <Image url="/image/cardimage/green_card.png"/>

@@ -81,8 +81,11 @@ public class Client {
                 case GameEventType.ANNOUNCE_WINNER:
                     handleAnnounceWinner(message);
                     break;
+                case GameEventType.SUIT_CHANGED:
+                    handleSuitChanged(message);
+                    break;
                 default:
-                    System.out.println("Unknown Game Event Type");
+                    System.out.println("Client received unknown event type");
                     break;
             }
     }
@@ -240,7 +243,6 @@ public class Client {
         System.out.println("Card Played Event Occurred");
         System.out.println();
 
-
     }
 
     public void handleLastCardPlayed(String message) {
@@ -257,6 +259,21 @@ public class Client {
         int playerIndex = announceWinnerEvent.getPlayerIndex();
 
         gameManager.announceWinner(playerIndex);
+    }
+
+    public void handleSuitChanged(String message) {
+        Gson gson = new Gson();
+        SuitChangedEvent suitChangedEvent = gson.fromJson(message, SuitChangedEvent.class);
+        UnoSuit suit = suitChangedEvent.getSuit();
+
+        gameManager.updateCurrentSuit(suit);
+
+        System.out.println();
+        System.out.println("Change suit event occurred");
+        System.out.println("New suit: " + suit);
+        System.out.println();
+
+        gameManager.updateGameView(suitChangedEvent);
     }
 
     public void sendMessage(String message) {
