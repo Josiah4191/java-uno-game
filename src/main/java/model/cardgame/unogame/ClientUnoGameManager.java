@@ -1,16 +1,19 @@
 package model.cardgame.unogame;
 
+import controller.GameAreaListener;
 import model.cardgame.card.unocard.*;
 import model.image.playerimage.PlayerImage;
 import model.player.cardplayer.unoplayer.UnoPlayer;
 import model.player.cardplayer.unoplayer.UnoPlayerAI;
 import multiplayer.client.clientmessage.*;
+import multiplayer.server.servermessage.GameEvent;
 
 import java.util.List;
 
 public class ClientUnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
+    private GameAreaListener gameAreaListener;
 
     public void setGameState(UnoGameState gameState) {
         this.gameState = gameState;
@@ -18,6 +21,10 @@ public class ClientUnoGameManager {
 
     public UnoGameState getGameState() {
         return gameState;
+    }
+
+    public void setGameAreaListener(GameAreaListener gameAreaListener) {
+        this.gameAreaListener = gameAreaListener;
     }
 
     public void setLocalPlayer(UnoPlayer player) {
@@ -66,6 +73,10 @@ public class ClientUnoGameManager {
 
     public GameAction passTurn() {
         return new PassTurnAction(true);
+    }
+
+    public void updateGameView(GameEvent event) {
+        gameAreaListener.updateGameView(event);
     }
 
     public void updateTheme(UnoCardTheme theme) {

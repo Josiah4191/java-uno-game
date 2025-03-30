@@ -15,13 +15,16 @@ import model.image.cardimage.UnoCardImageManager;
 import model.player.cardplayer.unoplayer.UnoPlayer;
 import model.cardgame.unogame.ClientUnoGameManager;
 import model.cardgame.unogame.UnoGameState;
+import multiplayer.client.Client;
+import multiplayer.client.clientmessage.GameAction;
 import multiplayer.server.servermessage.GameEvent;
 import multiplayer.server.servermessage.GameEventType;
 
 import java.util.Optional;
 
-public class GameAreaController {
+public class GameAreaController implements GameAreaListener {
 
+    private Client client;
     private SceneManager sceneManager;
     private ClientUnoGameManager gameManager;
     private UnoGameState gameState;
@@ -86,7 +89,7 @@ public class GameAreaController {
     public void initialize() {
         initializeBtns();
         settingsVbox.toFront();
-        playBGMusic();
+        //playBGMusic();
     }
 
     public void setGameManager(ClientUnoGameManager gameManager) {
@@ -95,16 +98,7 @@ public class GameAreaController {
 
     public void setGameState(UnoGameState gameState) {
         this.gameState = gameState;
-        updateDiscardPileImage();
-        updatePlayerCards();
-        updateLocalPlayer();
-        updateOpponentPlayers();
-        updatePlayDirection();
-        highlightCurrentPlayer();
-        highlightCurrentSuitColor();
-        highlightPlayableCards();
-        highlightUnoBtn();
-        highlightPassTurnBtn();
+        updateAll();
 
         /*
         System.out.println("List of players inside client game controller: ");
@@ -128,6 +122,10 @@ public class GameAreaController {
 
     public SceneManager getSceneManager() {
         return sceneManager;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public void initializeBtns() {
@@ -158,36 +156,50 @@ public class GameAreaController {
         BGMusic.play();
     }
 
-    public void updateView(GameEvent event) {
-        GameEventType type = event.getType();
+    public void updateAll() {
+        updateDiscardPileImage();
+        updateLocalPlayerCards();
+        updateLocalPlayer();
+        updateOpponentPlayers();
+        updatePlayDirection();
+        updateLocalPlayerCardHandler();
+        highlightCurrentPlayer();
+        highlightCurrentSuitColor();
+        highlightPlayableCards();
+        highlightUnoBtn();
+        highlightPassTurnBtn();
+    }
 
-        switch (type) {
-            case GameEventType.SETUP_GAME:
-                break;
-            case GameEventType.ADD_LOCAL_PLAYER:
-                break;
-            case GameEventType.NAME_CHANGED:
-                break;
-            case GameEventType.IMAGE_CHANGED:
-                break;
-            case GameEventType.TURN_PASSED:
-                break;
-            case GameEventType.SAID_UNO:
-                break;
-            case GameEventType.APPLY_PENALTY:
-                break;
-            case GameEventType.CARD_DRAWN:
-                break;
-            case GameEventType.CARD_PLAYED:
-                break;
-            case GameEventType.LAST_CARD_PLAYED:
-                break;
-            case GameEventType.ANNOUNCE_WINNER:
-                break;
-            default:
-                System.out.println("Unknown Game Event Type");
-                break;
-        }
+    public void updateGameView(GameEvent event) {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                GameEventType type = event.getType();
+
+                switch (type) {
+                    case GameEventType.TURN_PASSED, GameEventType.CARD_DRAWN, GameEventType.CARD_PLAYED,
+                         GameEventType.ANNOUNCE_WINNER, GameEventType.APPLY_PENALTY:
+                        updateAll();
+                        break;
+                    case GameEventType.NAME_CHANGED:
+                        updateLocalPlayerCards();
+                        updateOpponentPlayers();
+                        break;
+                    case GameEventType.IMAGE_CHANGED:
+                        updateLocalPlayer();
+                        updateOpponentPlayers();
+                        break;
+                    case GameEventType.SAID_UNO:
+                        System.out.println("Updating Say UNO");
+                        break;
+                    case GameEventType.NO_OP:
+                        System.out.println("No Operation Event");
+                        break;
+                    default:
+                        System.out.println("Unknown Game Event Type");
+                        break;
+                }
+            }
+        });
     }
 
     public void updateDiscardPileImage() {
@@ -203,7 +215,7 @@ public class GameAreaController {
         discardPileBtn.setGraphic(imageView);
     }
 
-    public void updatePlayerCards() {
+    public void updateLocalPlayerCards() {
         UnoPlayer localPlayer = gameState.getLocalPlayer();
         int numberOfCards = localPlayer.getPlayerHand().size();
         playerCardsFlowPane.getChildren().clear();
@@ -331,11 +343,9 @@ public class GameAreaController {
 
     public void highlightCurrentSuitColor() {
         UnoSuit suit = gameState.getCurrentSuit();
-        if (!(suit == UnoSuit.WILD)) {
-            String color = suit.getColor();
-            String style = String.format("-fx-effect: dropshadow(three-pass-box, %s, 20, 0.5, 0, 0);", color);
-            discardPileBtn.setStyle(style);
-        }
+        String color = suit.getColor();
+        String style = String.format("-fx-effect: dropshadow(three-pass-box, %s, 20, 0.5, 0, 0);", color);
+        discardPileBtn.setStyle(style);
     }
 
     public void highlightPlayableCards() {
@@ -394,6 +404,31 @@ public class GameAreaController {
     public void showSuitColorSelection() {
         suitColorSelectionFlowPane.setVisible(true);
         suitColorSelectionFlowPane.toFront();
+    }
+
+    public void updateLocalPlayerCardHandler() {
+        UnoPlayer currentPlayer = gameState.getCurrentPlayer();
+        UnoPlayer localPlayer = gameState.getLocalPlayer();
+
+            playerCardsFlowPane.getChildren().forEach(cardLbl -> {
+                if (localPlayer.equals(currentPlayer)) {
+                    UnoCard card = (UnoCard) cardLbl.getUserData();
+                    int cardIndex = gameManager.getLocalPlayer().getPlayerHand().indexOf(card);
+                    var playableCards = gameManager.getLocalPlayer().getPlayableCards(gameState);
+
+                    if (playableCards.contains(card)) {
+
+                        cardLbl.setOnMouseClicked(e -> {
+                            GameAction playCardAction = gameManager.playCard(cardIndex);
+                            client.sendMessage(playCardAction.toJson());
+                        });
+                    } else {
+                        cardLbl.setOnMouseClicked(e -> playError1());
+                    }
+                } else {
+                    cardLbl.setOnMouseClicked(e -> playError1());
+                }
+            });
     }
 }
 

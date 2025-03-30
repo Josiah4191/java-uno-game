@@ -291,7 +291,7 @@ public class OfflineController {
         client.sendMessage(joinActionMessage);
         client.sendMessage(setupActionMessage);
 
-        sceneManager.loadGameAreaScene(gameManager);
+        sceneManager.loadGameAreaScene(gameManager, client);
         sceneManager.switchScene("gameArea");
 
         } else {

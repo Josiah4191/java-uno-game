@@ -55,7 +55,7 @@ public class GameSelectionController {
     public void initialize() {
         initializeMenu();
         initializeToggleBtns();
-        playGameMenuMusic();
+        //playGameMenuMusic();
     }
 
     public void playGameMenuMusic() {

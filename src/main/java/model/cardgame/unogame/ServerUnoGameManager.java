@@ -5,6 +5,7 @@ import model.image.playerimage.PlayerImage;
 import model.player.cardplayer.unoplayer.UnoHumanPlayer;
 import model.player.cardplayer.unoplayer.UnoPlayer;
 import model.player.cardplayer.unoplayer.UnoPlayerAI;
+import multiplayer.client.clientmessage.GameAction;
 import multiplayer.server.servermessage.*;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class ServerUnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
     private AIActionListener aiActionListener;
+    private GameEventListener gameEventListener;
 
     public UnoGameState getGameState() {
         return gameState;
@@ -30,11 +32,15 @@ public class ServerUnoGameManager {
         this.gameState = gameState;
     }
 
+    public void setGameEventListener(GameEventListener gameEventListener) {
+        this.gameEventListener = gameEventListener;
+    }
+
     public void setAiActionListener(AIActionListener aiActionListener) {
         this.aiActionListener = aiActionListener;
     }
 
-    public GameEvent setupGame(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty, int numberOfOpponents, int playerID) {
+    public void setupGame(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty, int numberOfOpponents, int playerID) {
         // set the game settings
         gameState.setTheme(theme);
         gameState.setEdition(edition);
@@ -79,21 +85,24 @@ public class ServerUnoGameManager {
         // get the list of all players
         var players = gameState.getPlayers();
 
-        // return the event to the server
-        return new SetupGameEvent(theme, edition, difficulty, currentSuit, lastPlayedCard, players, localPlayerCards);
+        continueTurnCycle();
+
+        SetupGameEvent setupGameEvent = new SetupGameEvent(theme, edition, difficulty, currentSuit, lastPlayedCard, players, localPlayerCards);
+        gameEventListener.sendEventMessageToAll(setupGameEvent);
     }
 
-    public GameEvent addLocalPlayer(String playerName, int playerID, PlayerImage playerImage) {
+    public void addLocalPlayer(String playerName, int playerID, PlayerImage playerImage) {
         UnoHumanPlayer player = new UnoHumanPlayer(playerID);
-        player.setName(playerName);
         player.setImage(playerImage);
+        player.setName(playerName);
 
         gameState.getPlayerIdToPlayer().put(playerID, player);
 
-        return new AddLocalPlayerEvent(player);
+        AddLocalPlayerEvent addLocalPlayerEvent = new AddLocalPlayerEvent(player);
+        gameEventListener.sendEventMessage(addLocalPlayerEvent, playerID);
     }
 
-    public GameEvent playerDrawCardFromDrawPile(int playerIndex) {
+    public void playerDrawCardFromDrawPile(int playerIndex) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
 
@@ -103,20 +112,25 @@ public class ServerUnoGameManager {
         int currentPlayerIndex = moveToNextPlayer(1);
         int totalCardsRemaining = player.getTotalCardsRemaining();
 
-        return new CardDrawnEvent(playerIndex, card, totalCardsRemaining, currentPlayerIndex);
+        CardDrawnEvent cardDrawnEvent = new CardDrawnEvent(playerIndex, card, totalCardsRemaining, currentPlayerIndex);
+        gameEventListener.sendEventMessageToAll(cardDrawnEvent);
+        sayUno(playerIndex, false);
+
+
     }
 
-    public GameEvent callUno(int playerIndex) {
+    public void callUno(int playerIndex) {
         boolean checkCallUno = gameState.getModerator().checkCallUno(gameState, playerIndex);
 
         if (checkCallUno) {
-            return applyPenalty(playerIndex, 2);
+            applyPenalty(playerIndex, 2);
+            sayUno(playerIndex, false);
         } else {
-            return new NoOpEvent();
+            gameEventListener.sendEventMessageToAll(new NoOpEvent());
         }
     }
 
-    public GameEvent playCard(int playerIndex, int cardIndex) {
+    public void playCard(int playerIndex, int cardIndex) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         UnoCard card = player.getCard(cardIndex);
         boolean valid = validateCard(card);
@@ -129,43 +143,55 @@ public class ServerUnoGameManager {
             int totalCardsRemaining = player.getTotalCardsRemaining();
             PlayDirection playDirection = gameState.getPlayDirection();
 
-            return new CardPlayedEvent(playerIndex, cardIndex, currentPlayerIndex, totalCardsRemaining, lastPlayedCard, currentSuit, playDirection);
+            CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(playerIndex, cardIndex, currentPlayerIndex, totalCardsRemaining, lastPlayedCard, currentSuit, playDirection);
+            gameEventListener.sendEventMessageToAll(cardPlayedEvent);
+        } else {
+            gameEventListener.sendEventMessageToAll(new NoOpEvent());
         }
 
-        return new NoOpEvent();
+        if (!(player.isAI())) {
+            continueTurnCycle();
+        }
+
     }
 
-    public GameEvent aiPlayCard(UnoPlayerAI player) {
+    public void aiPlayCard(UnoPlayerAI player) {
         aiCallUno();
         UnoCard card = player.selectCard();
         int cardIndex = player.getPlayerHand().indexOf(card);
         int playerIndex = gameState.getPlayerIndex(player);
 
         if (card == null) {
-            return playerDrawCardFromDrawPile(playerIndex);
+            playerDrawCardFromDrawPile(playerIndex);
         } else {
-            return playCard(playerIndex, cardIndex);
+            playCard(playerIndex, cardIndex);
         }
     }
 
-    public GameEvent sayUno(int playerIndex, boolean sayUno) {
+    public void sayUno(int playerIndex, boolean sayUno) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         player.sayUno(sayUno);
         boolean newSayUno = player.getSayUno();
 
-        return new SaidUnoEvent(playerIndex, newSayUno);
+        SaidUnoEvent saidUnoEvent = new SaidUnoEvent(playerIndex, newSayUno);
+        gameEventListener.sendEventMessageToAll(saidUnoEvent);
     }
 
-    public GameEvent passTurn(int playerIndex) {
+    public void passTurn(int playerIndex) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         player.setPassTurn(!player.isPassTurn());
         int nextPlayerIndex = moveToNextPlayer(1);
-        return new TurnPassedEvent(nextPlayerIndex);
+
+        TurnPassedEvent turnPassedEvent = new TurnPassedEvent(nextPlayerIndex);
+        gameEventListener.sendEventMessageToAll(turnPassedEvent);
+
     }
 
-    public GameEvent updatePlayerImage(int playerIndex, PlayerImage image) {
+    public void updatePlayerImage(int playerIndex, PlayerImage image) {
         gameState.getPlayer(playerIndex).setImage(image);
-        return new ImageChangedEvent(playerIndex, image);
+
+        ImageChangedEvent imageChangedEvent = new ImageChangedEvent(playerIndex, image);
+        gameEventListener.sendEventMessageToAll(imageChangedEvent);
     }
 
     public GameEvent updatePlayerName(int playerIndex, String name) {
@@ -173,7 +199,7 @@ public class ServerUnoGameManager {
         return new NameChangedEvent(playerIndex, name);
     }
 
-    public GameEvent applyPenalty(int playerIndex, int cardPenalty) {
+    public void applyPenalty(int playerIndex, int cardPenalty) {
         List<UnoCard> cardsDrawn = new ArrayList<>();
 
         for (int i = 0; i < cardPenalty; i++) {
@@ -184,7 +210,8 @@ public class ServerUnoGameManager {
 
         int totalCardsRemaining = gameState.getPlayer(playerIndex).getPlayerHand().size();
 
-        return new ApplyPenaltyEvent(playerIndex, cardsDrawn, totalCardsRemaining);
+        ApplyPenaltyEvent applyPenaltyEvent = new ApplyPenaltyEvent(playerIndex, cardsDrawn, totalCardsRemaining);
+        gameEventListener.sendEventMessageToAll(applyPenaltyEvent);
     }
 
     public void aiCallUno() {
@@ -192,9 +219,7 @@ public class ServerUnoGameManager {
         for (UnoPlayer player : humanPlayers) {
             int playerIndex = gameState.getPlayerIndex(player);
             // Need to add listener method to send this event to server
-            GameEvent event = callUno(playerIndex);
-            aiActionListener.aiSendEventMessage(event);
-
+            callUno(playerIndex);
         }
     }
 
@@ -215,9 +240,7 @@ public class ServerUnoGameManager {
 
                     // call listener interface method to send to server
                     // called aiCardPlayed(GameEvent event)
-                    GameEvent event = aiPlayCard(player);
-                    aiActionListener.aiSendEventMessage(event);
-
+                    aiPlayCard(player);
                     continueTurnCycle();
                 }
             });

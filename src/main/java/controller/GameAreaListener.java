@@ -1,11 +1,11 @@
 package controller;
 
-import model.cardgame.unogame.UnoGameState;
-import model.player.cardplayer.unoplayer.UnoPlayer;
+import multiplayer.server.servermessage.GameEvent;
 
 public interface GameAreaListener {
-    void updateGameAreaView();
+    void updateGameView(GameEvent event);
 
+    /*
     void showSuitColorSelection();
 
     void announceWinner(UnoPlayer player);
@@ -13,6 +13,7 @@ public interface GameAreaListener {
     void updatePlayDirection();
     
     void setGameState(UnoGameState gameState);
+     */
 
 
 

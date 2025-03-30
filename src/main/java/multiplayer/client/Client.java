@@ -107,6 +107,9 @@ public class Client {
         gameManager.updateLastPlayedCard(lastPlayedCard);
         gameManager.updateLocalPlayerHandAddCard(localPlayerCards);
 
+        System.out.println();
+        System.out.println("Setup Game Event Occurred");
+        System.out.println();
 
         /*
         System.out.println("List of players inside the handle setup method for the client after unpacking: ");
@@ -127,31 +130,34 @@ public class Client {
         UnoPlayer localPlayer = localPlayerEvent.getLocalPlayer();
 
         gameManager.setLocalPlayer(localPlayer);
-        System.out.println(localPlayer);
+
+        System.out.println();
+        System.out.println("Add Local Player Event Occurred");
+        System.out.println();
     }
 
     public void handleNameChanged(String message) {
         Gson gson = new Gson();
-        NameChangedEvent nameChanged = gson.fromJson(message, NameChangedEvent.class);
-        int playerIndex = nameChanged.getPlayerIndex();
-        String name = nameChanged.getName();
+        NameChangedEvent nameChangedEvent = gson.fromJson(message, NameChangedEvent.class);
+        int playerIndex = nameChangedEvent.getPlayerIndex();
+        String name = nameChangedEvent.getName();
 
         gameManager.updatePlayerName(playerIndex, name);
     }
 
     public void handleImageChanged(String message) {
         Gson gson = new Gson();
-        ImageChangedEvent imageChange = gson.fromJson(message, ImageChangedEvent.class);
-        int playerIndex = imageChange.getPlayerIndex();
-        PlayerImage image = imageChange.getImage();
+        ImageChangedEvent imageChangedEvent = gson.fromJson(message, ImageChangedEvent.class);
+        int playerIndex = imageChangedEvent.getPlayerIndex();
+        PlayerImage image = imageChangedEvent.getImage();
 
         gameManager.updatePlayerImage(playerIndex, image);
     }
 
     public void handleTurnPassed(String message) {
         Gson gson = new Gson();
-        TurnPassedEvent turnPassed = gson.fromJson(message, TurnPassedEvent.class);
-        int currentPlayerIndex = turnPassed.getCurrentPlayerIndex();
+        TurnPassedEvent turnPassedEvent = gson.fromJson(message, TurnPassedEvent.class);
+        int currentPlayerIndex = turnPassedEvent.getCurrentPlayerIndex();
 
         gameManager.updateCurrentPlayerIndex(currentPlayerIndex);
     }
@@ -167,10 +173,10 @@ public class Client {
 
     public void handleApplyPenalty(String message) {
         Gson gson = new Gson();
-        ApplyPenaltyEvent applyPenalty = gson.fromJson(message, ApplyPenaltyEvent.class);
-        int playerIndex = applyPenalty.getPlayerIndex();
-        int totalNumberOfCards = applyPenalty.getTotalCardsRemaining();
-        List<UnoCard> cardsDrawn = applyPenalty.getCardsDrawn();
+        ApplyPenaltyEvent applyPenaltyEvent = gson.fromJson(message, ApplyPenaltyEvent.class);
+        int playerIndex = applyPenaltyEvent.getPlayerIndex();
+        int totalNumberOfCards = applyPenaltyEvent.getTotalCardsRemaining();
+        List<UnoCard> cardsDrawn = applyPenaltyEvent.getCardsDrawn();
 
         UnoPlayer localPlayer = gameManager.getLocalPlayer();
         if (gameManager.getPlayer(playerIndex).equals(localPlayer)) {
@@ -178,6 +184,10 @@ public class Client {
         }
 
         gameManager.updatePlayerCardNumberMap(playerIndex, totalNumberOfCards);
+
+        System.out.println();
+        System.out.println("Apply Penalty Event Occurred");
+        System.out.println();
     }
 
     public void handleCardDrawn(String message) {
@@ -196,18 +206,23 @@ public class Client {
 
         gameManager.updatePlayerCardNumberMap(playerIndex, totalNumberOfCards);
         gameManager.updateCurrentPlayerIndex(currentPlayerIndex);
+        gameManager.updateGameView(cardDrawnEvent);
+
+        System.out.println();
+        System.out.println("Card Drawn Event Occurred");
+        System.out.println();
     }
 
     public void handleCardPlayed(String message) {
         Gson gson = new Gson();
-        CardPlayedEvent cardPlayed = gson.fromJson(message, CardPlayedEvent.class);
-        int playerIndex = cardPlayed.getPlayerIndex();
-        int currentPlayerIndex = cardPlayed.getCurrentPlayerIndex();
-        int cardIndex = cardPlayed.getCardIndex();
-        int totalCardsRemaining = cardPlayed.getTotalCardsRemaining();
-        UnoCard lastPlayedCard = cardPlayed.getLastPlayedCard();
-        UnoSuit currentSuit = cardPlayed.getCurrentSuit();
-        PlayDirection playDirection = cardPlayed.getPlayDirection();
+        CardPlayedEvent cardPlayedEvent = gson.fromJson(message, CardPlayedEvent.class);
+        int playerIndex = cardPlayedEvent.getPlayerIndex();
+        int currentPlayerIndex = cardPlayedEvent.getCurrentPlayerIndex();
+        int cardIndex = cardPlayedEvent.getCardIndex();
+        int totalCardsRemaining = cardPlayedEvent.getTotalCardsRemaining();
+        UnoCard lastPlayedCard = cardPlayedEvent.getLastPlayedCard();
+        UnoSuit currentSuit = cardPlayedEvent.getCurrentSuit();
+        PlayDirection playDirection = cardPlayedEvent.getPlayDirection();
 
         UnoPlayer localPlayer = gameManager.getLocalPlayer();
         if (gameManager.getPlayer(playerIndex).equals(localPlayer)) {
@@ -219,12 +234,19 @@ public class Client {
         gameManager.updateLastPlayedCard(lastPlayedCard);
         gameManager.updateCurrentSuit(currentSuit);
         gameManager.updatePlayDirection(playDirection);
+        gameManager.updateGameView(cardPlayedEvent);
+
+        System.out.println();
+        System.out.println("Card Played Event Occurred");
+        System.out.println();
+
+
     }
 
     public void handleLastCardPlayed(String message) {
         Gson gson = new Gson();
-        LastCardPlayedEvent lastCardPlayed = gson.fromJson(message, LastCardPlayedEvent.class);
-        UnoCard card = lastCardPlayed.getLastPlayedCard();
+        LastCardPlayedEvent lastCardPlayedEvent = gson.fromJson(message, LastCardPlayedEvent.class);
+        UnoCard card = lastCardPlayedEvent.getLastPlayedCard();
 
         gameManager.updateLastPlayedCard(card);
     }
@@ -251,6 +273,7 @@ public class Client {
         server.start();
 
         serverUnoGameManager.setAiActionListener(server);
+        serverUnoGameManager.setGameEventListener(server);
 
         connectToHost("localhost", server.getPort());
     }

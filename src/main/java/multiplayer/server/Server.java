@@ -3,14 +3,12 @@ package multiplayer.server;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import multiplayer.client.clientmessage.*;
-import multiplayer.server.servermessage.AIActionListener;
+import multiplayer.server.servermessage.*;
 import model.cardgame.card.unocard.UnoCardTheme;
 import model.cardgame.card.unocard.UnoEdition;
 import model.cardgame.unogame.Difficulty;
 import model.image.playerimage.PlayerImage;
 import model.player.cardplayer.unoplayer.UnoPlayer;
-import multiplayer.server.servermessage.ApplyPenaltyEvent;
-import multiplayer.server.servermessage.GameEvent;
 import model.cardgame.unogame.ServerUnoGameManager;
 import model.cardgame.unogame.UnoGameState;
 
@@ -25,7 +23,7 @@ import java.util.Map;
     Need to think about sending updates to all clients as well for information that matters to all clients
  */
 
-public class Server implements AIActionListener {
+public class Server implements AIActionListener, GameEventListener {
 
     private ServerSocket serverSocket;
     private volatile boolean running = true;
@@ -105,7 +103,11 @@ public class Server implements AIActionListener {
 
     public void sendMessage(String message, int playerID) {
         ServerMessageWriter clientHandlerWriter = clientHandlerWriters.get(playerID);
-        clientHandlerWriter.storeMessage(message);
+
+        if (clientHandlerWriter != null) {
+            clientHandlerWriter.storeMessage(message);
+        }
+
     }
 
     public void sendMessageToAllClients(String message) {
@@ -137,7 +139,7 @@ public class Server implements AIActionListener {
                 handleSayUno(message, playerID);
                 break;
             case GameActionType.CALL_UNO:
-                handleCallUno(message, playerID);
+                handleCallUno(message);
                 break;
             case GameActionType.PLAY_CARD:
                 handlePlayCard(message, playerID);
@@ -159,11 +161,7 @@ public class Server implements AIActionListener {
         int numberOfOpponents = setupGame.getNumberOfOpponents();
 
         // call game manager method
-        GameEvent setupEvent = gameManager.setupGame(edition, theme, difficulty, numberOfOpponents, playerID);
-
-        // send event to client
-        String setupEventMessage = setupEvent.toJson();
-        sendMessage(setupEventMessage, playerID);
+        gameManager.setupGame(edition, theme, difficulty, numberOfOpponents, playerID);
     }
 
     public void handleJoinGame(String message, int playerID) {
@@ -173,11 +171,7 @@ public class Server implements AIActionListener {
         PlayerImage playerImage = joinGame.getPlayerImage();
 
         // call game manager method
-        GameEvent addLocalPlayerEvent = gameManager.addLocalPlayer(name, playerID, playerImage);
-
-        // send event to client
-        String addLocalPlayerEventMessage = addLocalPlayerEvent.toJson();
-        sendMessage(addLocalPlayerEventMessage, playerID);
+        gameManager.addLocalPlayer(name, playerID, playerImage);
     }
 
     public void handleChangeName(String message, int playerID) {
@@ -203,12 +197,7 @@ public class Server implements AIActionListener {
         PlayerImage image = changeImageAction.getPlayerImage();
 
         // call game manager method
-        GameEvent changeImageEvent = gameManager.updatePlayerImage(playerIndex, image);
-
-        // send event to client
-        String changeImageEventMessage = changeImageEvent.toJson();
-        sendMessage(changeImageEventMessage, playerID);
-
+        gameManager.updatePlayerImage(playerIndex, image);
     }
 
     public void handlePassTurn(int playerID) {
@@ -216,11 +205,7 @@ public class Server implements AIActionListener {
         int playerIndex = gameState.getPlayerIndex(player);
 
         // call game manager method
-        GameEvent turnPassedEvent = gameManager.passTurn(playerIndex);
-
-        // send event to client
-        String turnPassedEventMessage = turnPassedEvent.toJson();
-        sendMessage(turnPassedEventMessage, playerID);
+        gameManager.passTurn(playerIndex);
     }
 
     public void handleSayUno(String message, int playerID) {
@@ -231,32 +216,16 @@ public class Server implements AIActionListener {
         int playerIndex = gameState.getPlayerIndex(player);
 
         // call game manager method
-        GameEvent saidUnoEvent = gameManager.sayUno(playerIndex, sayUno);
-
-        // send event to client
-        String saidUnoEventMessage = saidUnoEvent.toJson();
-        sendMessage(saidUnoEventMessage, playerID);
+        gameManager.sayUno(playerIndex, sayUno);
     }
 
-    public void handleCallUno(String message, int playerID) {
+    public void handleCallUno(String message) {
         Gson gson = new Gson();
         CallUnoAction callUno = gson.fromJson(message, CallUnoAction.class);
         int playerIndex = callUno.getPlayerIndex();
 
         // call game manager method
-        GameEvent penaltyEvent = gameManager.callUno(playerIndex);
-        // send event to client
-        String penaltyEventMessage = penaltyEvent.toJson();
-        sendMessage(penaltyEventMessage, playerID);
-
-        // check if ApplyPenaltyEvent
-        if (penaltyEvent instanceof ApplyPenaltyEvent) {
-            // call game manager method
-            GameEvent saidUnoEvent = gameManager.sayUno(playerIndex, false);
-            // send event to client
-            String saidUnoEventMessage = saidUnoEvent.toJson();
-            sendMessage(saidUnoEventMessage, playerID);
-        }
+        gameManager.callUno(playerIndex);
     }
 
     public void handlePlayCard(String message, int playerID) {
@@ -267,11 +236,7 @@ public class Server implements AIActionListener {
         int playerIndex = gameState.getPlayers().indexOf(player);
 
         // call game manager method
-        GameEvent playCardEvent = gameManager.playCard(playerIndex, cardIndex);
-
-        // send event to client
-        String playCardEventMessage = playCardEvent.toJson();
-        sendMessage(playCardEventMessage, playerID);
+        gameManager.playCard(playerIndex, cardIndex);
     }
 
     public void handleDrawCard(String message, int playerID) {
@@ -279,18 +244,22 @@ public class Server implements AIActionListener {
         int playerIndex = gameState.getPlayers().indexOf(player);
 
         // call game manager method
-        GameEvent drawCardEvent = gameManager.playerDrawCardFromDrawPile(playerIndex);
-        GameEvent saidUnoEvent = gameManager.sayUno(playerIndex, false);
-
-        // send events to client
-        String drawCardEventMessage = drawCardEvent.toJson();
-        String saidUnoEventMessage = saidUnoEvent.toJson();
-        sendMessage(drawCardEventMessage, playerID);
-        sendMessage(saidUnoEventMessage, playerID);
+        gameManager.playerDrawCardFromDrawPile(playerIndex);
     }
 
     public void aiSendEventMessage(GameEvent event) {
         // send event to client
+        String message = event.toJson();
+        sendMessageToAllClients(message);
+    }
+
+    public void sendEventMessage(GameEvent event, int playerID) {
+        // send event to client
+        String message = event.toJson();
+        sendMessage(message, playerID);
+    }
+
+    public void sendEventMessageToAll(GameEvent event) {
         String message = event.toJson();
         sendMessageToAllClients(message);
     }
