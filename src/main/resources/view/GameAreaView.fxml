@@ -21,7 +21,7 @@
         </Button>
     </VBox>
 
-    <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+    <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="80"
                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
         <GridPane fx:id="centerGridPane" alignment="CENTER">
@@ -78,7 +78,7 @@
                       GridPane.halignment="CENTER"/>
 
             <!-- Fifth Row -->
-            <FlowPane fx:id="suitColorSelectionFlowPane" visible="false"
+            <FlowPane fx:id="suitColorSelectionFlowPane"
                       alignment="CENTER"
                       GridPane.rowIndex="4"
                       GridPane.columnIndex="0"
@@ -118,33 +118,31 @@
             </FlowPane>
 
             <!-- Sixth Row -->
-            <VBox fx:id="playerControlsHbox"
+            <StackPane fx:id="playerControlsStackPane"
                   alignment="CENTER"
                   GridPane.rowIndex="5"
                   GridPane.columnIndex="0"
                   GridPane.valignment="CENTER"
                   GridPane.halignment="CENTER">
 
-                <HBox fx:id="sayUnoBtnHbox" alignment="CENTER">
-                    <Button fx:id="sayUnoBtn" visible="false" onMouseClicked="#setSayUnoBtnHandler">
-                        <graphic>
-                            <ImageView fitWidth="100" fitHeight="60">
-                                <Image url="/image/buttonimage/uno_button.png"/>
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                </HBox>
+                    <HBox fx:id="sayUnoBtnHbox" alignment="CENTER">
+                        <Button fx:id="sayUnoBtn">
+                            <graphic>
+                                <ImageView fitWidth="100" fitHeight="60">
+                                    <Image url="/image/buttonimage/uno_button.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
 
-                <HBox fx:id="passTurnHbox" alignment="CENTER">
-                    <Button fx:id="passTurnBtn" visible="false" onMouseClicked="#setPassTurnBtnHandler">
-                        <graphic>
-                            <ImageView fitWidth="100" fitHeight="60">
-                                <Image url="/image/buttonimage/pass_button.png"/>
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                </HBox>
-            </VBox>
+                        <Button fx:id="passTurnBtn">
+                            <graphic>
+                                <ImageView fitWidth="100" fitHeight="60">
+                                    <Image url="/image/buttonimage/pass_button.png"/>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </HBox>
+            </StackPane>
         </GridPane>
     </StackPane>
 

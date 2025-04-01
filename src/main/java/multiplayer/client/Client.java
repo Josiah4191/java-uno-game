@@ -299,8 +299,12 @@ public class Client implements GameActionListener {
     public void handleNoOP(String message) {
         Gson gson = new Gson();
         NoOpEvent noOpEvent = gson.fromJson(message, NoOpEvent.class);
-        String description = noOpEvent.getDescription();
-        System.out.println(description);
+        NoOpEventType eventType = noOpEvent.getEventType();
+
+        System.out.println();
+        System.out.println("[No Operation Event] " + eventType.name());
+        System.out.println();
+        gameManager.updateGameView(noOpEvent);
     }
 
     public void sendMessage(String message) {

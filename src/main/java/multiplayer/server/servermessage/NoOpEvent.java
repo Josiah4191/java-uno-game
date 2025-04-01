@@ -2,18 +2,18 @@ package multiplayer.server.servermessage;
 
 public class NoOpEvent extends GameEvent {
 
-    private String description;
+    private NoOpEventType eventType;
 
-    public NoOpEvent(String description) {
-        this.description = description;
+    public NoOpEvent(NoOpEventType eventType) {
+        this.eventType = eventType;
         setType(GameEventType.NO_OP);
     }
 
-    public String getDescription() {
-        return description;
+    public NoOpEventType getEventType() {
+        return eventType;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(NoOpEventType eventType) {
+        this.eventType = eventType;
     }
 }
