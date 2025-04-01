@@ -1,11 +1,13 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
 import model.cardgame.card.unocard.UnoCard;
@@ -16,7 +18,6 @@ import model.player.cardplayer.unoplayer.UnoPlayer;
 import model.cardgame.unogame.ClientUnoGameManager;
 import model.cardgame.unogame.UnoGameState;
 import multiplayer.client.Client;
-import multiplayer.client.clientmessage.GameAction;
 import multiplayer.server.servermessage.GameEvent;
 import multiplayer.server.servermessage.GameEventType;
 
@@ -58,7 +59,7 @@ public class GameAreaController implements GameAreaListener {
     @FXML
     private FlowPane playerCardsFlowPane;
     @FXML
-    private HBox playerControlsHbox;
+    private VBox playerControlsHbox;
     @FXML
     private VBox localPlayerVbox;
     @FXML
@@ -87,7 +88,6 @@ public class GameAreaController implements GameAreaListener {
     private Button sayUnoBtn;
 
     public void initialize() {
-        initializeBtns();
         settingsVbox.toFront();
         //playBGMusic();
     }
@@ -112,14 +112,6 @@ public class GameAreaController implements GameAreaListener {
 
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public void initializeBtns() {
-        sayUnoBtn.setOnMouseEntered(e -> sayUnoBtn.setStyle("-fx-opacity: 1;"));
-        sayUnoBtn.setOnMouseExited(e -> sayUnoBtn.setStyle("-fx-opacity: 0.5;"));
-
-        passTurnBtn.setOnMouseEntered(e -> passTurnBtn.setStyle("-fx-opacity: 1;"));
-        passTurnBtn.setOnMouseExited(e -> passTurnBtn.setStyle("-fx-opacity: 0.5;"));
     }
 
     public void playClick1() {
@@ -151,8 +143,8 @@ public class GameAreaController implements GameAreaListener {
         updateLocalPlayerCardHandler();
         highlightCurrentPlayer();
         highlightCurrentSuitColor();
-        highlightUnoBtn();
-        highlightPassTurnBtn();
+        updateDrawPileCardHandler();
+        showUnoBtn();
     }
 
     public void updateGameView(GameEvent event) {
@@ -352,28 +344,18 @@ public class GameAreaController implements GameAreaListener {
         }
     }
 
-    public void highlightUnoBtn() {
+    public void showUnoBtn() {
         UnoPlayer localPlayer = gameState.getLocalPlayer();
         if (localPlayer.getPlayerHand().size() == 1 && !(localPlayer.getSayUno())) {
             playConfirm1();
-            sayUnoBtn.setStyle("-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);" +
-                    "-fx-opacity: 1");
+            sayUnoBtn.setVisible(true);
         } else if (localPlayer.getPlayerHand().size() > 1) {
-            localPlayer.sayUno(false);
-            sayUnoBtn.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 30, 0.5, 0, 0);" +
-                    "-fx-opacity: 0.5");
+            sayUnoBtn.setVisible(false);
         }
     }
 
-    public void highlightPassTurnBtn() {
-        boolean isPassTurn = gameState.getLocalPlayer().isPassTurn();
-        if (isPassTurn) {
-            passTurnBtn.setStyle("-fx-effect: dropshadow(three-pass-box, white, 30, 0.5, 0, 0);" +
-                    "-fx-opacity: 1");
-        } else {
-            passTurnBtn.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 30, 0.5, 0, 0);" +
-                    "-fx-opacity: 0.5");
-        }
+    public void showPassTurnBtn() {
+        passTurnBtn.setVisible(true);
     }
 
     public void announceWinner(UnoPlayer player) {
@@ -403,10 +385,16 @@ public class GameAreaController implements GameAreaListener {
             UnoSuit suit = UnoSuit.valueOf(suitString);
 
             suitLbl.setOnMouseClicked(e -> {
-                GameAction changeSuitAction = gameManager.changeSuitColor(suit);
-                client.sendMessage(changeSuitAction.toJson());
+                gameManager.changeSuitColor(suit);
                 hideSuitColorSelection();
             });
+        });
+    }
+
+    public void setPassTurnBtnHandler() {
+        passTurnBtn.setOnMouseClicked(e -> {
+            gameManager.passTurn();
+            passTurnBtn.setVisible(false);
         });
     }
 
@@ -423,11 +411,13 @@ public class GameAreaController implements GameAreaListener {
                 if (playableCards.contains(card)) {
 
                     cardBtn.setOnMouseClicked(e -> {
-                        GameAction playCardAction = gameManager.playCard(cardIndex);
-                        client.sendMessage(playCardAction.toJson());
+                        gameManager.playCard(cardIndex);
 
                         if (card.getSuit() == UnoSuit.WILD) {
+                            gameManager.changeSuitColor(UnoSuit.WILD);
                             showSuitColorSelection();
+                        } else {
+                            hideSuitColorSelection();
                         }
 
                     });
@@ -441,6 +431,30 @@ public class GameAreaController implements GameAreaListener {
         });
         highlightPlayableCards();
     }
+
+    public void updateDrawPileCardHandler() {
+        UnoPlayer currentPlayer = gameState.getCurrentPlayer();
+        UnoPlayer localPlayer = gameState.getLocalPlayer();
+
+        drawPileBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                if (currentPlayer.equals(localPlayer)) {
+                    passTurnBtn.setVisible(true);
+                    gameManager.drawCard();
+                } else {
+                    playError1();
+                }
+            }
+        });
+    }
+
+    public void setSayUnoBtnHandler() {
+        sayUnoBtn.setOnMouseClicked(e -> {
+            gameManager.sayUno();
+            sayUnoBtn.setVisible(false);
+        });
+    }
+
 }
     /*
     public void setDrawPileCardHandler() {

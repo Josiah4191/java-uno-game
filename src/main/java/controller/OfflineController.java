@@ -159,6 +159,7 @@ public class OfflineController {
 
         client = new Client();
         client.setGameManager(gameManager);
+        gameManager.setGameActionListener(client);
 
         client.createServer();
     }
@@ -282,14 +283,8 @@ public class OfflineController {
                 selectedName == null
         )) {
 
-        GameAction joinAction = gameManager.joinGame(selectedName, selectedAvatar);
-        GameAction setupAction = gameManager.setupGame(selectedEdition, selectedTheme, selectedDifficulty, numberOfOpponents);
-
-        String joinActionMessage = joinAction.toJson();
-        String setupActionMessage = setupAction.toJson();
-
-        client.sendMessage(joinActionMessage);
-        client.sendMessage(setupActionMessage);
+        gameManager.joinGame(selectedName, selectedAvatar);
+        gameManager.setupGame(selectedEdition, selectedTheme, selectedDifficulty, numberOfOpponents);
 
         sceneManager.loadGameAreaScene(gameManager, client);
         sceneManager.switchScene("gameArea");

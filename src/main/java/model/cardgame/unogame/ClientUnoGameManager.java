@@ -14,6 +14,7 @@ public class ClientUnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
     private GameAreaListener gameAreaListener;
+    private GameActionListener gameActionListener;
 
     public void setGameState(UnoGameState gameState) {
         this.gameState = gameState;
@@ -25,6 +26,10 @@ public class ClientUnoGameManager {
 
     public void setGameAreaListener(GameAreaListener gameAreaListener) {
         this.gameAreaListener = gameAreaListener;
+    }
+
+    public void setGameActionListener(GameActionListener gameActionListener) {
+        this.gameActionListener = gameActionListener;
     }
 
     public void setLocalPlayer(UnoPlayer player) {
@@ -39,44 +44,54 @@ public class ClientUnoGameManager {
         return gameState.getPlayer(playerIndex);
     }
 
-    public GameAction setupGame(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty, int numberOfOpponents) {
-        return new SetupGameAction(edition, theme, difficulty, numberOfOpponents);
+    public void setupGame(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty, int numberOfOpponents) {
+        SetupGameAction setupGameAction = new SetupGameAction(edition, theme, difficulty, numberOfOpponents);
+        gameActionListener.sendActionMessage(setupGameAction);
     }
 
-    public GameAction joinGame(String name, PlayerImage playerImage) {
-        return new JoinGameAction(name, playerImage);
+    public void joinGame(String name, PlayerImage playerImage) {
+        JoinGameAction joinGameAction = new JoinGameAction(name, playerImage);
+        gameActionListener.sendActionMessage(joinGameAction);
     }
 
-    public GameAction changeName(String newName) {
-        return new ChangeNameAction(newName);
+    public void changeName(String newName) {
+        ChangeNameAction changeNameAction = new ChangeNameAction(newName);
+        gameActionListener.sendActionMessage(changeNameAction);
     }
 
-    public GameAction changePlayerImage(int playerIndex, PlayerImage playerImage) {
-        return new ChangeImageAction(playerImage);
+    public void changePlayerImage(int playerIndex, PlayerImage playerImage) {
+        ChangeImageAction changeImageAction = new ChangeImageAction(playerImage);
+        gameActionListener.sendActionMessage(changeImageAction);
     }
 
-    public GameAction playCard(int cardIndex) {
-        return new PlayCardAction(cardIndex);
+    public void playCard(int cardIndex) {
+        PlayCardAction playCardAction = new PlayCardAction(cardIndex);
+        gameActionListener.sendActionMessage(playCardAction);
     }
 
-    public GameAction sayUno() {
-        return new SayUnoAction(true);
+    public void sayUno() {
+        SayUnoAction sayUnoAction = new SayUnoAction(true);
+        gameActionListener.sendActionMessage(sayUnoAction);
     }
 
-    public GameAction callUno(int playerIndex) {
-        return new CallUnoAction(playerIndex);
+    public void callUno(int playerIndex) {
+        CallUnoAction callUnoAction = new CallUnoAction(playerIndex);
+        gameActionListener.sendActionMessage(callUnoAction);
     }
 
-    public GameAction drawCard() {
-        return new DrawCardAction();
+    public void drawCard() {
+        DrawCardAction drawCardAction = new DrawCardAction();
+        gameActionListener.sendActionMessage(drawCardAction);
     }
 
-    public GameAction passTurn() {
-        return new PassTurnAction(true);
+    public void passTurn() {
+        PassTurnAction passTurnAction = new PassTurnAction(true);
+        gameActionListener.sendActionMessage(passTurnAction);
     }
 
-    public GameAction changeSuitColor(UnoSuit suit) {
-        return new ChangeSuitAction(suit);
+    public void changeSuitColor(UnoSuit suit) {
+        ChangeSuitAction changeSuitAction = new ChangeSuitAction(suit);
+        gameActionListener.sendActionMessage(changeSuitAction);
     }
 
     public void updateGameView(GameEvent event) {
@@ -167,7 +182,23 @@ public class ClientUnoGameManager {
     }
 
     public void updateSayUno(int playerIndex, boolean sayUno) {
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+
+        if (player.getPlayerID() == getLocalPlayer().getPlayerID()) {
+            System.out.println("Player ID is same as local player ID");
+            getLocalPlayer().sayUno(sayUno);
+        }
         gameState.getPlayer(playerIndex).sayUno(sayUno);
+    }
+
+    public void updateTurnPassed(int playerIndex, boolean turnPassed) {
+        UnoPlayer player = gameState.getPlayer(playerIndex);
+
+        if (player.getPlayerID() == getLocalPlayer().getPlayerID()) {
+            System.out.println("Player ID is same as local player ID");
+            getLocalPlayer().setPassTurn(turnPassed);
+        }
+        gameState.getPlayer(playerIndex).setPassTurn(turnPassed);
     }
 
     public void updateCurrentSuit(UnoSuit currentSuit) {

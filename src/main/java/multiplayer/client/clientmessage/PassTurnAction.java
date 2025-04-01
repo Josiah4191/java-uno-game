@@ -1,19 +1,19 @@
 package multiplayer.client.clientmessage;
 
 public class PassTurnAction extends GameAction {
-    boolean isPassTurn;
+    boolean passTurn;
 
-    public PassTurnAction(boolean isPassTurn) {
-        this.isPassTurn = isPassTurn;
+    public PassTurnAction(boolean passTurn) {
+        this.passTurn = passTurn;
         setType(GameActionType.PASS_TURN);
     }
 
-    public boolean isPassTurn() {
-        return isPassTurn;
+    public boolean getPassTurn() {
+        return passTurn;
     }
 
     public void setPassTurn(boolean passTurn) {
-        isPassTurn = passTurn;
+        this.passTurn = passTurn;
     }
 
 }

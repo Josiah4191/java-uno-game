@@ -6,6 +6,8 @@ import model.cardgame.card.unocard.*;
 import model.cardgame.unogame.*;
 import model.image.playerimage.PlayerImage;
 import model.player.cardplayer.unoplayer.UnoPlayer;
+import multiplayer.client.clientmessage.GameAction;
+import multiplayer.client.clientmessage.GameActionListener;
 import multiplayer.server.Server;
 import multiplayer.server.servermessage.*;
 
@@ -13,7 +15,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.List;
 
-public class Client {
+public class Client implements GameActionListener {
 
     private Server server;
     private Socket socket;
@@ -83,6 +85,9 @@ public class Client {
                     break;
                 case GameEventType.SUIT_CHANGED:
                     handleSuitChanged(message);
+                    break;
+                case GameEventType.NO_OP:
+                    handleNoOP(message);
                     break;
                 default:
                     System.out.println("Client received unknown event type");
@@ -160,18 +165,33 @@ public class Client {
     public void handleTurnPassed(String message) {
         Gson gson = new Gson();
         TurnPassedEvent turnPassedEvent = gson.fromJson(message, TurnPassedEvent.class);
-        int currentPlayerIndex = turnPassedEvent.getCurrentPlayerIndex();
+        boolean turnPassed = turnPassedEvent.getTurnPassed();
+        int playerIndex = turnPassedEvent.getPlayerIndex();
 
-        gameManager.updateCurrentPlayerIndex(currentPlayerIndex);
+        gameManager.updateTurnPassed(playerIndex, turnPassed);
+        gameManager.updateGameView(turnPassedEvent);
+
+        System.out.println();
+        System.out.println("Turn Passed Event Occurred");
+        System.out.println();
+
     }
 
     public void handleSaidUno(String message) {
         Gson gson = new Gson();
         SaidUnoEvent saidUnoEvent = gson.fromJson(message, SaidUnoEvent.class);
         int playerIndex = saidUnoEvent.getPlayerIndex();
-        boolean sayUno = saidUnoEvent.isSayUno();
+        boolean sayUno = saidUnoEvent.getSayUno();
 
         gameManager.updateSayUno(playerIndex, sayUno);
+
+        System.out.println();
+        System.out.println("Said Uno Event Occurred");
+        System.out.println("Player: " + gameManager.getGameState().getPlayer(playerIndex) + " | Say UNO: " + sayUno);
+        System.out.println();
+
+        System.out.println("Local player say uno: " + gameManager.getGameState().getLocalPlayer().getSayUno());
+
     }
 
     public void handleApplyPenalty(String message) {
@@ -276,6 +296,13 @@ public class Client {
         gameManager.updateGameView(suitChangedEvent);
     }
 
+    public void handleNoOP(String message) {
+        Gson gson = new Gson();
+        NoOpEvent noOpEvent = gson.fromJson(message, NoOpEvent.class);
+        String description = noOpEvent.getDescription();
+        System.out.println(description);
+    }
+
     public void sendMessage(String message) {
         clientMessageWriter.storeMessage(message);
     }
@@ -289,10 +316,14 @@ public class Client {
         server.setGameState(gameState);
         server.start();
 
-        serverUnoGameManager.setAiActionListener(server);
         serverUnoGameManager.setGameEventListener(server);
 
         connectToHost("localhost", server.getPort());
+    }
+
+    public void sendActionMessage(GameAction action) {
+        String message = action.toJson();
+        sendMessage(message);
     }
 
     public void setGameManager(ClientUnoGameManager gameManager) {

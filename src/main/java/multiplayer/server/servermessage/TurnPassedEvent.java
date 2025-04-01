@@ -2,18 +2,29 @@ package multiplayer.server.servermessage;
 
 public class TurnPassedEvent extends GameEvent {
 
-    private int currentPlayerIndex;
+    private boolean turnPassed;
+    private int playerIndex;
 
-    public TurnPassedEvent(int nextPlayerIndex) {
-        this.currentPlayerIndex = nextPlayerIndex;
+    public TurnPassedEvent(int playerIndex, boolean turnPassed) {
+        this.playerIndex = playerIndex;
+        this.turnPassed = turnPassed;
         setType(GameEventType.TURN_PASSED);
     }
 
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
+    public boolean getTurnPassed() {
+        return turnPassed;
     }
 
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
+    public void setTurnPassed(boolean turnPassed) {
+        this.turnPassed = turnPassed;
     }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
 }

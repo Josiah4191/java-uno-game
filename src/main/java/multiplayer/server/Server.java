@@ -24,7 +24,7 @@ import java.util.Map;
     Need to think about sending updates to all clients as well for information that matters to all clients
  */
 
-public class Server implements AIActionListener, GameEventListener {
+public class Server implements GameEventListener {
 
     private ServerSocket serverSocket;
     private volatile boolean running = true;
@@ -134,7 +134,7 @@ public class Server implements AIActionListener, GameEventListener {
                 handleChangeImage(message, playerID);
                 break;
             case GameActionType.PASS_TURN:
-                handlePassTurn(playerID);
+                handlePassTurn(message, playerID);
                 break;
             case GameActionType.SAY_UNO:
                 handleSayUno(message, playerID);
@@ -204,12 +204,14 @@ public class Server implements AIActionListener, GameEventListener {
         gameManager.updatePlayerImage(playerIndex, image);
     }
 
-    public void handlePassTurn(int playerID) {
+    public void handlePassTurn(String message, int playerID) {
+        Gson gson = new Gson();
+        PassTurnAction passTurnAction = gson.fromJson(message, PassTurnAction.class);
+        boolean turnPassed = passTurnAction.getPassTurn();
         UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
         int playerIndex = gameState.getPlayerIndex(player);
-
         // call game manager method
-        gameManager.passTurn(playerIndex);
+        gameManager.passTurn(playerIndex, turnPassed);
     }
 
     public void handleSayUno(String message, int playerID) {
@@ -258,12 +260,6 @@ public class Server implements AIActionListener, GameEventListener {
 
         // call game manager method
         gameManager.changeSuit(suit);
-    }
-
-    public void aiSendEventMessage(GameEvent event) {
-        // send event to client
-        String message = event.toJson();
-        sendMessageToAllClients(message);
     }
 
     public void sendEventMessage(GameEvent event, int playerID) {

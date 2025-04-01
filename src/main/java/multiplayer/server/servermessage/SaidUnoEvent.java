@@ -19,7 +19,7 @@ public class SaidUnoEvent extends GameEvent {
         this.playerIndex = playerIndex;
     }
 
-    public boolean isSayUno() {
+    public boolean getSayUno() {
         return sayUno;
     }
 

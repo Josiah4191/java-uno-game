@@ -21,7 +21,6 @@ Date: 3/7/2025
 public class ServerUnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
-    private AIActionListener aiActionListener;
     private GameEventListener gameEventListener;
 
     public UnoGameState getGameState() {
@@ -34,10 +33,6 @@ public class ServerUnoGameManager {
 
     public void setGameEventListener(GameEventListener gameEventListener) {
         this.gameEventListener = gameEventListener;
-    }
-
-    public void setAiActionListener(AIActionListener aiActionListener) {
-        this.aiActionListener = aiActionListener;
     }
 
     public void setupGame(UnoEdition edition, UnoCardTheme theme, Difficulty difficulty, int numberOfOpponents, int playerID) {
@@ -76,7 +71,7 @@ public class ServerUnoGameManager {
         UnoSuit currentSuit = gameState.getCurrentSuit();
 
         // deal 7 cards to each player
-        dealCards(15, gameState.getPlayers());
+        dealCards(1, gameState.getPlayers());
 
         // get the local player's cards
         UnoPlayer localPlayer = gameState.getPlayerFromPlayerID(playerID);
@@ -115,8 +110,6 @@ public class ServerUnoGameManager {
         CardDrawnEvent cardDrawnEvent = new CardDrawnEvent(playerIndex, card, totalCardsRemaining, currentPlayerIndex);
         gameEventListener.sendEventMessageToAll(cardDrawnEvent);
         sayUno(playerIndex, false);
-
-
     }
 
     public void callUno(int playerIndex) {
@@ -126,7 +119,7 @@ public class ServerUnoGameManager {
             applyPenalty(playerIndex, 2);
             sayUno(playerIndex, false);
         } else {
-            gameEventListener.sendEventMessageToAll(new NoOpEvent());
+            gameEventListener.sendEventMessageToAll(new NoOpEvent("[Call Uno Event] No Operation: Player already said UNO."));
         }
     }
 
@@ -146,7 +139,7 @@ public class ServerUnoGameManager {
             CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(playerIndex, cardIndex, currentPlayerIndex, totalCardsRemaining, lastPlayedCard, currentSuit, playDirection);
             gameEventListener.sendEventMessageToAll(cardPlayedEvent);
         } else {
-            gameEventListener.sendEventMessageToAll(new NoOpEvent());
+            gameEventListener.sendEventMessageToAll(new NoOpEvent("[Play Card Event] No Operation: Card is not valid to play."));
         }
 
         if (!(player.isAI())) {
@@ -179,14 +172,12 @@ public class ServerUnoGameManager {
         gameEventListener.sendEventMessageToAll(saidUnoEvent);
     }
 
-    public void passTurn(int playerIndex) {
+    public void passTurn(int playerIndex, boolean turnPassed) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
-        player.setPassTurn(!player.isPassTurn());
-        int nextPlayerIndex = moveToNextPlayer(1);
-
-        TurnPassedEvent turnPassedEvent = new TurnPassedEvent(nextPlayerIndex);
+        player.setPassTurn(turnPassed);
+        TurnPassedEvent turnPassedEvent = new TurnPassedEvent(playerIndex, turnPassed);
         gameEventListener.sendEventMessageToAll(turnPassedEvent);
-
+        continueTurnCycle();
     }
 
     public void updatePlayerImage(int playerIndex, PlayerImage image) {
@@ -220,7 +211,10 @@ public class ServerUnoGameManager {
         gameState.setCurrentSuit(suit);
         SuitChangedEvent suitChangedEvent = new SuitChangedEvent(suit);
         gameEventListener.sendEventMessageToAll(suitChangedEvent);
-        continueTurnCycle();
+
+        if (!(suit == UnoSuit.WILD)) {
+            continueTurnCycle();
+        }
     }
 
     public void aiCallUno() {

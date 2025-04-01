@@ -118,7 +118,7 @@
             </FlowPane>
 
             <!-- Sixth Row -->
-            <HBox fx:id="playerControlsHbox"
+            <VBox fx:id="playerControlsHbox"
                   alignment="CENTER"
                   GridPane.rowIndex="5"
                   GridPane.columnIndex="0"
@@ -126,7 +126,7 @@
                   GridPane.halignment="CENTER">
 
                 <HBox fx:id="sayUnoBtnHbox" alignment="CENTER">
-                    <Button fx:id="sayUnoBtn">
+                    <Button fx:id="sayUnoBtn" visible="false" onMouseClicked="#setSayUnoBtnHandler">
                         <graphic>
                             <ImageView fitWidth="100" fitHeight="60">
                                 <Image url="/image/buttonimage/uno_button.png"/>
@@ -136,7 +136,7 @@
                 </HBox>
 
                 <HBox fx:id="passTurnHbox" alignment="CENTER">
-                    <Button fx:id="passTurnBtn">
+                    <Button fx:id="passTurnBtn" visible="false" onMouseClicked="#setPassTurnBtnHandler">
                         <graphic>
                             <ImageView fitWidth="100" fitHeight="60">
                                 <Image url="/image/buttonimage/pass_button.png"/>
@@ -144,7 +144,7 @@
                         </graphic>
                     </Button>
                 </HBox>
-            </HBox>
+            </VBox>
         </GridPane>
     </StackPane>
 
