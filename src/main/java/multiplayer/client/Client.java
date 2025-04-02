@@ -48,7 +48,6 @@ public class Client implements GameActionListener {
 
     public synchronized void handleMessage(String message) {
         GameEventType type = getEventType(message);
-
             switch (type) {
                 case GameEventType.SETUP_GAME:
                     handleSetupGame(message);

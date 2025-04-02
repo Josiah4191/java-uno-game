@@ -87,6 +87,27 @@ public class ServerUnoGameManager {
         gameEventListener.sendEventMessage(addLocalPlayerEvent, playerID);
     }
 
+    public void printDeckInformation() {
+        int deckSize = gameState.getDeck().size();
+        int discardPileSize = gameState.getDiscardPile().size();
+        int drawPileSize = gameState.getDrawPile().size();
+        int totalPileSize = deckSize + discardPileSize + drawPileSize;
+
+        System.out.println();
+        System.out.println("Total number of cards in deck: " + deckSize);
+        System.out.println("Total number of cards in draw pile: " + drawPileSize);
+        System.out.println("Total number of cards in discard pile: " + discardPileSize);
+
+        for (UnoPlayer player: gameState.getPlayers()) {
+            int totalCards = player.getPlayerHand().size();
+            System.out.println("Player: " + player.getName() + " | " + "Total number of cards: " + totalCards);
+            totalPileSize += totalCards;
+        }
+
+        System.out.println("Total number of cards: " + totalPileSize);
+        System.out.println();
+    }
+
     public void playerDrawCardFromDrawPile(int playerIndex) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();

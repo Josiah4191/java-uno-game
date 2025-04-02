@@ -144,9 +144,11 @@ public class Server implements GameEventListener {
                 break;
             case GameActionType.PLAY_CARD:
                 handlePlayCard(message, playerID);
+                gameManager.printDeckInformation();
                 break;
             case GameActionType.DRAW_CARD:
                 handleDrawCard(message, playerID);
+                gameManager.printDeckInformation();
                 break;
             case GameActionType.CHANGE_SUIT:
                 handleSuitChange(message, playerID);

@@ -503,6 +503,7 @@ public class GameAreaController implements GameAreaListener {
     public void setSayUnoBtnHandler() {
         sayUnoBtn.setOnMouseClicked(e -> {
             gameManager.sayUno();
+            hideBtn(sayUnoBtn);
         });
     }
 }
