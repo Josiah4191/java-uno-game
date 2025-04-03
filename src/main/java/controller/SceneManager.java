@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.cardgame.unogame.ClientUnoGameManager;
 import multiplayer.client.Client;
 
@@ -25,6 +26,8 @@ public class SceneManager {
     private Scene onlineScene;
 
     private Scene gameAreaScene;
+
+    private GameAreaController gameAreaController;
 
     private Map<String, Scene> scenes = new HashMap<>();
 
@@ -102,12 +105,12 @@ public class SceneManager {
             Parent root = loader.load();
             gameAreaScene = new Scene(root, 900, 700);
 
-            GameAreaController controller = loader.getController();
-            controller.setSceneManager(this);
-            controller.setGameManager(gameManager);
-            controller.setGameState(gameManager.getGameState());
-            controller.setClient(client);
-            gameManager.setGameAreaListener(controller);
+            this.gameAreaController = loader.getController();
+            gameAreaController.setSceneManager(this);
+            gameAreaController.setGameManager(gameManager);
+            gameAreaController.setGameState(gameManager.getGameState());
+            gameAreaController.setClient(client);
+            gameManager.setGameAreaListener(gameAreaController);
 
             scenes.put("gameArea", gameAreaScene);
 
@@ -124,5 +127,19 @@ public class SceneManager {
         stage.setScene(scenes.get(scene));
         stage.setTitle("UNO");
         stage.show();
+
+        stage.setOnCloseRequest(e -> {
+            Scene gameAreaScene = scenes.get("gameArea");
+            if (gameAreaController != null && gameAreaScene != null) {
+                gameAreaController.quit();
+            }
+        });
+    }
+
+    public void removeScene(String scene) {
+        if (scene.equals("gameArea")) {
+            gameAreaController = null;
+        }
+        scenes.remove(scene);
     }
 }

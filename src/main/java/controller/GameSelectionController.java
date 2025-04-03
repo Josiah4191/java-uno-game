@@ -131,10 +131,14 @@ public class GameSelectionController {
                         playClick2();
                         loadOnlineView();
                         System.out.println("Launching UNO game ONLINE");
+                        gameModeBtnGroup.selectToggle(null);
+                        gameBtnGroup.selectToggle(null);
                     } else {
                         playClick2();
                         loadOfflineView();
                         System.out.println("Launching UNO game OFFLINE");
+                        gameModeBtnGroup.selectToggle(null);
+                        gameBtnGroup.selectToggle(null);
                     }
                     break;
                 default:

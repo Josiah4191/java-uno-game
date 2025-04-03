@@ -2,7 +2,6 @@ package multiplayer.client;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
@@ -12,7 +11,8 @@ public class ClientMessageWriter {
 
     private BlockingQueue<String> messages = new LinkedBlockingQueue<>(1000);
     private BufferedWriter writer;
-    private volatile boolean isRunning = true;
+    private Thread thread;
+    private volatile boolean running = true;
 
     public ClientMessageWriter(Socket socket) {
 
@@ -44,30 +44,34 @@ public class ClientMessageWriter {
 
     public void startWriting() {
 
-        Thread thread = new Thread(new Runnable() {
+        this.thread = new Thread(new Runnable() {
             public void run() {
 
-                while (isRunning) {
+                while (running) {
                     try {
                         String message = messages.take();
+
+                        if (message.equals("SHUTDOWN")) {
+                            System.out.println("From Client Message Writer: Closing thread " + thread.getName());
+                            System.out.flush();
+                            messages.clear();
+                            running = false;
+                            break;
+                        }
+
                         sendMessage(message);
-                        System.out.println("Client sent message to server: " + message);
+                        System.out.println("From Client Message Writer: Client sent message to server: " + message);
                         System.out.flush();
 
                     } catch (InterruptedException e) {
+                        System.out.println("From Client Message Writer: Error shutting down Client Message Writer");
+                        System.out.flush();
                         throw new RuntimeException(e);
                     }
                 }
             }
-        });
+        }, "[Client Message Writer]");
         thread.start();
     }
 
-    public boolean isRunning() {
-        return isRunning;
-    }
-
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
 }

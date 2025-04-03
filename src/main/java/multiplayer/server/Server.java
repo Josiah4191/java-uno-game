@@ -19,21 +19,17 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
-    Need to create a message sender class that queues messages to the clients
-    Need to think about sending updates to all clients as well for information that matters to all clients
- */
-
 public class Server implements GameEventListener {
 
+    private Map<Integer, ServerMessageReader> serverMessageReaders = new HashMap<>();
+    private Map<Integer, ServerMessageWriter> serverMessageWriters = new HashMap<>();
     private ServerSocket serverSocket;
-    private volatile boolean running = true;
-    private Map<Integer, ServerMessageReader> clientHandlerReaders = new HashMap<>();
-    private Map<Integer, ServerMessageWriter> clientHandlerWriters = new HashMap<>();
-    private int playerID = 1;
     private ServerUnoGameManager gameManager;
     private UnoGameState gameState;
+    private int playerID = 1;
     private int port = 12345;
+    private Thread thread;
+    private volatile boolean running = false;
 
     public void start() {
         openConnection();
@@ -52,30 +48,30 @@ public class Server implements GameEventListener {
     }
 
     public void openConnection() {
+        running = true;
 
-        Thread thread = new Thread(new Runnable() {
+        this.thread = new Thread(new Runnable() {
             public void run() {
                 while (running) {
                     try {
                         serverSocket = new ServerSocket(port);
                         while (running) {
                             Socket socket = serverSocket.accept();
+                            System.out.println("From Server: New Client connected");
 
-                            System.out.println("Client connected");
+                            ServerMessageReader serverMessageReader = new ServerMessageReader(Server.this, socket);
+                            serverMessageReader.setPlayerID(1);
+                            System.out.println("From Server: Client handler (reader) created with playerID: " + playerID);
 
-                            ServerMessageReader clientHandlerReader = new ServerMessageReader(Server.this, socket);
-                            clientHandlerReader.setPlayerID(1);
-                            System.out.println("Client handler (reader) created with playerID: " + playerID);
+                            ServerMessageWriter serverMessageWriter = new ServerMessageWriter(socket);
+                            serverMessageWriter.setPlayerID(1);
+                            System.out.println("From Server: Client handler (writer) created with playerID: " + playerID);
 
-                            ServerMessageWriter clientHandlerWriter = new ServerMessageWriter(socket);
-                            clientHandlerWriter.setPlayerID(1);
-                            System.out.println("Client handler (writer) created with playerID: " + playerID);
+                            serverMessageWriters.put(playerID, serverMessageWriter);
+                            serverMessageWriter.startWriting();
 
-                            clientHandlerWriters.put(playerID, clientHandlerWriter);
-                            clientHandlerWriter.startWriting();
-
-                            clientHandlerReaders.put(playerID, clientHandlerReader);
-                            clientHandlerReader.listen();
+                            serverMessageReaders.put(playerID, serverMessageReader);
+                            serverMessageReader.listen();
 
                             playerID++;
                         }
@@ -83,27 +79,58 @@ public class Server implements GameEventListener {
                         if (!running) {
                             break;
                         }
-                        System.out.println("Error opening server connection");
+                        System.out.println("From Server: Error opening server connection");
                     }
                 }
             }
-        });
+        }, "[Server Socket Thread]");
         thread.start();
     }
 
-    public void closeConnection() {
+    public void shutDown() {
+        // stop the continueTurnCycle() method from the ServerUnoGameManager
+        gameManager.cancelTurnCycle();
+
+        // create a ShutDownEvent object and send it to all the clients
+        ShutDownEvent shutDownEvent = new ShutDownEvent();
+        String message = shutDownEvent.toJson();
+        sendMessageToAllClients(message);
+
+        serverMessageWriters.forEach((key, messageWriter) -> {
+            messageWriter.storeMessage("SHUTDOWN");
+        });
+
+        serverMessageReaders.forEach((key, messageReader) -> {
+            messageReader.shutDown();
+        });
+
+        serverMessageReaders.clear();
+        serverMessageWriters.clear();
+
+        gameManager = null;
+        gameState = null;
+
+        playerID = 1;
+
         running = false;
+
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
+                System.out.println("From Server Socket: Closing thread " + thread.getName());
                 serverSocket.close();
             }
         } catch (IOException e) {
-            System.out.println("Error closing server connection");
+            System.out.println("From Server: Error closing server connection");
+            System.out.flush();
         }
     }
 
+    public void shutDownClient(int playerID) {
+        serverMessageReaders.remove(playerID);
+    }
+
     public void sendMessage(String message, int playerID) {
-        ServerMessageWriter clientHandlerWriter = clientHandlerWriters.get(playerID);
+        ServerMessageWriter clientHandlerWriter = serverMessageWriters.get(playerID);
 
         if (clientHandlerWriter != null) {
             clientHandlerWriter.storeMessage(message);
@@ -112,7 +139,7 @@ public class Server implements GameEventListener {
     }
 
     public void sendMessageToAllClients(String message) {
-        for (var clientHandlerWriter: clientHandlerWriters.values()) {
+        for (var clientHandlerWriter: serverMessageWriters.values()) {
             clientHandlerWriter.storeMessage(message);
         }
     }
@@ -152,6 +179,9 @@ public class Server implements GameEventListener {
                 break;
             case GameActionType.CHANGE_SUIT:
                 handleSuitChange(message, playerID);
+                break;
+            case GameActionType.DISCONNECT:
+                System.out.println("Client Disconnected");
                 break;
             default:
                 System.out.println("Server received unknown action type");
@@ -281,7 +311,6 @@ public class Server implements GameEventListener {
         String type = json.get("type").getAsString();
         return GameActionType.valueOf(type);
     }
-
 }
 
 

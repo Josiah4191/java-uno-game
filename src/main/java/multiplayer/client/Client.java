@@ -17,12 +17,11 @@ import java.util.List;
 
 public class Client implements GameActionListener {
 
-    private Server server;
-    private Socket socket;
     private ClientMessageReader clientMessageReader;
     private ClientMessageWriter clientMessageWriter;
+    private Server server;
+    private Socket socket;
     private ClientUnoGameManager gameManager;
-    private volatile boolean isRunning;
 
     public void connectToHost(String address, int port) {
         try {
@@ -44,6 +43,10 @@ public class Client implements GameActionListener {
         JsonObject json = gson.fromJson(message, JsonObject.class);
         String type = json.get("type").getAsString();
         return GameEventType.valueOf(type);
+    }
+
+    public Server getServer() {
+        return server;
     }
 
     public synchronized void handleMessage(String message) {
@@ -88,6 +91,9 @@ public class Client implements GameActionListener {
                 case GameEventType.NO_OP:
                     handleNoOP(message);
                     break;
+                case GameEventType.SHUT_DOWN:
+                    shutDown();
+                    break;
                 default:
                     System.out.println("Client received unknown event type");
                     break;
@@ -118,17 +124,6 @@ public class Client implements GameActionListener {
         System.out.println("Setup Game Event Occurred");
         System.out.println();
 
-        /*
-        System.out.println("List of players inside the handle setup method for the client after unpacking: ");
-        players.forEach((player) -> {
-            System.out.println("Player is AI: " + player.isAI());
-            System.out.println("Player index: " + players.indexOf(player));
-            System.out.println("Player name: " + player.getName());
-            System.out.println("Player image: " + player.getImage());
-            System.out.println("Player ID: " + player.getPlayerID());
-            System.out.println();
-        });
-         */
     }
 
     public void handleAddLocalPlayer(String message) {
@@ -333,11 +328,20 @@ public class Client implements GameActionListener {
         this.gameManager = gameManager;
     }
 
-    public boolean isRunning() {
-        return isRunning;
+    public void shutDown() {
+        // send the message the writer for shutdown
+        sendMessage("SHUTDOWN");
+
+        // shut down the client writers (sets running to false, .clear() the messages in queue)
+        clientMessageReader.shutDown();
+
+        // sets the reader and writer to null
+        clientMessageReader = null;
+        clientMessageWriter = null;
+
+        // set the game manager and server to null
+        gameManager = null;
+        server = null;
     }
 
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
 }

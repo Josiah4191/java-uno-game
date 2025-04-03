@@ -5,7 +5,7 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane xmlns="http://javafx.com/javafx"
+<AnchorPane fx:id="rootAnchorPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.GameAreaController"
             prefHeight="600.0" prefWidth="800.0"
@@ -19,9 +19,13 @@
                 </ImageView>
             </graphic>
         </Button>
+
+        <Button fx:id="newGameBtn" text="New Game" visible="false"/>
+        <Button fx:id="mainMenuBtn" text="Main Menu" visible="false"/>
+        <Button fx:id="quitBtn" text="Quit" visible="false"/>
     </VBox>
 
-    <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="80"
+    <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="100"
                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
         <GridPane fx:id="centerGridPane" alignment="CENTER">
@@ -116,34 +120,28 @@
                     </graphic>
                 </Label>
             </FlowPane>
-
-            <!-- Sixth Row -->
-            <StackPane fx:id="playerControlsStackPane"
-                  alignment="CENTER"
-                  GridPane.rowIndex="5"
-                  GridPane.columnIndex="0"
-                  GridPane.valignment="CENTER"
-                  GridPane.halignment="CENTER">
-
-                    <HBox fx:id="sayUnoBtnHbox" alignment="CENTER">
-                        <Button fx:id="sayUnoBtn">
-                            <graphic>
-                                <ImageView fitWidth="100" fitHeight="60">
-                                    <Image url="/image/buttonimage/uno_button.png"/>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-
-                        <Button fx:id="passTurnBtn">
-                            <graphic>
-                                <ImageView fitWidth="100" fitHeight="60">
-                                    <Image url="/image/buttonimage/pass_button.png"/>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                    </HBox>
-            </StackPane>
         </GridPane>
+    </StackPane>
+
+    <StackPane fx:id="playerControlsStackPane" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="0"
+               AnchorPane.leftAnchor="0">
+        <HBox fx:id="controlsHBox" alignment="CENTER">
+            <Button fx:id="sayUnoBtn" alignment="CENTER">
+                <graphic>
+                    <ImageView fitWidth="100" fitHeight="60">
+                        <Image url="/image/buttonimage/uno_button.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <Button fx:id="passTurnBtn" alignment="CENTER" text="2">
+                <graphic>
+                    <ImageView fitWidth="100" fitHeight="60">
+                        <Image url="/image/buttonimage/pass_button.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
     </StackPane>
 
     <VBox fx:id="localPlayerVbox" alignment="CENTER" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20">

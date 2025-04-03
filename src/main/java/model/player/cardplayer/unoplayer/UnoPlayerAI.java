@@ -59,6 +59,7 @@ public class UnoPlayerAI extends UnoPlayer {
         PlayerImage[] images = PlayerImage.values();
         PlayerImage image = images[new Random().nextInt(images.length)];
         super.setImage(image);
+        setName("[B]" + getName());
     }
 
     /*

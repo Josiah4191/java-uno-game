@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
@@ -35,6 +36,8 @@ public class GameAreaController implements GameAreaListener {
     private AudioClip confirm1 = new AudioClip(getClass().getResource("/audio/confirm.wav").toString());
     private AudioClip BGMusic = new AudioClip(getClass().getResource("/audio/Evening_harmony.mp3").toString());
 
+    @FXML
+    private AnchorPane rootAnchorPane;
     @FXML
     private StackPane centerStackPane;
     @FXML
@@ -82,36 +85,48 @@ public class GameAreaController implements GameAreaListener {
     @FXML
     private Button passTurnBtn;
     @FXML
-    private HBox sayUnoBtnHbox;
+    private HBox controlsHBox;
     @FXML
     private Button sayUnoBtn;
+    @FXML
+    private Button quitBtn;
+    @FXML
+    private Button mainMenuBtn;
+    @FXML
+    private Button newGameBtn;
 
     public void initialize() {
         settingsVbox.toFront();
         playerControlsStackPane.toFront();
         initializeBtns();
+
         setSayUnoBtnHandler();
         setPassTurnBtnHandler();
         setSuitColorSelectionHandler();
+        setQuitBtnHandler();
+        setSettingsBtnHandler();
+        setMainMenuBtnHandler();
+        setNewGameBtnHandler();
+        setRootAnchorPaneKeybind();
         //playBGMusic();
     }
 
     public void initializeBtns() {
         setSayUnoBtnHandler();
         setPassTurnBtnHandler();
-        hideBtn(sayUnoBtn);
-        hideBtn(passTurnBtn);
+        disableBtn(sayUnoBtn);
+        disableBtn(passTurnBtn);
         hideSuitColorSelection();
     }
 
-    public void hideBtn(Button button) {
-        button.setManaged(false);
-        button.setVisible(false);
+    public void disableBtn(Button button) {
+        button.setDisable(true);
+        button.setStyle("-fx-opacity: 0.5;");
     }
 
-    public void showBtn(Button button) {
-        button.setManaged(true);
-        button.setVisible(true);
+    public void enableBtn(Button button) {
+        button.setDisable(false);
+        button.setStyle("-fx-opacity: 1;");
     }
 
     public void setGameManager(ClientUnoGameManager gameManager) {
@@ -187,6 +202,7 @@ public class GameAreaController implements GameAreaListener {
                             updateLocalPlayer();
                             updateLocalPlayerCards();
                             updateLocalPlayerPlayableCardHandler(card);
+                            showUnoBtn();
                         } else {
                             updateAll();
                         }
@@ -316,6 +332,7 @@ public class GameAreaController implements GameAreaListener {
             playerImageView.setFitWidth(60);
 
             playerImageLbl.setGraphic(playerImageView);
+            playerImageLbl.setPrefWidth(60);
 
             opponentBox.setUserData(player);
             opponentBox.getChildren().addAll(cardNumberLbl, playerImageLbl, playerNameLbl);
@@ -397,7 +414,9 @@ public class GameAreaController implements GameAreaListener {
         UnoPlayer localPlayer = gameState.getLocalPlayer();
         if (localPlayer.getPlayerHand().size() == 1 && !(localPlayer.getSayUno())) {
             playConfirm1();
-            showBtn(sayUnoBtn);
+            enableBtn(sayUnoBtn);
+        } else {
+            disableBtn(sayUnoBtn);
         }
     }
 
@@ -435,13 +454,6 @@ public class GameAreaController implements GameAreaListener {
         });
     }
 
-    public void setPassTurnBtnHandler() {
-        passTurnBtn.setOnMouseClicked(e -> {
-            gameManager.passTurn();
-            hideBtn(passTurnBtn);
-        });
-    }
-
     public void updateLocalPlayerPlayableCardHandler(UnoCard playableCard) {
         playerCardsFlowPane.getChildren().forEach(cardBtn -> {
             UnoCard card = (UnoCard) cardBtn.getUserData();
@@ -450,7 +462,7 @@ public class GameAreaController implements GameAreaListener {
             if (card.equals(playableCard)) {
                 cardBtn.setOnMouseClicked(e -> {
                     gameManager.playCard(cardIndex);
-                    hideBtn(passTurnBtn);
+                    disableBtn(passTurnBtn);
 
                     if (card.getSuit() == UnoSuit.WILD) {
                         gameManager.changeSuitColor(UnoSuit.WILD);
@@ -491,8 +503,7 @@ public class GameAreaController implements GameAreaListener {
             public void handle(MouseEvent mouseEvent) {
                 if (currentPlayer.equals(localPlayer)) {
                     gameManager.drawCard();
-                    passTurnBtn.setManaged(true);
-                    passTurnBtn.setVisible(true);
+                    enableBtn(passTurnBtn);
                 } else {
                     playError1();
                 }
@@ -500,10 +511,77 @@ public class GameAreaController implements GameAreaListener {
         });
     }
 
+    public void setPassTurnBtnHandler() {
+        passTurnBtn.setOnMouseClicked(e -> {
+            gameManager.passTurn();
+            disableBtn(passTurnBtn);
+        });
+    }
+
     public void setSayUnoBtnHandler() {
         sayUnoBtn.setOnMouseClicked(e -> {
             gameManager.sayUno();
-            hideBtn(sayUnoBtn);
+            disableBtn(sayUnoBtn);
+        });
+    }
+
+    public void setSettingsBtnHandler() {
+        settingsBtn.setOnMouseClicked(e -> {
+            quitBtn.setVisible(!(quitBtn.isVisible()));
+            mainMenuBtn.setVisible(!(mainMenuBtn.isVisible()));
+            newGameBtn.setVisible(!(newGameBtn.isVisible()));
+        });
+    }
+
+    public void setRootAnchorPaneKeybind() {
+        rootAnchorPane.setOnKeyPressed(e -> {
+            KeyCode code = e.getCode();
+            if (code == KeyCode.ESCAPE) {
+                quitBtn.setVisible(!(quitBtn.isVisible()));
+                mainMenuBtn.setVisible(!(mainMenuBtn.isVisible()));
+                newGameBtn.setVisible(!(newGameBtn.isVisible()));
+            } else if (code == KeyCode.DIGIT1) {
+                gameManager.sayUno();
+                disableBtn(sayUnoBtn);
+            } else if (code == KeyCode.DIGIT2) {
+                gameManager.passTurn();
+                disableBtn(passTurnBtn);
+            }
+        });
+    }
+
+    public void quit() {
+        client.getServer().shutDown();
+        System.out.println("From Game Area Controller: Server shutting down");
+        System.out.flush();
+        Platform.exit();
+    }
+
+    public void setQuitBtnHandler() {
+        quitBtn.setOnMouseClicked(se -> {
+            quit();
+        });
+    }
+
+    public void setMainMenuBtnHandler() {
+        mainMenuBtn.setOnMouseClicked(e -> {
+            client.getServer().shutDown();
+            System.out.println("From Game Area Controller: Server shutting down");
+            System.out.flush();
+
+            sceneManager.switchScene("gameSelection");
+            sceneManager.removeScene("gameArea");
+        });
+    }
+
+    public void setNewGameBtnHandler() {
+        newGameBtn.setOnMouseClicked(e -> {
+            client.getServer().shutDown();
+            System.out.println("From Game Area Controller: Server shutting down");
+            System.out.flush();
+
+            sceneManager.switchScene("offline");
+            sceneManager.removeScene("gameArea");
         });
     }
 }

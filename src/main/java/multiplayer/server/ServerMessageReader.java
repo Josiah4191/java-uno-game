@@ -2,16 +2,16 @@ package multiplayer.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class ServerMessageReader {
 
-    private Server server;
     private BufferedReader reader;
+    private Server server;
     private int playerID;
-    private volatile boolean isRunning = true;
+    private Thread thread;
+    private volatile boolean running = true;
 
     public ServerMessageReader(Server server, Socket socket) {
         this.server = server;
@@ -25,24 +25,31 @@ public class ServerMessageReader {
 
     public void listen() {
 
-        Thread thread = new Thread(new Runnable() {
+        this.thread = new Thread(new Runnable() {
             public void run() {
 
-                while (isRunning) {
+                while (running) {
                     try {
-
                         // listen to the messages coming in from the client
                         String message = reader.readLine();
+
+                        // when the socket is closed. readLine() returns null
+                        if (message == null) {
+                            System.out.println("From Server Message Reader: Closing thread " + thread.getName());
+                            break;
+                        }
+
                         // passes the message off to the server and calls the servers method to process the message
                         server.handleMessage(message, playerID);
-                        System.out.println("Server received message from client: " + message);
+                        System.out.println("From Server Message Reader: Server received message from client: " + message);
                         System.out.flush();
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("From Server Message Reader: Error closing socket");
+                        System.out.flush();
                     }
                 }
             }
-        });
+        }, "[Server Message Reader: " + playerID + "]");
         thread.start();
     }
 
@@ -50,16 +57,7 @@ public class ServerMessageReader {
         this.playerID = playerID;
     }
 
-    public int getPlayerID() {
-        return playerID;
+    public void shutDown() {
+        running = false;
     }
-
-    public void setRunning(boolean status) {
-        this.isRunning = status;
-    }
-
-    public boolean isRunning() {
-        return isRunning;
-    }
-
 }

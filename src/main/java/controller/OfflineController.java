@@ -18,10 +18,10 @@ import multiplayer.client.clientmessage.GameAction;
 
 public class OfflineController {
 
-    private Client client;
-    private SceneManager sceneManager;
-    private ClientUnoGameManager gameManager;
     private PlayerImageManager playerImageManager = new PlayerImageManager();
+    private ClientUnoGameManager gameManager;
+    private SceneManager sceneManager;
+    private Client client;
 
     private UnoEdition selectedEdition;
     private UnoCardTheme selectedTheme;
@@ -133,7 +133,6 @@ public class OfflineController {
         initializeMenu();
         initializeToggleGroup();
         initializeSpinner();
-        createClient();
     }
 
     public void initializeMenu() {
@@ -263,6 +262,14 @@ public class OfflineController {
     }
 
     public void goBack() {
+        if (client != null) {
+            if (client.getServer() != null) {
+                client.getServer().shutDown();
+            }
+            client = null;
+            gameManager = null;
+        }
+
         sceneManager.switchScene("gameSelection");
     }
 
@@ -272,22 +279,30 @@ public class OfflineController {
 
     public void setupGame() {
         playClick2();
+
+        createClient();
+
         setSelectedName();
         setNumberOfOpponents();
 
         if (!(
                 selectedEdition == null ||
-                selectedTheme == null ||
-                selectedDifficulty == null ||
-                selectedAvatar == null ||
-                selectedName == null
+                        selectedTheme == null ||
+                        selectedDifficulty == null ||
+                        selectedAvatar == null ||
+                        selectedName == null
         )) {
 
-        gameManager.joinGame(selectedName, selectedAvatar);
-        gameManager.setupGame(selectedEdition, selectedTheme, selectedDifficulty, numberOfOpponents);
+            gameManager.joinGame(selectedName, selectedAvatar);
+            gameManager.setupGame(selectedEdition, selectedTheme, selectedDifficulty, numberOfOpponents);
 
-        sceneManager.loadGameAreaScene(gameManager, client);
-        sceneManager.switchScene("gameArea");
+            sceneManager.loadGameAreaScene(gameManager, client);
+            sceneManager.switchScene("gameArea");
+
+            playerImageButtonGroup.selectToggle(null);
+            themeButtonGroup.selectToggle(null);
+            editionButtonGroup.selectToggle(null);
+            difficultyButtonGroup.selectToggle(null);
 
         } else {
             playError1();
@@ -295,21 +310,3 @@ public class OfflineController {
 
     }
 }
-
-    /*
-    public void hideMenu() {
-        Platform.runLater(new Runnable() {
-            public void run() {
-                if (menuBtnVBox.getScene() != null) {
-                    menuBtnVBox.getScene().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        public void handle(MouseEvent mouseEvent) {
-                            if (menuBtnVBox.isVisible() && !menuBtnVBox.contains(mouseEvent.getSceneX(), mouseEvent.getSceneY())) {
-                                menuBtnVBox.setVisible(false);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-     */

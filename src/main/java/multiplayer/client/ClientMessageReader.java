@@ -7,12 +7,15 @@ import java.net.Socket;
 
 public class ClientMessageReader {
 
-    private Client client;
     private BufferedReader reader;
-    private volatile boolean isRunning = true;
+    private Client client;
+    private Socket socket;
+    private Thread thread;
+    private volatile boolean running = true;
 
     public ClientMessageReader(Client client, Socket socket) {
         this.client = client;
+        this.socket = socket;
 
         try {
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -23,15 +26,14 @@ public class ClientMessageReader {
 
     public void startReading() {
 
-        Thread thread = new Thread(new Runnable() {
+        this.thread = new Thread(new Runnable() {
             public void run() {
 
-                while (isRunning) {
+                while (running) {
                     try {
-
                         String message = reader.readLine();
                         client.handleMessage(message);
-                        System.out.println("Client received message from server: " + message);
+                        System.out.println("From Client Message Reader: Client received message from server: " + message);
                         System.out.flush();
 
                     } catch (IOException e) {
@@ -39,7 +41,21 @@ public class ClientMessageReader {
                     }
                 }
             }
-        });
+        }, "[Client Message Reader]");
         thread.start();
+    }
+
+    public void shutDown() {
+        // set running to false
+        System.out.println("From Client Message Reader: Closing thread " + thread.getName());
+        System.out.flush();
+        running = false;
+
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("From Client Message Reader: Error closing socket");
+            System.out.flush();
+        }
     }
 }

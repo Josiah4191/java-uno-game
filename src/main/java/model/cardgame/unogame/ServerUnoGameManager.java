@@ -5,7 +5,6 @@ import model.image.playerimage.PlayerImage;
 import model.player.cardplayer.unoplayer.UnoHumanPlayer;
 import model.player.cardplayer.unoplayer.UnoPlayer;
 import model.player.cardplayer.unoplayer.UnoPlayerAI;
-import multiplayer.client.clientmessage.GameAction;
 import multiplayer.server.servermessage.*;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ public class ServerUnoGameManager {
 
     private UnoGameState gameState = new UnoGameState();
     private GameEventListener gameEventListener;
+    private Thread turnCycleThread;
 
     public UnoGameState getGameState() {
         return gameState;
@@ -98,7 +98,7 @@ public class ServerUnoGameManager {
         System.out.println("Total number of cards in draw pile: " + drawPileSize);
         System.out.println("Total number of cards in discard pile: " + discardPileSize);
 
-        for (UnoPlayer player: gameState.getPlayers()) {
+        for (UnoPlayer player : gameState.getPlayers()) {
             int totalCards = player.getPlayerHand().size();
             System.out.println("Player: " + player.getName() + " | " + "Total number of cards: " + totalCards);
             totalPileSize += totalCards;
@@ -170,7 +170,6 @@ public class ServerUnoGameManager {
                 continueTurnCycle();
             }
         }
-
     }
 
     public void aiPlayCard(UnoPlayerAI player) {
@@ -253,13 +252,14 @@ public class ServerUnoGameManager {
         UnoPlayer currentPlayer = gameState.getCurrentPlayer();
 
         if (currentPlayer.isAI()) {
-            Thread thread = new Thread(new Runnable() {
+            turnCycleThread = new Thread(new Runnable() {
                 public void run() {
 
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("From Server Uno GameManager: Closing thread " + turnCycleThread.getName());
+                        System.out.flush();
                     }
 
                     UnoPlayerAI player = (UnoPlayerAI) currentPlayer;
@@ -269,9 +269,13 @@ public class ServerUnoGameManager {
                     aiPlayCard(player);
                     continueTurnCycle();
                 }
-            });
-            thread.start();
+            }, "[Continue Turn Cycle Thread]");
+            turnCycleThread.start();
         }
+    }
+
+    public void cancelTurnCycle() {
+        turnCycleThread.interrupt();
     }
 
     private List<UnoPlayer> createAIPlayer(int numberOfPlayers) {

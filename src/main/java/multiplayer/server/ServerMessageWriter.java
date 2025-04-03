@@ -9,28 +9,26 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ServerMessageWriter {
 
-    private Socket socket;
-    private int playerID;
-    private volatile boolean isRunning = true;
     private BlockingQueue<String> messages = new LinkedBlockingQueue<>(1000);
     private BufferedWriter writer;
+    private int playerID;
+    private volatile boolean running = true;
+    private Thread thread;
 
     public ServerMessageWriter(Socket socket) {
-        this.socket = socket;
-
         try {
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void storeMessage(String message) {
         try {
             messages.put(message);
         } catch (InterruptedException e) {
-            System.out.println("Failed to store message in queue");
+            System.out.println("From Server Message Writer: Failed to store message in queue");
+            System.out.flush();
         }
     }
 
@@ -40,46 +38,42 @@ public class ServerMessageWriter {
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
-            System.out.println("Error getting output stream from socket");
+            System.out.println("From Server Message Writer: Error getting output stream from socket");
+            System.out.flush();
         }
     }
 
     public void startWriting() {
-            Thread thread = new Thread(new Runnable() {
+            this.thread = new Thread(new Runnable() {
                 public void run() {
 
-                    while (isRunning) {
+                    while (running) {
                         try {
                             String message = messages.take();
+
+                            if (message.equals("SHUTDOWN")) {
+                                System.out.println("From Server Message Writer: Closing thread " + thread.getName());
+                                System.out.flush();
+                                messages.clear();
+                                running = false;
+                                break;
+                            }
+
                             sendMessage(message);
-                            System.out.println("Server sent message to client: " + message);
+                            System.out.println("From Server Message Writer: Server sent message to client: " + message);
                             System.out.flush();
                         } catch (InterruptedException e) {
-                            System.out.println("Failed to retrieve message from queue");
+                            System.out.println("From Server Message Writer: Error shutting down Server Message Writer");
+                            System.out.flush();
                         }
                     }
                 }
-            });
+            }, "[Server Message Writer Thread: " + playerID + "]");
             thread.start();
-    }
-
-    public int getPlayerID() {
-        return playerID;
     }
 
     public void setPlayerID(int playerID) {
         this.playerID = playerID;
     }
 
-    public boolean isRunning() {
-        return isRunning;
-    }
-
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
 }
