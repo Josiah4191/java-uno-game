@@ -35,10 +35,6 @@ public abstract class Player implements Serializable {
         return name;
     }
 
-    public String toString() {
-        return name;
-    }
-
     public void setImage(PlayerImage playerImage) {
         this.playerImage = playerImage;
         setName(playerImage.getName());
@@ -64,5 +60,9 @@ public abstract class Player implements Serializable {
 
     public int hashCode() {
         return Objects.hash(playerID, isAI, name, playerImage);
+    }
+
+    public String toString() {
+        return name;
     }
 }

@@ -150,11 +150,6 @@ public class ClientUnoGameManager {
         }
     }
 
-    public void updateLocalPlayerLastDrawnCard(int playerIndex, UnoCard drawnCard) {
-        UnoPlayer player = gameState.getPlayer(playerIndex);
-        player.setLastDrawCard(drawnCard);
-    }
-
     public void updatePlayerName(int playerIndex, String name) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         player.setName(name);
@@ -189,7 +184,6 @@ public class ClientUnoGameManager {
         UnoPlayer player = gameState.getPlayer(playerIndex);
 
         if (player.getPlayerID() == getLocalPlayer().getPlayerID()) {
-            System.out.println("Player ID is same as local player ID");
             getLocalPlayer().sayUno(sayUno);
         }
         gameState.getPlayer(playerIndex).sayUno(sayUno);

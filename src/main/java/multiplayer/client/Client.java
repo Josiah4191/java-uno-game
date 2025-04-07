@@ -125,8 +125,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Setup Game Event Occurred");
-        System.out.println();
-
     }
 
     public void handleAddLocalPlayer(String message) {
@@ -138,7 +136,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Add Local Player Event Occurred");
-        System.out.println();
     }
 
     public void handleSetPlayableCards(String message) {
@@ -150,7 +147,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received set playable cards event");
-        System.out.println();
     }
 
     public void handleNameChanged(String message) {
@@ -160,6 +156,9 @@ public class Client implements GameActionListener {
         String name = nameChangedEvent.getName();
 
         gameManager.updatePlayerName(playerIndex, name);
+
+        System.out.println();
+        System.out.println("Client received name change event");
     }
 
     public void handleImageChanged(String message) {
@@ -171,8 +170,7 @@ public class Client implements GameActionListener {
         gameManager.updatePlayerImage(playerIndex, image);
 
         System.out.println();
-        System.out.println("Client received name change event");
-        System.out.println();
+        System.out.println("Client received image change event");
     }
 
     public void handleTurnPassed(String message) {
@@ -185,8 +183,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received turn passed event");
-        System.out.println();
-
     }
 
     public void handleSaidUno(String message) {
@@ -199,7 +195,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received say UNO Event");
-        System.out.println();
     }
 
     public void handleApplyPenalty(String message) {
@@ -218,7 +213,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received apply penalty event");
-        System.out.println();
     }
 
     public void handleCardDrawn(String message) {
@@ -232,7 +226,6 @@ public class Client implements GameActionListener {
         UnoPlayer localPlayer = gameManager.getLocalPlayer();
         if (gameManager.getPlayer(playerIndex).equals(localPlayer)) {
             gameManager.updateLocalPlayerHandAddCard(List.of(drawnCard));
-            gameManager.updateLocalPlayerLastDrawnCard(playerIndex, drawnCard);
         }
 
         gameManager.updatePlayerCardNumberMap(playerIndex, totalNumberOfCards);
@@ -241,7 +234,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received card drawn event");
-        System.out.println();
     }
 
     public void handleCardPlayed(String message) {
@@ -269,7 +261,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received card played event");
-        System.out.println();
     }
 
     public void handleLastCardPlayed(String message) {
@@ -281,7 +272,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received last card played event");
-        System.out.println();
     }
 
     public void handleAnnounceWinner(String message) {
@@ -293,7 +283,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received announce winner event");
-        System.out.println();
     }
 
     public void handleSuitChanged(String message) {
@@ -306,7 +295,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received suit changed event");
-        System.out.println();
     }
 
     public void handleNoOP(String message) {
@@ -317,7 +305,6 @@ public class Client implements GameActionListener {
 
         System.out.println();
         System.out.println("Client received no operation event: " + eventType.name());
-        System.out.println();
     }
 
     public void sendMessage(String message) {

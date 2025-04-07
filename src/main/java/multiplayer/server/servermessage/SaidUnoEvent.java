@@ -23,7 +23,4 @@ public class SaidUnoEvent extends GameEvent {
         return sayUno;
     }
 
-    public void setSayUno(boolean sayUno) {
-        this.sayUno = sayUno;
-    }
 }

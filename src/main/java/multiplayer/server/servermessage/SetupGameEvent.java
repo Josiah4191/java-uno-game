@@ -31,10 +31,6 @@ public class SetupGameEvent extends GameEvent {
         return theme;
     }
 
-    public void setTheme(UnoCardTheme theme) {
-        this.theme = theme;
-    }
-
     public UnoEdition getEdition() {
         return edition;
     }
@@ -47,24 +43,12 @@ public class SetupGameEvent extends GameEvent {
         return currentSuit;
     }
 
-    public void setCurrentSuit(UnoSuit currentSuit) {
-        this.currentSuit = currentSuit;
-    }
-
     public UnoCard getLastPlayedCard() {
         return lastPlayedCard;
     }
 
-    public void setLastPlayedCard(UnoCard lastPlayedCard) {
-        this.lastPlayedCard = lastPlayedCard;
-    }
-
     public List<UnoPlayer> getPlayers() {
         return players;
-    }
-
-    public void setPlayers(List<UnoPlayer> players) {
-        this.players = players;
     }
 
     public Difficulty getDifficulty() {
@@ -77,10 +61,6 @@ public class SetupGameEvent extends GameEvent {
 
     public List<UnoCard> getLocalPlayerCards() {
         return localPlayerCards;
-    }
-
-    public void setLocalPlayerCards(List<UnoCard> localPlayerCards) {
-        this.localPlayerCards = localPlayerCards;
     }
 
 }

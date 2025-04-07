@@ -79,12 +79,4 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
         return getPlayerHand().get(cardIndex);
     }
 
-    public void setLastDrawCard(C lastDrawCard) {
-        this.lastDrawCard = lastDrawCard;
-    }
-
-    public C getLastDrawCard() {
-        return lastDrawCard;
-    }
-
 }

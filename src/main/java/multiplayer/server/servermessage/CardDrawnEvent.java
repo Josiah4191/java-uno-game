@@ -29,24 +29,12 @@ public class CardDrawnEvent extends GameEvent {
         return drawnCard;
     }
 
-    public void setDrawnCard(UnoCard drawnCard) {
-        this.drawnCard = drawnCard;
-    }
-
     public int getTotalCardsRemaining() {
         return totalCardsRemaining;
     }
 
-    public void setTotalCardsRemaining(int totalCardsRemaining) {
-        this.totalCardsRemaining = totalCardsRemaining;
-    }
-
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
-    }
-
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
     }
 
 }

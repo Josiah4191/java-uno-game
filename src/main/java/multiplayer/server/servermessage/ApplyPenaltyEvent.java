@@ -29,15 +29,8 @@ public class ApplyPenaltyEvent extends GameEvent {
         return totalCardsRemaining;
     }
 
-    public void setTotalCardsRemaining(int totalCardsRemaining) {
-        this.totalCardsRemaining = totalCardsRemaining;
-    }
-
     public List<UnoCard> getCardsDrawn() {
         return cardsDrawn;
     }
 
-    public void setCardsDrawn(List<UnoCard> cardsDrawn) {
-        this.cardsDrawn = cardsDrawn;
-    }
 }

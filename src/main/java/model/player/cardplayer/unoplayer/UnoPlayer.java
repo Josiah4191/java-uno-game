@@ -22,29 +22,8 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
 
     private boolean sayUno = false;
 
-    /*
-    The UnoPlayer constructor assigns its playerHand Pile to a new UnoPlayerHandPile.
-    The new UnoPlayerHandPile represents the player's Pile cards.
-    The new UnoPlayerHandPile starts empty.
-     */
     public UnoPlayer(int playerID) {
         super(new UnoPlayerHandPile(), playerID);
-    }
-
-    /*
-    public List<UnoCard> getPlayableCards(UnoGameState gameState) {
-        return getPlayerHand()
-                .stream()
-                .filter(card -> gameState.getModerator().validateCard(gameState, card))
-                .toList();
-    }
-     */
-
-    public List<UnoCard> getNonPlayableCards(UnoGameState gameState) {
-        return getPlayerHand()
-                .stream()
-                .filter(card -> !gameState.getModerator().validateCard(gameState, card))
-                .toList();
     }
 
     public void sayUno(boolean sayUno) {

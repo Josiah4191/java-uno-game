@@ -115,7 +115,6 @@ public class ServerUnoGameManager {
         int currentPlayerIndex = gameState.getCurrentPlayerIndex();
 
         addCardToPlayer(playerIndex, card);
-        player.setLastDrawCard(card);
 
         if (cardIsPlayable) {
             gameState.setPlayableCards(List.of(card));

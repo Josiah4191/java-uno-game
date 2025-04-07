@@ -13,7 +13,4 @@ public class NoOpEvent extends GameEvent {
         return eventType;
     }
 
-    public void setDescription(NoOpEventType eventType) {
-        this.eventType = eventType;
-    }
 }

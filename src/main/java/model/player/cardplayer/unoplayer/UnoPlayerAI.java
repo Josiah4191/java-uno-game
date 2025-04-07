@@ -40,12 +40,6 @@ public class UnoPlayerAI extends UnoPlayer {
         setImage();
     }
 
-    /*
-    The playCard() method returns an UnoCard.
-    The playCard(int index) method is defined in CardPlayer.
-    The brain analyze() method returns an integer to select which card to return.
-     */
-
     public UnoCard selectCard() {
         var playableCards = gameState.getPlayableCards();
         if (!playableCards.isEmpty()) {
@@ -61,15 +55,6 @@ public class UnoPlayerAI extends UnoPlayer {
         super.setImage(image);
         setName("[B]" + getName());
     }
-
-    /*
-     It might make sense to define this method in game manager, so that it could work for any player's
-     hand of cards.
-     OR we need to define it inside the moderator class.
-     We can pass the method a player's name, and then check their cards against the last played card.
-     Then we can return the list of cards that are playable.
-     If the player tries to play a card not in the list of playable cards, then we prevent it.
-    */
 
     public void createBrain() {
         this.brain = UnoBrainFactory.createBrain(gameState.getDifficulty());

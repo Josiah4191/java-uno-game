@@ -14,7 +14,4 @@ public class LastCardPlayedEvent extends GameEvent {
         return lastPlayedCard;
     }
 
-    public void setLastPlayedCard(UnoCard lastPlayedCard) {
-        this.lastPlayedCard = lastPlayedCard;
-    }
 }

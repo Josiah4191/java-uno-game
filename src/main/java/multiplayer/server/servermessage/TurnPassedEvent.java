@@ -13,8 +13,4 @@ public class TurnPassedEvent extends GameEvent {
         return currentPlayerIndex;
     }
 
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
-    }
-
 }
