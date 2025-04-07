@@ -31,12 +31,14 @@ public class UnoPlayer extends CardPlayer<UnoPlayerHandPile, UnoCard> {
         super(new UnoPlayerHandPile(), playerID);
     }
 
+    /*
     public List<UnoCard> getPlayableCards(UnoGameState gameState) {
         return getPlayerHand()
                 .stream()
                 .filter(card -> gameState.getModerator().validateCard(gameState, card))
                 .toList();
     }
+     */
 
     public List<UnoCard> getNonPlayableCards(UnoGameState gameState) {
         return getPlayerHand()

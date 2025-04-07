@@ -47,7 +47,7 @@ public class UnoPlayerAI extends UnoPlayer {
      */
 
     public UnoCard selectCard() {
-        var playableCards = getPlayableCards(gameState);
+        var playableCards = gameState.getPlayableCards();
         if (!playableCards.isEmpty()) {
             return brain.analyze(gameState, playableCards);
         } else {

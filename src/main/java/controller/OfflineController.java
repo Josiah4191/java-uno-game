@@ -2,11 +2,14 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
+import javafx.stage.Stage;
 import multiplayer.client.Client;
 import model.cardgame.unogame.ClientUnoGameManager;
 import model.cardgame.card.unocard.UnoCardTheme;
@@ -22,6 +25,7 @@ public class OfflineController {
     private ClientUnoGameManager gameManager;
     private SceneManager sceneManager;
     private Client client;
+    private Parent settingsPane;
 
     private UnoEdition selectedEdition;
     private UnoCardTheme selectedTheme;
@@ -115,6 +119,7 @@ public class OfflineController {
     private VBox separationBox1;
     @FXML
     private VBox separationBox2;
+
 
     public void setGameManager(ClientUnoGameManager gameManager) {
         this.gameManager = gameManager;
@@ -277,6 +282,10 @@ public class OfflineController {
         Platform.exit();
     }
 
+    public void openSettings() {
+
+    }
+
     public void setupGame() {
         playClick2();
 
@@ -308,5 +317,9 @@ public class OfflineController {
             playError1();
         }
 
+    }
+
+    public void setSettingsPane(Parent settingsPane) {
+        this.settingsPane = settingsPane;
     }
 }

@@ -161,7 +161,7 @@ public class Server implements GameEventListener {
                 handleChangeImage(message, playerID);
                 break;
             case GameActionType.PASS_TURN:
-                handlePassTurn(message, playerID);
+                handlePassTurn();
                 break;
             case GameActionType.SAY_UNO:
                 handleSayUno(message, playerID);
@@ -171,11 +171,11 @@ public class Server implements GameEventListener {
                 break;
             case GameActionType.PLAY_CARD:
                 handlePlayCard(message, playerID);
-                gameManager.printDeckInformation();
+                //gameManager.printDeckInformation();
                 break;
             case GameActionType.DRAW_CARD:
                 handleDrawCard(message, playerID);
-                gameManager.printDeckInformation();
+                //gameManager.printDeckInformation();
                 break;
             case GameActionType.CHANGE_SUIT:
                 handleSuitChange(message, playerID);
@@ -218,11 +218,7 @@ public class Server implements GameEventListener {
         int playerIndex = gameState.getPlayerIndex(player);
 
         // call game manager method
-        GameEvent changeNameEvent = gameManager.updatePlayerName(playerIndex, name);
-
-        // send event to client
-        String changeNameEventMessage = changeNameEvent.toJson();
-        sendMessage(changeNameEventMessage, playerID);
+        gameManager.updatePlayerName(playerIndex, name);
     }
 
     public void handleChangeImage(String message, int playerID) {
@@ -236,14 +232,9 @@ public class Server implements GameEventListener {
         gameManager.updatePlayerImage(playerIndex, image);
     }
 
-    public void handlePassTurn(String message, int playerID) {
-        Gson gson = new Gson();
-        PassTurnAction passTurnAction = gson.fromJson(message, PassTurnAction.class);
-        boolean turnPassed = passTurnAction.getPassTurn();
-        UnoPlayer player = gameState.getPlayerFromPlayerID(playerID);
-        int playerIndex = gameState.getPlayerIndex(player);
+    public void handlePassTurn() {
         // call game manager method
-        gameManager.passTurn(playerIndex, turnPassed);
+        gameManager.passTurn();
     }
 
     public void handleSayUno(String message, int playerID) {

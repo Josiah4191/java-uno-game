@@ -32,6 +32,7 @@ public class UnoGameState implements Serializable {
     private UnoCardMachine cardMachine = new UnoCardMachine();
     private transient UnoCardImageManager cardImageManager = new UnoCardImageManager();
     private transient PlayerImageManager playerImageManager = new PlayerImageManager();
+    private List<UnoCard> playableCards = new ArrayList<>();
     private UnoCard lastPlayedCard;
     private int currentPlayerIndex;
     private int nextPlayerIndex;
@@ -64,6 +65,14 @@ public class UnoGameState implements Serializable {
 
     public List<UnoPlayer> getPlayers() {
         return players;
+    }
+
+    public void setPlayableCards(List<UnoCard> playableCards) {
+        this.playableCards = playableCards;
+    }
+
+    public List<UnoCard> getPlayableCards() {
+        return playableCards;
     }
 
     public void addPlayers(List<UnoPlayer> players) {

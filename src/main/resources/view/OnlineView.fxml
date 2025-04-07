@@ -12,7 +12,7 @@
             stylesheets="@/style/OnlineView_Styles.css"
             prefHeight="400.0" prefWidth="600.0">
 
-    <VBox fx:id="backBox" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0">
+    <VBox fx:id="backBox" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20">
         <Button fx:id="backBtn" onMouseClicked="#goBack">
             <graphic>
                 <ImageView fitWidth="25" fitHeight="25">
@@ -22,7 +22,7 @@
         </Button>
     </VBox>
 
-    <VBox fx:id="settingsBox" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+    <VBox fx:id="settingsBox" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
         <Button fx:id="settingsBtn">
             <graphic>
                 <ImageView fitWidth="35" fitHeight="35">

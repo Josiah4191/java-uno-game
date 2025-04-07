@@ -91,6 +91,9 @@ public class Client implements GameActionListener {
                 case GameEventType.NO_OP:
                     handleNoOP(message);
                     break;
+                case GameEventType.SET_PLAYABLE_CARDS:
+                    handleSetPlayableCards(message);
+                    break;
                 case GameEventType.SHUT_DOWN:
                     shutDown();
                     break;
@@ -138,6 +141,18 @@ public class Client implements GameActionListener {
         System.out.println();
     }
 
+    public void handleSetPlayableCards(String message) {
+        Gson gson = new Gson();
+        SetPlayableCardEvent setPlayableCardEvent = gson.fromJson(message, SetPlayableCardEvent.class);
+        var playableCards = setPlayableCardEvent.getPlayableCards();
+
+        gameManager.updatePlayableCards(playableCards);
+
+        System.out.println();
+        System.out.println("Client received set playable cards event");
+        System.out.println();
+    }
+
     public void handleNameChanged(String message) {
         Gson gson = new Gson();
         NameChangedEvent nameChangedEvent = gson.fromJson(message, NameChangedEvent.class);
@@ -154,19 +169,22 @@ public class Client implements GameActionListener {
         PlayerImage image = imageChangedEvent.getImage();
 
         gameManager.updatePlayerImage(playerIndex, image);
+
+        System.out.println();
+        System.out.println("Client received name change event");
+        System.out.println();
     }
 
     public void handleTurnPassed(String message) {
         Gson gson = new Gson();
         TurnPassedEvent turnPassedEvent = gson.fromJson(message, TurnPassedEvent.class);
-        boolean turnPassed = turnPassedEvent.getTurnPassed();
-        int playerIndex = turnPassedEvent.getPlayerIndex();
+        int currentPlayerIndex = turnPassedEvent.getCurrentPlayerIndex();
 
-        gameManager.updateTurnPassed(playerIndex, turnPassed);
+        gameManager.updateCurrentPlayerIndex(currentPlayerIndex);
         gameManager.updateGameView(turnPassedEvent);
 
         System.out.println();
-        System.out.println("Turn Passed Event Occurred");
+        System.out.println("Client received turn passed event");
         System.out.println();
 
     }
@@ -180,12 +198,8 @@ public class Client implements GameActionListener {
         gameManager.updateSayUno(playerIndex, sayUno);
 
         System.out.println();
-        System.out.println("Said Uno Event Occurred");
-        System.out.println("Player: " + gameManager.getGameState().getPlayer(playerIndex) + " | Say UNO: " + sayUno);
+        System.out.println("Client received say UNO Event");
         System.out.println();
-
-        System.out.println("Local player say uno: " + gameManager.getGameState().getLocalPlayer().getSayUno());
-
     }
 
     public void handleApplyPenalty(String message) {
@@ -203,7 +217,7 @@ public class Client implements GameActionListener {
         gameManager.updatePlayerCardNumberMap(playerIndex, totalNumberOfCards);
 
         System.out.println();
-        System.out.println("Apply Penalty Event Occurred");
+        System.out.println("Client received apply penalty event");
         System.out.println();
     }
 
@@ -226,7 +240,7 @@ public class Client implements GameActionListener {
         gameManager.updateGameView(cardDrawnEvent);
 
         System.out.println();
-        System.out.println("Card Drawn Event Occurred");
+        System.out.println("Client received card drawn event");
         System.out.println();
     }
 
@@ -254,9 +268,8 @@ public class Client implements GameActionListener {
         gameManager.updateGameView(cardPlayedEvent);
 
         System.out.println();
-        System.out.println("Card Played Event Occurred");
+        System.out.println("Client received card played event");
         System.out.println();
-
     }
 
     public void handleLastCardPlayed(String message) {
@@ -265,6 +278,10 @@ public class Client implements GameActionListener {
         UnoCard card = lastCardPlayedEvent.getLastPlayedCard();
 
         gameManager.updateLastPlayedCard(card);
+
+        System.out.println();
+        System.out.println("Client received last card played event");
+        System.out.println();
     }
 
     public void handleAnnounceWinner(String message) {
@@ -273,6 +290,10 @@ public class Client implements GameActionListener {
         int playerIndex = announceWinnerEvent.getPlayerIndex();
 
         gameManager.announceWinner(playerIndex);
+
+        System.out.println();
+        System.out.println("Client received announce winner event");
+        System.out.println();
     }
 
     public void handleSuitChanged(String message) {
@@ -281,24 +302,22 @@ public class Client implements GameActionListener {
         UnoSuit suit = suitChangedEvent.getSuit();
 
         gameManager.updateCurrentSuit(suit);
-
-        System.out.println();
-        System.out.println("Change suit event occurred");
-        System.out.println("New suit: " + suit);
-        System.out.println();
-
         gameManager.updateGameView(suitChangedEvent);
+
+        System.out.println();
+        System.out.println("Client received suit changed event");
+        System.out.println();
     }
 
     public void handleNoOP(String message) {
         Gson gson = new Gson();
         NoOpEvent noOpEvent = gson.fromJson(message, NoOpEvent.class);
         NoOpEventType eventType = noOpEvent.getEventType();
+        gameManager.updateGameView(noOpEvent);
 
         System.out.println();
-        System.out.println("[No Operation Event] " + eventType.name());
+        System.out.println("Client received no operation event: " + eventType.name());
         System.out.println();
-        gameManager.updateGameView(noOpEvent);
     }
 
     public void sendMessage(String message) {

@@ -26,7 +26,6 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     - C represents Card.
      */
     private P playerHand;
-    private boolean passTurn;
     private C lastDrawCard;
 
     /*
@@ -86,23 +85,6 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
 
     public C getLastDrawCard() {
         return lastDrawCard;
-    }
-
-    /*
-    public void swapCardPositions(UnoCard card1, UnoCard card2) {
-        var cards = playerHand.getCardPile();
-        int card1Index = cards.indexOf(card1);
-        int card2Index = cards.indexOf(card2);
-        Collections.swap(cards, card1Index, card2Index);
-    }
-    */
-
-    public void setPassTurn(boolean pass) {
-        this.passTurn = pass;
-    }
-
-    public boolean isPassTurn() {
-        return passTurn;
     }
 
 }

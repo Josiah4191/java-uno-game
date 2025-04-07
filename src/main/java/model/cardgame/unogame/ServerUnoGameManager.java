@@ -59,7 +59,7 @@ public class ServerUnoGameManager {
         UnoSuit currentSuit = gameState.getCurrentSuit();
 
         // deal 7 cards to each player
-        dealCards(7, gameState.getPlayers());
+        dealCards(1, gameState.getPlayers());
 
         // get the local player's cards
         UnoPlayer localPlayer = gameState.getPlayerFromPlayerID(playerID);
@@ -111,21 +111,30 @@ public class ServerUnoGameManager {
     public void playerDrawCardFromDrawPile(int playerIndex) {
         UnoPlayer player = gameState.getPlayer(playerIndex);
         UnoCard card = gameState.getCardMachine().drawCardFromDrawPile();
+        boolean cardIsPlayable = gameState.getModerator().validateCard(gameState, card);
         int currentPlayerIndex = gameState.getCurrentPlayerIndex();
-        boolean cardIsPlayable = true;
 
         addCardToPlayer(playerIndex, card);
         player.setLastDrawCard(card);
 
-        if (!(player.getPlayableCards(gameState).contains(card))) {
-            cardIsPlayable = false;
-            System.out.println("Card is not playable");
+        if (cardIsPlayable) {
+            gameState.setPlayableCards(List.of(card));
+        } else {
+            gameState.setPlayableCards(List.of());
+        }
+
+        if (player.isAI()) {
             currentPlayerIndex = moveToNextPlayer(1);
         }
 
         int totalCardsRemaining = player.getTotalCardsRemaining();
 
-        CardDrawnEvent cardDrawnEvent = new CardDrawnEvent(playerIndex, card, totalCardsRemaining, currentPlayerIndex, cardIsPlayable);
+        var playableCards = gameState.getPlayableCards();
+        if (!(player.isAI())) {
+            gameEventListener.sendEventMessage(new SetPlayableCardEvent(playableCards), player.getPlayerID());
+        }
+
+        CardDrawnEvent cardDrawnEvent = new CardDrawnEvent(playerIndex, card, totalCardsRemaining, currentPlayerIndex);
         gameEventListener.sendEventMessageToAll(cardDrawnEvent);
         sayUno(playerIndex, false);
     }
@@ -149,9 +158,9 @@ public class ServerUnoGameManager {
         }
 
         UnoCard card = player.getCard(cardIndex);
-        boolean valid = validateCard(card);
+        var playableCards = gameState.getPlayableCards();
 
-        if (valid) {
+        if (playableCards.contains(card)) {
             UnoCard lastPlayedCard = player.playCard(cardIndex);
             gameState.setLastPlayedCard(lastPlayedCard);
             int currentPlayerIndex = processCardPlayed(card);
@@ -169,6 +178,10 @@ public class ServerUnoGameManager {
             if (!(card.getSuit() == UnoSuit.WILD)) {
                 continueTurnCycle();
             }
+        }
+
+        if (checkWinner(player)) {
+            gameEventListener.sendEventMessageToAll(new AnnounceWinnerEvent(playerIndex));
         }
     }
 
@@ -194,10 +207,9 @@ public class ServerUnoGameManager {
         gameEventListener.sendEventMessageToAll(saidUnoEvent);
     }
 
-    public void passTurn(int playerIndex, boolean turnPassed) {
-        UnoPlayer player = gameState.getPlayer(playerIndex);
-        player.setPassTurn(turnPassed);
-        TurnPassedEvent turnPassedEvent = new TurnPassedEvent(playerIndex, turnPassed);
+    public void passTurn() {
+        int currentPlayerIndex = moveToNextPlayer(1);
+        TurnPassedEvent turnPassedEvent = new TurnPassedEvent(currentPlayerIndex);
         gameEventListener.sendEventMessageToAll(turnPassedEvent);
         continueTurnCycle();
     }
@@ -209,9 +221,10 @@ public class ServerUnoGameManager {
         gameEventListener.sendEventMessageToAll(imageChangedEvent);
     }
 
-    public GameEvent updatePlayerName(int playerIndex, String name) {
+    public void updatePlayerName(int playerIndex, String name) {
         gameState.getPlayer(playerIndex).setName(name);
-        return new NameChangedEvent(playerIndex, name);
+        NameChangedEvent nameChangedEvent = new NameChangedEvent(playerIndex, name);
+        gameEventListener.sendEventMessageToAll(nameChangedEvent);
     }
 
     public void applyPenalty(int playerIndex, int cardPenalty) {
@@ -248,8 +261,23 @@ public class ServerUnoGameManager {
         }
     }
 
+    public void updatePlayableCards(UnoPlayer player) {
+        List<UnoCard> cards = player.getPlayerHand();
+        List<UnoCard> playableCards = new ArrayList<>();
+
+        cards.forEach(card -> {
+            boolean valid = gameState.getModerator().validateCard(gameState, card);
+            if (valid) {
+                playableCards.add(card);
+            }
+        });
+
+        gameState.setPlayableCards(playableCards);
+    }
+
     public void continueTurnCycle() {
         UnoPlayer currentPlayer = gameState.getCurrentPlayer();
+        updatePlayableCards(currentPlayer);
 
         if (currentPlayer.isAI()) {
             turnCycleThread = new Thread(new Runnable() {
@@ -271,6 +299,9 @@ public class ServerUnoGameManager {
                 }
             }, "[Continue Turn Cycle Thread]");
             turnCycleThread.start();
+        } else {
+            var playableCards = gameState.getPlayableCards();
+            gameEventListener.sendEventMessage(new SetPlayableCardEvent(playableCards), currentPlayer.getPlayerID());
         }
     }
 

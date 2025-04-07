@@ -41,8 +41,6 @@ public class ServerMessageReader {
 
                         // passes the message off to the server and calls the servers method to process the message
                         server.handleMessage(message, playerID);
-                        System.out.println("From Server Message Reader: Server received message from client: " + message);
-                        System.out.flush();
                     } catch (IOException e) {
                         System.out.println("From Server Message Reader: Error closing socket");
                         System.out.flush();

@@ -85,7 +85,7 @@ public class ClientUnoGameManager {
     }
 
     public void passTurn() {
-        PassTurnAction passTurnAction = new PassTurnAction(true);
+        PassTurnAction passTurnAction = new PassTurnAction();
         gameActionListener.sendActionMessage(passTurnAction);
     }
 
@@ -105,6 +105,10 @@ public class ClientUnoGameManager {
     public void updatePlayerCardNumberMap(int playerIndex, int cardNumber) {
         var map = gameState.getPlayerIndexToCardNumber();
         map.put(playerIndex, cardNumber);
+    }
+
+    public void updatePlayableCards(List<UnoCard> playableCards) {
+        gameState.setPlayableCards(playableCards);
     }
 
     public void updatePlayerListAdd(List<UnoPlayer> players) {
@@ -191,22 +195,12 @@ public class ClientUnoGameManager {
         gameState.getPlayer(playerIndex).sayUno(sayUno);
     }
 
-    public void updateTurnPassed(int playerIndex, boolean turnPassed) {
-        UnoPlayer player = gameState.getPlayer(playerIndex);
-
-        if (player.getPlayerID() == getLocalPlayer().getPlayerID()) {
-            System.out.println("Player ID is same as local player ID");
-            getLocalPlayer().setPassTurn(turnPassed);
-        }
-        gameState.getPlayer(playerIndex).setPassTurn(turnPassed);
-    }
-
     public void updateCurrentSuit(UnoSuit currentSuit) {
         gameState.setCurrentSuit(currentSuit);
     }
 
     public void announceWinner(int playerIndex) {
-
+        System.out.println("Announce Winner Event Received from Client. Winner is: " + gameState.getPlayer(playerIndex));
     }
 
     public void updateDifficulty(Difficulty difficulty) {

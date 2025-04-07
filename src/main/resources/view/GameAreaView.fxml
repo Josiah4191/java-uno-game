@@ -5,13 +5,14 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane fx:id="rootAnchorPane" xmlns="http://javafx.com/javafx"
+<AnchorPane fx:id="rootAnchorPane"
+            xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.GameAreaController"
             prefHeight="600.0" prefWidth="800.0"
             stylesheets="@/style/GameAreaView_Styles.css">
 
-    <VBox fx:id="settingsVbox" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+    <VBox fx:id="settingsBtnVbox" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
         <Button fx:id="settingsBtn">
             <graphic>
                 <ImageView fitWidth="35" fitHeight="35">
@@ -19,11 +20,72 @@
                 </ImageView>
             </graphic>
         </Button>
-
-        <Button fx:id="newGameBtn" text="New Game" visible="false"/>
-        <Button fx:id="mainMenuBtn" text="Main Menu" visible="false"/>
-        <Button fx:id="quitBtn" text="Quit" visible="false"/>
     </VBox>
+
+    <StackPane fx:id="settingsOuterStackPane" visible="false"
+               AnchorPane.topAnchor="0"
+               AnchorPane.rightAnchor="0"
+               AnchorPane.leftAnchor="0"
+               AnchorPane.bottomAnchor="0">
+
+        <StackPane fx:id="settingsInnerStackPane"
+                   prefHeight="400"
+                   prefWidth="300"
+                   maxHeight="400"
+                   maxWidth="300">
+
+            <VBox fx:id="settingsVbox"
+                  alignment="CENTER">
+                <GridPane fx:id="settingsGridPane" alignment="CENTER">
+
+                    <!-- First Row -->
+                    <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Options"/>
+                    </StackPane>
+
+                    <!-- Second Row -->
+                    <VBox GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Button fx:id="rulesBtn" text="Rules"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+
+                        <Button fx:id="interfaceBtn" text="Interface"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="keybindingsBtn" text="Keybindings"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                    </VBox>
+
+                    <!-- Third Row -->
+                    <VBox GridPane.rowIndex="2" GridPane.columnIndex="0">
+                        <Button fx:id="newGameBtn" text="New Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="loadGameBtn" text="Load Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="saveGameBtn" text="Save Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                    </VBox>
+
+                    <!-- Fourth Row -->
+                    <VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
+                        <Button fx:id="mainMenuBtn" text="Quit to Main Menu"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="exitBtn" text="Exit Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="returnBtn" text="Return to Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                    </VBox>
+                </GridPane>
+            </VBox>
+        </StackPane>
+    </StackPane>
 
     <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="100"
                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">

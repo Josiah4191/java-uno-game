@@ -60,8 +60,6 @@ public class ServerMessageWriter {
                             }
 
                             sendMessage(message);
-                            System.out.println("From Server Message Writer: Server sent message to client: " + message);
-                            System.out.flush();
                         } catch (InterruptedException e) {
                             System.out.println("From Server Message Writer: Error shutting down Server Message Writer");
                             System.out.flush();

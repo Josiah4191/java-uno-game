@@ -2,9 +2,51 @@
     -fx-background-image: url("/image/cardimage/table1.png");
     -fx-background-size: cover;
     -fx-background-position: center;
-    -fx-padding: 20px;
     -fx-opacity: 0.9;
     -fx-spacing: 20;
+}
+
+#settingsOuterStackPane {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+#settingsInnerStackPane, #rulesInnerStackPane {
+    -fx-border-radius: 15;
+    -fx-border-width: 3;
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(250, 235, 215, 0.9);
+    -fx-background-color: rgba(0, 0, 0, 1);
+}
+
+#rulesGridPane {
+
+}
+
+#settingsGridPane > VBox {
+    -fx-spacing: 2;
+    -fx-padding: 10;
+}
+
+#settingsGridPane > VBox > .button {
+    -fx-background-insets: 0;
+    -fx-background-color: steelblue;
+    -fx-border-color: black;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-family: "Comic Sans MS";
+    -fx-text-fill: antiquewhite;
+}
+
+#settingsGridPane > VBox > .button:hover {
+    -fx-background-color: #ff9144;
+    -fx-text-fill: black;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+#settingsGridPane > VBox > .button:pressed {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
 }
 
 #centerGridPane {
@@ -165,7 +207,7 @@
     -fx-scale-y: 0.99;
 }
 
-#settingsVbox {
+#settingsBtnVbox {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
 }
 

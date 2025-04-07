@@ -8,14 +8,12 @@ public class CardDrawnEvent extends GameEvent {
     private int currentPlayerIndex;
     private int totalCardsRemaining;
     private UnoCard drawnCard;
-    private boolean cardIsPlayable;
 
-    public CardDrawnEvent(int playerIndex, UnoCard cardDrawn, int totalCardsRemaining, int nextPlayerIndex, boolean cardIsPlayable) {
+    public CardDrawnEvent(int playerIndex, UnoCard cardDrawn, int totalCardsRemaining, int nextPlayerIndex) {
         this.playerIndex = playerIndex;
         this.drawnCard = cardDrawn;
         this.totalCardsRemaining = totalCardsRemaining;
         this.currentPlayerIndex = nextPlayerIndex;
-        this.cardIsPlayable = cardIsPlayable;
         setType(GameEventType.CARD_DRAWN);
     }
 
@@ -51,11 +49,4 @@ public class CardDrawnEvent extends GameEvent {
         this.currentPlayerIndex = currentPlayerIndex;
     }
 
-    public boolean isCardIsPlayable() {
-        return cardIsPlayable;
-    }
-
-    public void setCardIsPlayable(boolean cardIsPlayable) {
-        this.cardIsPlayable = cardIsPlayable;
-    }
 }

@@ -29,6 +29,7 @@ public class GameAreaController implements GameAreaListener {
     private SceneManager sceneManager;
     private ClientUnoGameManager gameManager;
     private UnoGameState gameState;
+    private boolean drawCard = false;
 
     private AudioClip click1 = new AudioClip(getClass().getResource("/audio/click1.wav").toString());
     private AudioClip click2 = new AudioClip(getClass().getResource("/audio/double_click.wav").toString());
@@ -39,13 +40,23 @@ public class GameAreaController implements GameAreaListener {
     @FXML
     private AnchorPane rootAnchorPane;
     @FXML
-    private StackPane centerStackPane;
+    private StackPane settingsOuterStackPane;
     @FXML
-    private GridPane centerGridPane;
+    private StackPane settingsInnerStackPane;
     @FXML
     private VBox settingsVbox;
     @FXML
+    private Label settingsLbl;
+    @FXML
+    private GridPane settingsGridPane;
+    @FXML
+    private VBox settingsBtnVbox;
+    @FXML
     private Button settingsBtn;
+    @FXML
+    private StackPane centerStackPane;
+    @FXML
+    private GridPane centerGridPane;
     @FXML
     private HBox playDirectionHbox = new HBox();
     @FXML
@@ -89,17 +100,33 @@ public class GameAreaController implements GameAreaListener {
     @FXML
     private Button sayUnoBtn;
     @FXML
-    private Button quitBtn;
+    private Button rulesBtn;
+    @FXML
+    private Button interfaceBtn;
+    @FXML
+    private Button keybindingsBtn;
+    @FXML
+    private Button newGameBtn;
+    @FXML
+    private Button saveGameBtn;
+    @FXML
+    private Button loadGameBtn;
     @FXML
     private Button mainMenuBtn;
     @FXML
-    private Button newGameBtn;
+    private Button exitBtn;
+    @FXML
+    private Button returnBtn;
 
     public void initialize() {
-        settingsVbox.toFront();
+        settingsBtnVbox.toFront();
         playerControlsStackPane.toFront();
         initializeBtns();
+        hideSuitColorSelection();
+        setRootAnchorPaneKeybind();
+    }
 
+    public void initializeBtns() {
         setSayUnoBtnHandler();
         setPassTurnBtnHandler();
         setSuitColorSelectionHandler();
@@ -107,16 +134,11 @@ public class GameAreaController implements GameAreaListener {
         setSettingsBtnHandler();
         setMainMenuBtnHandler();
         setNewGameBtnHandler();
-        setRootAnchorPaneKeybind();
-        //playBGMusic();
-    }
-
-    public void initializeBtns() {
-        setSayUnoBtnHandler();
-        setPassTurnBtnHandler();
+        setReturnBtnHandler();
+        setRulesBtnHandler();
         disableBtn(sayUnoBtn);
         disableBtn(passTurnBtn);
-        hideSuitColorSelection();
+
     }
 
     public void disableBtn(Button button) {
@@ -174,9 +196,9 @@ public class GameAreaController implements GameAreaListener {
         updateDiscardPileImage();
         updateLocalPlayerCards();
         updateLocalPlayer();
+        updateLocalPlayerCardHandler();
         updateOpponentPlayers();
         updatePlayDirection();
-        updateLocalPlayerCardHandler();
         highlightCurrentPlayer();
         highlightCurrentSuitColor();
         updateDrawPileCardHandler();
@@ -189,24 +211,9 @@ public class GameAreaController implements GameAreaListener {
                 GameEventType type = event.getType();
 
                 switch (type) {
-                    case GameEventType.TURN_PASSED, GameEventType.CARD_PLAYED,
+                    case GameEventType.CARD_DRAWN, GameEventType.TURN_PASSED, GameEventType.CARD_PLAYED,
                          GameEventType.ANNOUNCE_WINNER, GameEventType.APPLY_PENALTY, GameEventType.SUIT_CHANGED:
                         updateAll();
-                        break;
-                    case GameEventType.CARD_DRAWN:
-                        CardDrawnEvent cardDrawnEvent = (CardDrawnEvent) event;
-                        boolean cardIsPlayable = cardDrawnEvent.isCardIsPlayable();
-                        UnoCard card = cardDrawnEvent.getDrawnCard();
-
-                        if (cardIsPlayable) {
-                            updateLocalPlayer();
-                            updateLocalPlayerCards();
-                            updateLocalPlayerPlayableCardHandler(card);
-                            showUnoBtn();
-                        } else {
-                            updateAll();
-                        }
-
                         break;
                     case GameEventType.NAME_CHANGED:
                         updateLocalPlayerCards();
@@ -223,7 +230,8 @@ public class GameAreaController implements GameAreaListener {
                         NoOpEvent noOpEvent = (NoOpEvent) event;
                         switch (noOpEvent.getEventType()) {
                             case NoOpEventType.INVALID_CARD, NoOpEventType.INVALID_TURN:
-                                playError1();
+                                //playError1();
+                                System.out.println("Game Area Controller received NoOpEvent. Not playing Error1");
                                 break;
                         }
                         break;
@@ -359,7 +367,6 @@ public class GameAreaController implements GameAreaListener {
         UnoPlayer localPlayer = gameState.getLocalPlayer();
 
         if (currentPlayer.equals(localPlayer)) {
-            System.out.println("Current player does equal local player: " + true);
             localPlayerVbox.setStyle("-fx-effect: dropshadow(three-pass-box, white, 30, 0.6, 0, 0);" +
                     "-fx-opacity: 1");
         } else {
@@ -454,15 +461,20 @@ public class GameAreaController implements GameAreaListener {
         });
     }
 
-    public void updateLocalPlayerPlayableCardHandler(UnoCard playableCard) {
+    public void updateLocalPlayerCardHandler() {
+
+        var playableCards = gameState.getPlayableCards();
+
         playerCardsFlowPane.getChildren().forEach(cardBtn -> {
             UnoCard card = (UnoCard) cardBtn.getUserData();
-            int cardIndex = gameState.getLocalPlayer().getPlayerHand().indexOf(card);
+            int cardIndex = gameManager.getLocalPlayer().getPlayerHand().indexOf(card);
 
-            if (card.equals(playableCard)) {
+            if (playableCards.contains(card)) {
                 cardBtn.setOnMouseClicked(e -> {
-                    gameManager.playCard(cardIndex);
                     disableBtn(passTurnBtn);
+                    drawCard = false;
+
+                    gameManager.playCard(cardIndex);
 
                     if (card.getSuit() == UnoSuit.WILD) {
                         gameManager.changeSuitColor(UnoSuit.WILD);
@@ -471,27 +483,11 @@ public class GameAreaController implements GameAreaListener {
                         hideSuitColorSelection();
                     }
                 });
+
             } else {
                 cardBtn.setOnMouseClicked(e -> playError1());
             }
-        });
-    }
 
-    public void updateLocalPlayerCardHandler() {
-        playerCardsFlowPane.getChildren().forEach(cardBtn -> {
-            UnoCard card = (UnoCard) cardBtn.getUserData();
-            int cardIndex = gameManager.getLocalPlayer().getPlayerHand().indexOf(card);
-
-            cardBtn.setOnMouseClicked(e -> {
-                gameManager.playCard(cardIndex);
-
-                if (card.getSuit() == UnoSuit.WILD) {
-                    gameManager.changeSuitColor(UnoSuit.WILD);
-                    showSuitColorSelection();
-                } else {
-                    hideSuitColorSelection();
-                }
-            });
         });
     }
 
@@ -501,9 +497,10 @@ public class GameAreaController implements GameAreaListener {
 
         drawPileBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
-                if (currentPlayer.equals(localPlayer)) {
+                if (currentPlayer.equals(localPlayer) && (!drawCard)) {
                     gameManager.drawCard();
                     enableBtn(passTurnBtn);
+                    drawCard = true;
                 } else {
                     playError1();
                 }
@@ -515,6 +512,7 @@ public class GameAreaController implements GameAreaListener {
         passTurnBtn.setOnMouseClicked(e -> {
             gameManager.passTurn();
             disableBtn(passTurnBtn);
+            drawCard = false;
         });
     }
 
@@ -527,19 +525,29 @@ public class GameAreaController implements GameAreaListener {
 
     public void setSettingsBtnHandler() {
         settingsBtn.setOnMouseClicked(e -> {
-            quitBtn.setVisible(!(quitBtn.isVisible()));
-            mainMenuBtn.setVisible(!(mainMenuBtn.isVisible()));
-            newGameBtn.setVisible(!(newGameBtn.isVisible()));
+            settingsOuterStackPane.setVisible(!(settingsOuterStackPane.isVisible()));
+            settingsOuterStackPane.toFront();
         });
+    }
+
+    public void setRulesBtnHandler() {
     }
 
     public void setRootAnchorPaneKeybind() {
         rootAnchorPane.setOnKeyPressed(e -> {
             KeyCode code = e.getCode();
             if (code == KeyCode.ESCAPE) {
-                quitBtn.setVisible(!(quitBtn.isVisible()));
-                mainMenuBtn.setVisible(!(mainMenuBtn.isVisible()));
-                newGameBtn.setVisible(!(newGameBtn.isVisible()));
+                settingsOuterStackPane.setVisible(!(settingsOuterStackPane.isVisible()));
+                settingsOuterStackPane.toFront();
+                /*
+                if (rulesInnerStackPane.isVisible()) {
+                    rulesInnerStackPane.setVisible(false);
+                    rulesInnerStackPane.toFront();
+                } else {
+                    settingsOuterStackPane.setVisible(!(settingsOuterStackPane.isVisible()));
+                    settingsOuterStackPane.toFront();
+                }
+                 */
             } else if (code == KeyCode.DIGIT1) {
                 gameManager.sayUno();
                 disableBtn(sayUnoBtn);
@@ -558,7 +566,7 @@ public class GameAreaController implements GameAreaListener {
     }
 
     public void setQuitBtnHandler() {
-        quitBtn.setOnMouseClicked(se -> {
+        exitBtn.setOnMouseClicked(se -> {
             quit();
         });
     }
@@ -582,6 +590,13 @@ public class GameAreaController implements GameAreaListener {
 
             sceneManager.switchScene("offline");
             sceneManager.removeScene("gameArea");
+        });
+    }
+
+    public void setReturnBtnHandler() {
+        returnBtn.setOnMouseClicked(e -> {
+            settingsOuterStackPane.setVisible(!(settingsOuterStackPane.isVisible()));
+            settingsOuterStackPane.toFront();
         });
     }
 }
