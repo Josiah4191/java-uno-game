@@ -55,10 +55,7 @@ public class UnoClassicRules implements UnoRules, Serializable {
         int cardsRemaining = player.getTotalCardsRemaining();
         boolean sayUno = player.getSayUno();
 
-        if (!sayUno && cardsRemaining == 1) {
-            return true;
-        }
-        return false;
+        return !sayUno && (cardsRemaining == 1);
     }
 
 }

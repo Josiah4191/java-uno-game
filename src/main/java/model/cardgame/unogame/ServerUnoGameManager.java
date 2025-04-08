@@ -68,6 +68,9 @@ public class ServerUnoGameManager {
         // get the list of all players
         var players = gameState.getPlayers();
 
+        // play the first card that is added to discard pile
+        playFirstCard(lastPlayedCard);
+
         // start the turn cycle
         continueTurnCycle();
 
@@ -351,6 +354,10 @@ public class ServerUnoGameManager {
         }
 
         return win;
+    }
+
+    public void playFirstCard(UnoCard card) {
+
     }
 
     private int processCardPlayed(UnoCard card) {

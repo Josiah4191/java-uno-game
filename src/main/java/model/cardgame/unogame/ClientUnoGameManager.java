@@ -84,6 +84,10 @@ public class ClientUnoGameManager {
         gameActionListener.sendActionMessage(drawCardAction);
     }
 
+    public int getNumberOfCardsRemaining(int playerIndex) {
+        return gameState.getPlayerIndexToCardNumber().get(playerIndex);
+    }
+
     public void passTurn() {
         PassTurnAction passTurnAction = new PassTurnAction();
         gameActionListener.sendActionMessage(passTurnAction);

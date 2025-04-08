@@ -210,6 +210,7 @@ public class Client implements GameActionListener {
         }
 
         gameManager.updatePlayerCardNumberMap(playerIndex, totalNumberOfCards);
+        gameManager.updateGameView(applyPenaltyEvent);
 
         System.out.println();
         System.out.println("Client received apply penalty event");

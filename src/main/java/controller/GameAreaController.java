@@ -233,6 +233,9 @@ public class GameAreaController implements GameAreaListener {
                                 //playError1();
                                 System.out.println("Game Area Controller received NoOpEvent. Not playing Error1");
                                 break;
+                            case NoOpEventType.INVALID_CALL_UNO:
+                                //playError1();
+                                break;
                         }
                         break;
                     default:
@@ -297,6 +300,12 @@ public class GameAreaController implements GameAreaListener {
         localPlayerNameLbl.setText(localPlayer.getName());
 
         localPlayerCardNumberLbl.setText(String.valueOf(localPlayer.getPlayerHand().size()));
+
+        if (localPlayer.getPlayerHand().size() == 1) {
+            localPlayerCardNumberLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: mediumspringgreen;");
+        } else {
+            localPlayerCardNumberLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: antiquewhite;");
+        }
     }
 
     public void updateOpponentPlayers() {
@@ -323,10 +332,10 @@ public class GameAreaController implements GameAreaListener {
             int totalCardsRemaining = gameState.getPlayerIndexToCardNumber().get(playerIndex);
             cardNumberLbl.setText(String.valueOf(totalCardsRemaining));
 
-            if (player.getPlayerHand().size() == 1) {
+            if (totalCardsRemaining == 1) {
                 cardNumberLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: yellow;");
             } else {
-                cardNumberLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;");
+                cardNumberLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: antiquewhite;");
             }
 
             Label playerImageLbl = new Label();
@@ -334,7 +343,7 @@ public class GameAreaController implements GameAreaListener {
 
             Image playerImage = gameState.getPlayerImageManager().getImage(player.getImage());
             ImageView playerImageView = new ImageView(playerImage);
-            playerNameLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;");
+            playerNameLbl.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: antiquewhite;");
 
             playerImageView.setFitHeight(60);
             playerImageView.setFitWidth(60);
@@ -345,6 +354,8 @@ public class GameAreaController implements GameAreaListener {
             opponentBox.setUserData(player);
             opponentBox.getChildren().addAll(cardNumberLbl, playerImageLbl, playerNameLbl);
             opponentPlayerFlowPane.getChildren().add(opponentBox);
+
+            setOpponentPlayerCallUnoHandler();
         }
     }
 
@@ -597,6 +608,16 @@ public class GameAreaController implements GameAreaListener {
         returnBtn.setOnMouseClicked(e -> {
             settingsOuterStackPane.setVisible(!(settingsOuterStackPane.isVisible()));
             settingsOuterStackPane.toFront();
+        });
+    }
+
+    public void setOpponentPlayerCallUnoHandler() {
+        opponentPlayerFlowPane.getChildren().forEach(opponentBox -> {
+            UnoPlayer opponentPlayer = (UnoPlayer) opponentBox.getUserData();
+            opponentBox.setOnMouseClicked(e -> {
+                int playerIndex = gameState.getPlayerIndex(opponentPlayer);
+                gameManager.callUno(playerIndex);
+            });
         });
     }
 }
