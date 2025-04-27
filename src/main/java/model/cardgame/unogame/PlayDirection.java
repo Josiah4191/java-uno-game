@@ -1,8 +1,7 @@
 package model.cardgame.unogame;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/8/2025
+This enum type represents and keeps track of the play direction in the UNO game.
  */
 
 import java.io.Serializable;
@@ -10,6 +9,7 @@ import java.io.Serializable;
 public enum PlayDirection implements Serializable {
     FORWARD(), REVERSE();
 
+    // Checks if the direction isForward
     public boolean isForward() {
         return this == FORWARD;
     }

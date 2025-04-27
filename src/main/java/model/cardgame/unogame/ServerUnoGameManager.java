@@ -15,6 +15,9 @@ import java.util.Random;
 Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
 Date: 3/7/2025
 ------------------------------------------------------------------------------
+
+
+
  */
 
 public class ServerUnoGameManager {
@@ -59,7 +62,7 @@ public class ServerUnoGameManager {
         UnoSuit currentSuit = gameState.getCurrentSuit();
 
         // deal 7 cards to each player
-        dealCards(1, gameState.getPlayers());
+        dealCards(7, gameState.getPlayers());
 
         // get the local player's cards
         UnoPlayer localPlayer = gameState.getPlayerFromPlayerID(playerID);
@@ -286,7 +289,7 @@ public class ServerUnoGameManager {
                 public void run() {
 
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(4000);
                     } catch (InterruptedException e) {
                         System.out.println("From Server Uno GameManager: Closing thread " + turnCycleThread.getName());
                         System.out.flush();

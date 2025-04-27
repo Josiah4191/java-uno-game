@@ -7,12 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This class is responsible for managing the flow of cards between the deck, draw pile, and discard pile.
-The constructor is passed an UnoDeck object.
 
 This class combines the UnoDrawPile, UnoDiscardPile, and UnoDeck so that they can shift cards between
 each list of cards.
@@ -41,35 +36,41 @@ public class UnoCardMachine implements Serializable {
     private UnoDiscardPile discardPile;
     private UnoDeck deck;
 
+    // Creates an UnoDeck, DrawPile, and DiscardPile based on the given UnoEdition
     public void createMachine(UnoEdition edition) {
-        this.drawPile = new UnoDrawPile();
-        this.discardPile = new UnoDiscardPile();
-        this.deck = new UnoDeck(edition);
-        transferDeckToDrawPile();
+        this.drawPile = new UnoDrawPile(); // create draw pile
+        this.discardPile = new UnoDiscardPile(); // create discard pile
+        this.deck = new UnoDeck(edition); // create deck
+        transferDeckToDrawPile(); // transfer the UnoCards from the deck to the draw pile
     }
 
+    // Draws a card from the draw pile
     public UnoCard drawCardFromDrawPile() {
-        if (drawPile.isEmpty()) {
-            transferDiscardPileToDrawPile();
-            shuffleDrawPile();
-            UnoCard card = drawCardFromDrawPile();
-            addCardToDiscardPile(card);
+        if (drawPile.isEmpty()) { // check if the draw pile is empty
+            transferDiscardPileToDrawPile(); // if draw pile is empty, transfer all the cards from discard to draw pile.
+            shuffleDrawPile(); // shuffle the cards
+            UnoCard card = drawCardFromDrawPile(); // call this method again after cards were transferred
+            addCardToDiscardPile(card); // add the drawn card to the discard pile
         }
-        return drawPile.drawCard();
+        return drawPile.drawCard(); // return an UnoCard from the draw pile
     }
 
+    // Shuffles the draw pile
     private void shuffleDrawPile() {
         drawPile.shuffle();
     }
 
+    // Transfers cards from the deck to the draw pile
     private void transferDeckToDrawPile() {
         deck.transferUnoDeckToDrawPile(drawPile);
     }
 
+    // Adds a card to the discard pile
     public void addCardToDiscardPile(UnoCard card) {
         discardPile.addCard(card);
     }
 
+    // Transfers the cards from the discard pile to the draw pile
     private void transferDiscardPileToDrawPile() {
         discardPile.transferDiscardPileToDrawPile(drawPile);
     }
@@ -90,6 +91,7 @@ public class UnoCardMachine implements Serializable {
         return Collections.unmodifiableList(deck.getDeck());
     }
 
+    // Deals a given number of cards to a list of players by drawing from the draw pile
     public void dealCards(int numberOfCards, List<UnoPlayer> players) {
         for (var player : players) {
             for (int i = 0; i < numberOfCards; i++) {

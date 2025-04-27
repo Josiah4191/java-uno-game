@@ -1,10 +1,6 @@
 package model.cardgame.card.unocard;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This enum contains values which correspond to card values in an Uno deck.
 Each enum constructor sets its count to match the number of times it should appear in a
 suit (e.g., A RED suit in Uno has one ZERO, but it has two ONE values).

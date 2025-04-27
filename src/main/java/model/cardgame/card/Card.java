@@ -1,10 +1,6 @@
 package model.cardgame.card;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This abstract generic class represents a card in a card game.
 The first generic type S extends Enum<S> means the class type must be an Enum type. The S represents a card Suit.
 The second generic type V extends Enum<V> also means the class type must be an Enum type. The V represents a card Value.
@@ -48,12 +44,14 @@ public abstract class Card<S extends Enum<S>, V extends Enum<V>> implements Seri
         return "Suit: " + suit + " | " + "Value: " + value;
     }
 
+    // Auto-generated equals method
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Card<?, ?> card = (Card<?, ?>) o;
         return Objects.equals(suit, card.suit) && Objects.equals(value, card.value);
     }
 
+    // Auto-generated hash code method
     public int hashCode() {
         return Objects.hash(suit, value);
     }

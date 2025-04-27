@@ -12,19 +12,49 @@ import static model.image.playerimage.PlayerImage.*;
 
 public class PlayerImages {
 
+    /*
+    This class contains Maps for storing player images.
+
+    There are two maps to be aware of here:
+        - playerImages
+        - imagePaths
+
+    The actual image URL paths are originally stored in the imagePaths HashMap.
+        - The key is a PlayerImage enum type
+        - The value is the file path to the image
+
+    The PlayerImageManager class is what's used to retrieve images for players. The PlayerImageManager class reads
+    from the playerImages map to get the image, NOT the imagePaths map.
+
+    The playerImages map is populated by the loadImages() method. This method is used to make sure the images load properly,
+    and if there is an error loading an image, it should generate a placeholder image.
+
+    The loadImages() method also uses the ImageLogger to log information to a log file if there is an error loading an image.
+
+    Basically, the map is re-created by the loadImages method to verify that the images can be loaded, and if there is an error
+    loading an image, a placeholder image is used instead. And it also logs information about the image that can't be loaded.
+ */
+
+    /*
+    This is the map for storing the player images. It starts off empty. As the images are loaded, they will fill
+    the map. If an image can't be loaded, then it will fill the image with a placeholder image.
+    */
     private static final Map<PlayerImage, URL> playerImages = new HashMap<>();
+    // Placeholder URL for an image if another image fails to load.
     private static final URL DEFAULT_IMAGE_URL = PlayerImages.class.getResource("/images/cardimages/deck.png");
 
+    // This method loads the images and adds them to the playerImages HashMap if successful
     public static void loadImages() {
-        for (var imageKey: imagePaths.keySet()) {
-            String imagePath = imagePaths.get(imageKey);
+        for (var imageKey: imagePaths.keySet()) { // loop through the key set
+            String imagePath = imagePaths.get(imageKey); // get the file path as a String
             try {
-                URL imageURL = PlayerImages.class.getResource(imagePath);
-                if (imageURL == null) {
-                    playerImages.put(imageKey, DEFAULT_IMAGE_URL);
+                URL imageURL = PlayerImages.class.getResource(imagePath); // try to load the resource with the image file path
+                if (imageURL == null) { // if imageURL is null
+                    playerImages.put(imageKey, DEFAULT_IMAGE_URL); // set the image as the default placeholder image
+                    // log an error message about which image file coudln't be loaded
                     ImageLogger.getImageLogger().warning("[Player Image Log]: " + imagePath + " failed to load. Using default image.");
                 } else {
-                    playerImages.put(imageKey, imageURL);
+                    playerImages.put(imageKey, imageURL); // if imageURL isn't null, add the imageURL to the playerImages map
                 }
             } catch (Exception e) {
                 System.out.println(e);

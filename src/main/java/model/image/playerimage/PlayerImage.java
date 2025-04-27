@@ -2,6 +2,11 @@ package model.image.playerimage;
 
 import java.io.Serializable;
 
+/*
+    This enum is used to represent PlayerImages. Each PlayerImage enum is associated with a name as a String,
+    which is set in the constructor.
+ */
+
 public enum PlayerImage implements Serializable {
     P1("Botwave"), P2("Sneakabyte"), P3("ZappyZap"), P4("Hoptronic"),
     P5("Lil Loopy"), P6("Techspert"), P7("Sir Chatterly"), P8("Baron von Ping"),

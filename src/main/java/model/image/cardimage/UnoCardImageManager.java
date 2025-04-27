@@ -1,19 +1,11 @@
 package model.image.cardimage;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This class is responsible for getting Uno card images.
-The getImage method receives a Card object and returns the file path to that card's image.
+The getImage method receives a Card object and returns an Image object for that card.
 The theme determines the set of images that the getImage will return from.
 Additional themes for separate sets of Uno cards can easily be added.
 The default theme is classic, but can be changed.
-
-NOTE:
-    The classic images are stored in a map in the UnoCardClassicImages class.
-    getImage() is returning a descriptive String since there are no images yet.
  */
 
 import model.cardgame.card.unocard.UnoCard;
@@ -27,9 +19,10 @@ import java.net.URL;
 
 public class UnoCardImageManager {
 
+    // This static initialization block loads the images as soon as the Card Image Manager is created
     static {
-        ImageLogger.getImageLogger().info("[Card Image Log]: Loading images");
-        UnoCardClassicImages.loadImages();
+        ImageLogger.getImageLogger().info("[Card Image Log]: Loading images"); // log that the images are being loaded
+        UnoCardClassicImages.loadImages(); // load the images
     }
 
     // Variable for the theme.
@@ -49,12 +42,12 @@ public class UnoCardImageManager {
     public Image getClassicImage(UnoCard card) {
         // Get card suit key from map of images, and then get card value key from inner map.
         var outerMap = UnoCardClassicImages.getClassicCardImages();
-        UnoSuit suit = card.getSuit();
-        UnoValue value = card.getValue();
+        UnoSuit suit = card.getSuit(); // get the suit
+        UnoValue value = card.getValue(); // get the value
 
         var innerMap = outerMap.get(suit);
         URL imageURL = innerMap.get(value);
-        return new Image(imageURL.toString());
+        return new Image(imageURL.toString()); // create and return new Image object for the given UnoCard
     }
 
     // Gets the theme.

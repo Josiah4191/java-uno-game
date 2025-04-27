@@ -13,48 +13,77 @@ import static model.cardgame.card.unocard.UnoSuit.*;
 import static model.cardgame.card.unocard.UnoValue.*;
 import static java.util.Map.entry;
 
-public class UnoCardClassicImages {
-
-    /*
-    Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-    Date: 3/7/2025
-    ------------------------------------------------------------------------------
-
+/*
     This class contains Maps for storing classic images of Uno cards.
+
+    There are two maps to be aware of here:
+        - CARD_IMAGES
+        - CARD_IMAGE_PATHS
+
+    The actual image URL paths are originally stored in the CARD_IMAGE_PATHS HashMap.
         - Outer map keys are suits (e.g., RED, GREEN, BLUE, YELLOW, WILD).
         - Outer map values are maps.
             - Inner map keys correspond to card values within their suit.
             - Inner map values are file paths for an image.
-     */
-    // @formatter:off
 
+    The UnoCardImageManager class is what's used to retrieve images for cards. The UnoCardImageManager class reads
+    from the CARD_IMAGES map to get the image, NOT the CARD_IMAGES_PATHS map.
+
+    The CARD_IMAGES map is populated by the loadImages() method. This method is used to make sure the images load properly,
+    and if there is an error loading an image, it should generate a placeholder image.
+
+    The loadImages() method also uses the ImageLogger to log information to a log file if there is an error loading an image.
+
+    Basically, the map is re-created by the loadImages method to verify that the images can be loaded, and if there is an error
+    loading an image, a placeholder image is used instead. And it also logs information about the image that can't be loaded.
+ */
+
+// @formatter:off
+public class UnoCardClassicImages {
+    /*
+        This is the map for storing the card images. It starts off empty. As the images are loaded, they will fill
+        the map. If an image can't be loaded, then it will fill the image with a placeholder image.
+     */
     private static final Map<UnoSuit, HashMap<UnoValue, URL>> CARD_IMAGES = new HashMap<>();
+
+    // This is the default image URL that is used if an image can't be loaded for some reason
     private static final URL DEFAULT_IMAGE_URL = PlayerImages.class.getResource("/images/cardimages/deck.png");
+
+    /*
+        This constant UnoCard is used for the Deck image to be loaded. It's used for errorhandling. If the card
+        image manager can't load a certain card, then it will use this card to load as a placeholder image.
+     */
     public static final UnoCard DECK = new UnoCard(GENERAL, UnoValue.DECK);
+
+    // This constant UnoCard had a similar purpose as the DECK UnoCard constant, but the LOGO isn't being used.
     public static final UnoCard LOGO = new UnoCard(GENERAL, UnoValue.LOGO);
 
+    // This method loads the images of the cards.
     public static void loadImages() {
+        // Loop through the image paths map key set
         for (var suit: CARD_IMAGE_PATHS.keySet()) {
-            HashMap<UnoValue, URL> map = new HashMap<>();
-            var innerMap = CARD_IMAGE_PATHS.get(suit);
-            for (var value: innerMap.keySet()) {
+            HashMap<UnoValue, URL> map = new HashMap<>(); // create a new HashMap that will be the inner map for CARD_IMAGES map
+            var innerMap = CARD_IMAGE_PATHS.get(suit); // get the inner map within the CARD_IMAGE_PATHS
+            for (var value: innerMap.keySet()) { // loop through the key set for the inner map
 
-                String imagePath = CARD_IMAGE_PATHS.get(suit).get(value);
+                String imagePath = CARD_IMAGE_PATHS.get(suit).get(value); // get the path as a String for the image
 
                 try {
-                    URL imageURL = UnoCardClassicImages.class.getResource(imagePath);
+                    URL imageURL = UnoCardClassicImages.class.getResource(imagePath); // get the image resource as a URL object
 
-                    if (imageURL == null) {
+                    if (imageURL == null) { // check if the imageURL is null
+                        // if the imageURL is null, then the image resource couldn't be found with that file path, and this uses
+                        // the ImageLogger to log an error message to the log file.
                         ImageLogger.getImageLogger().severe("[Classic Card Image Log]: " + imagePath + " image failed to load. Setting default image.");
-                        map.put(value, DEFAULT_IMAGE_URL);
+                        map.put(value, DEFAULT_IMAGE_URL); // if the image wasn't loaded, then it puts the default image URL as a placeholder
                     } else {
-                        map.put(value, imageURL);
+                        map.put(value, imageURL); // if it isn't null, then map the imageURL with the value of the card
                     }
                 } catch (Exception e) {
                     System.out.println(e);
                 }
             }
-            CARD_IMAGES.put(suit, map);
+            CARD_IMAGES.put(suit, map); // map the inner map to the current suit
         }
     }
 

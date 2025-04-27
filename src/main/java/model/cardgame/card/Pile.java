@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This abstract generic class is responsible for managing a list of cards, which represents a pile of
 cards (e.g., draw pile, discard pile).
 

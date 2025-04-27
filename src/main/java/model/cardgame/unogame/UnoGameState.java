@@ -12,9 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
+This class is used to hold all the information about the current state of the game. It's only responsible for
+storing the data, and this data is passed around throughout the program where it's needed. It can also be used
+for saving and loading the game.
+
+There are only get and set methods for the variables that are stored. The names of the variables should be
+self-explanatory for what they represent.
+
+The game state is serializable, so it can be saved to a file as an object. The objects it stores are also
+serializable, unless marked as transient.
  */
 
 public class UnoGameState implements Serializable {

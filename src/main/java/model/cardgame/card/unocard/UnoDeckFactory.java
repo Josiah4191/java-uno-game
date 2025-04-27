@@ -6,10 +6,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This class is responsible for creating a deck of Uno cards.
 It flexibly allows adding different decks of UNO for other editions.
 Only the classic UNO deck has been added.

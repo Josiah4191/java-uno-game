@@ -1,10 +1,6 @@
 package model.cardgame.card.unocard;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This class represents a deck of Uno cards. It extends the Deck class and specifies UnoCard for the Card type and
 UnoEdition for the Enum type.
 

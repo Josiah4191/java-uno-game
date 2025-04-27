@@ -5,10 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This abstract generic class represents a deck of cards.
 The first generic type C specifies the Card type.
 The second generic type E specifies the edition of the deck, and it must be an enum type.

@@ -14,6 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import model.image.playerimage.PlayerImage;
 import model.image.playerimage.PlayerImageManager;
+/*
+    The online controller is connected to the online view. Currently, the online view is disabled and can't be selected
+    by the user. This is meant for multiplayer, but it isn't implemented yet.
+
+     - PlayerImageManager class loads the player images
+     - SceneManager class loads and switches views
+ */
 
 public class OnlineController {
 
@@ -44,58 +51,76 @@ public class OnlineController {
     @FXML
     private Button settingsBtn;
 
+    // This method runs when the class is loaded and initializes components
     public void initialize() {
         initializeMenu();
         generatePlayerImages();
         avatarImageBox.setMaxWidth(Region.USE_PREF_SIZE);
     }
 
+    // This method initializes the menu components
     public void initializeMenu() {
         backBox.toFront();
         settingsBox.toFront();
     }
 
+    // Play audio click1
     public void playClick1() {
         click1.play();
     }
 
+    // Play audio click2
     public void playClick2() {
         click2.play();
     }
 
+    // Play audio confirm1
     public void playConfirm1() {
         confirm1.play();
     }
 
+    // Play audio error1
     public void playError1() {
         error1.play();
     }
 
+    // This method sets all the images to the buttons that the user can select
     public void generatePlayerImages() {
+        /*
+            clear the image pane each time this method is called. If this method is called again, like going
+            back and forth in the views, then this prevents the avatarImagePane from duplicating the images and
+            making a mess
+         */
         avatarImageBox.getChildren().clear();
 
+        // loop through all the values in the PlayerImage enum
         for (PlayerImage playerImage : PlayerImage.values()) {
-            ToggleButton toggleButton = new ToggleButton();
-            Image image = playerImageManager.getImage(playerImage);
-            ImageView imageView = new ImageView(image);
+            ToggleButton toggleButton = new ToggleButton(); // create a ToggleButton
+            Image image = playerImageManager.getImage(playerImage); // get the image of that playerImage enum
+            ImageView imageView = new ImageView(image); // create ImageView with the player image
 
-            imageView.setFitWidth(50);
-            imageView.setFitHeight(50);
+            imageView.setFitWidth(50); // adjust the image width
+            imageView.setFitHeight(50); // adjust the image height
 
+            // set the user data for the button to its image. this is used to get the selected player image.
             toggleButton.setUserData(playerImage);
-            toggleButton.setGraphic(imageView);
+            toggleButton.setGraphic(imageView); // set the image for the button
 
-            toggleButton.setToggleGroup(avatarImageButtonGroup);
+            toggleButton.setToggleGroup(avatarImageButtonGroup); // set toggle group for the button
 
+            // set the event action for when the button is clicked
             toggleButton.setOnAction(e -> setSelectedAvatar());
-            toggleButton.isSelected();
+            // toggleButton.isSelected(); doesn't do anything usefl. may be removed.
 
+            // set the sound effect to playClick1 when the user hovers over the toggle button
             toggleButton.setOnMouseEntered(e -> playClick1());
 
+            // add the button to the avatarImagePane
             avatarImageBox.getChildren().add(toggleButton);
         }
     }
 
+    // This method sets the avatar that the user selects
     public void setSelectedAvatar() {
         ToggleButton selectedPlayerImage = (ToggleButton) avatarImageButtonGroup.getSelectedToggle();
         if (selectedPlayerImage != null) {
@@ -106,18 +131,22 @@ public class OnlineController {
         }
     }
 
+    // This method returns to the previous selection view
     public void goBack() {
         sceneManager.switchScene("gameSelection");
     }
 
+    // This method quits the program.
     public void quit() {
         Platform.exit();
     }
 
+    // This method gets the scene manager. It isn't used and may be removed.
     public SceneManager getSceneManager() {
         return sceneManager;
     }
 
+    // This method sets the sceneManager
     public void setSceneManager(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
     }

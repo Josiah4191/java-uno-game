@@ -3,10 +3,6 @@ package model.cardgame.card.unocard;
 import model.cardgame.card.Pile;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-------------------------------------------------------------------------------
-
 This class manages the discard pile for an UNO game. It extends the Pile class and specifies UnoCard for the card type.
  */
 
