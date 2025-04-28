@@ -23,6 +23,7 @@ public abstract class Pile<C> implements Serializable {
         return cardPile;
     }
 
+    // Add a card to the pile.
     public void addCard(C card) {
         cardPile.add(card);
     }

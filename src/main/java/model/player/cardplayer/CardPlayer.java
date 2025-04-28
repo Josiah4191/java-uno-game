@@ -7,10 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
------------------------------------------------------------------------------
--
 This abstract generic class represents a player for card main.java.games.
     - Each card game should subclass Pile to have its own type of pile representing a player's cards.
     - Each card game should subclass Card to have its own type of card.
@@ -26,7 +22,6 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     - C represents Card.
      */
     private P playerHand;
-    private C lastDrawCard;
 
     /*
     The constructor receives a Pile, which represents a set of cards, and then sets it to playerHand.
@@ -46,35 +41,34 @@ public abstract class CardPlayer<P extends Pile<C>, C> extends Player {
     /*
     The getPlayerHand() method returns a view, or unmodifiable list, of the player's cards.
     The playerHand Pile object has a method getCardPile(), which returns the pile of cards.
-    NOTE:
-        - This is a public method right now for testing purposes, but it needs to be protected or removed
-        so other players or the computer AI cannot access this list.
-        - If other players or the AI could see this list, that would be cheating.
-        - UNO doesn't allow players to see their opponents cards.
      */
     public List<C> getPlayerHand() {
         return Collections.unmodifiableList(playerHand.getCardPile());
     }
 
     /*
-    The playCard(int index) method returns a Card object. The index parameter is an integer that identifies the
-    card in their pile of cards that they want to remove.
-    The playerHand Pile object has a method drawCard(int index) that gets a card from its list of cards.
-    NOTE:
-        This is the method that will be used by human players.
+        The playCard(int index) method returns a Card object. The index parameter is an integer that identifies the
+        card in their pile of cards that they want to remove.
+        The playerHand Pile object has a method drawCard(int index) that gets a card from its list of cards.
      */
     public C playCard(int cardIndex) {
         return playerHand.drawCard(cardIndex);
     }
 
     /*
-    The getTotalCardsRemaining() method returns an integer that represents the number of cards remaining in a
-    player's Pile of cards.
+        The getTotalCardsRemaining() method returns an integer that represents the number of cards remaining in a
+        player's Pile of cards.
      */
     public int getTotalCardsRemaining() {
         return playerHand.size();
     }
 
+    /*
+        This method gets the card at the given card index in the player's hand. It is used to get a card so that it can be
+        validated. The play card method for the CardPlayer is used to actually play a card if it is valid. This was needed
+        because the playCard will draw the card and remove it from the player's hand, but if the card isn't valid, then that
+        shouldn't happen.
+     */
     public C getCard(int cardIndex) {
         return getPlayerHand().get(cardIndex);
     }

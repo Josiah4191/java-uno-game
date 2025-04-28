@@ -23,7 +23,8 @@ import java.util.List;
              updateGameView() method
         - GameActionListener
             - The GameActionListener is a reference to the client. The client object is listens to events that occur in this game manager,
-            like when a message needs to be sent to the server (e.g., playing a card, drawing a card)
+            like when a message needs to be sent to the server (e.g., playing a card, drawing a card), the game manager can use the Client
+            method to send a message to the server here.
  */
 
 public class ClientUnoGameManager {

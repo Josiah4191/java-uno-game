@@ -7,11 +7,6 @@ import java.io.Serializable;
 import java.util.List;
 
 /*
-Team Members: Steve Wareham, Charles Davidson, Josiah Stoltzfus
-Date: 3/7/2025
-
-------------------------------------------------------------------------------
-
 This abstract class extends Brain. This abstract class represents a brain that is used to process information
 about the UNO game.
 
@@ -21,11 +16,6 @@ The brain needs to be passed a GameState object which contains information about
 information to process and make a decision for which card it should play.
 
 This class has one abstract method that must be implemented by its subclass: analyze()
-
-NOTE:
-    - It might be worth refactoring UnoBrain or Brain to be an interface, since they have a single method.
-    - However, it currently stores the gameState, so that may not be necessary, or that will need reworked.
-    - This can be revisited at a later time.
 */
 
 public abstract class UnoBrain implements Serializable {
