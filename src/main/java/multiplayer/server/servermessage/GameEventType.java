@@ -1,5 +1,8 @@
 package multiplayer.server.servermessage;
 
+/*
+    This enum defines the event types for the server sending messages to clients.
+ */
 public enum GameEventType {
     SETUP_GAME, CARD_PLAYED, CARD_DRAWN, TURN_PASSED, SAID_UNO, NAME_CHANGED,
     IMAGE_CHANGED, APPLY_PENALTY, LAST_CARD_PLAYED, ADD_LOCAL_PLAYER, ANNOUNCE_WINNER, SUIT_CHANGED, NO_OP, SHUT_DOWN, SET_PLAYABLE_CARDS

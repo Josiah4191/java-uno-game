@@ -1,5 +1,12 @@
 package multiplayer.server.servermessage;
 
+/*
+    This class is a bean class, or data transfer object, and it is used to send information from server
+    to client.
+
+    ImageChangedEvent takes place when the server has changed a player's image.
+ */
+
 public class SaidUnoEvent extends GameEvent {
 
     private int playerIndex;

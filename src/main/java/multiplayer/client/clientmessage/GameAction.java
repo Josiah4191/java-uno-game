@@ -2,14 +2,11 @@ package multiplayer.client.clientmessage;
 
 import com.google.gson.Gson;
 
-
 /*
     This is an abstract base class that represents a type of action to be sent from client to server. Each GameAction
     subclass should set their type in the constructor.
 
     This class also has a method that converts itself into JSON to send the data as a JSON String.
-
-    ChangeNameAction takes place when a player wants to change their name
  */
 
 public abstract class GameAction {
