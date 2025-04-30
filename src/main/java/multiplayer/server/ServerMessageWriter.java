@@ -34,7 +34,6 @@ import java.util.concurrent.LinkedBlockingQueue;
         - Step 4: The Json String message that was taken out of the queue is passed to the sendMessage() method
         - Step 5: The sendMessage() method uses the BufferedWriter to write the message.
         - This process is repeated indefinitely until the thread running in the startWriting() method is shut down.
-
  */
 
 public class ServerMessageWriter {

@@ -33,7 +33,7 @@ This GameAreaController class connects the ClientUnoGameManager class to the Gam
 Instance variables:
     - Client
         - This controller stores a reference to the Client object that uses this controller. Currently, it is used
-        to shut down all of the threads that the client and server are running.
+        to shut down all the threads that the client and server are running.
     - SceneManager
         - The SceneManager class holds all the scenes in the program. It's used to launch the different UI views
         and it can load them as well.

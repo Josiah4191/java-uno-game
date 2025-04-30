@@ -14,7 +14,6 @@ import java.net.Socket;
     thread.
 
     The Server also sets the playerID for this ServerMessageReader so that it can identify who this client is in the game.
-
  */
 
 public class ServerMessageReader {

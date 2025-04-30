@@ -51,7 +51,7 @@ public class PlayerImages {
                 URL imageURL = PlayerImages.class.getResource(imagePath); // try to load the resource with the image file path
                 if (imageURL == null) { // if imageURL is null
                     playerImages.put(imageKey, DEFAULT_IMAGE_URL); // set the image as the default placeholder image
-                    // log an error message about which image file coudln't be loaded
+                    // log an error message about which image file couldn't be loaded
                     ImageLogger.getImageLogger().warning("[Player Image Log]: " + imagePath + " failed to load. Using default image.");
                 } else {
                     playerImages.put(imageKey, imageURL); // if imageURL isn't null, add the imageURL to the playerImages map
