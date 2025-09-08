@@ -53,9 +53,10 @@ It was originally developed as a **group project**, and while the core functiona
 
 3. Open the project in your preferred IDE (IntelliJ, Eclipse, NetBeans).
 
-4. Add the following VM options in your Run/Debug configuration: --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml,javafx.media
+4. Add the following VM options in your Run/Debug configuration:
+   - --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml,javafx.media
 
-5. Run the main class to start the application.
+6. Run the main class to start the application.
 
 ---
 
