@@ -22,9 +22,4 @@ public class Main extends Application {
 
     }
 
-    // This method gets the primary stage
-    public static Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
 }
