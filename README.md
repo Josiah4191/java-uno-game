@@ -43,7 +43,7 @@ It was originally developed as a **group project**, and while the core functiona
 
 ---
 
-## Getting Started
+## Setup
 
 1. Install Java 17+ and the JavaFX SDK.
 
