@@ -1,6 +1,6 @@
 # Java UNO Game
 
-A fully functional UNO card game built in **Java** with a **JavaFX** interface.  
+A semi functional UNO card game built in **Java** with a **JavaFX** interface.  
 It was originally developed as a **group project**, and while the core functionality is complete, it remains a **work in progress** with ongoing improvements focused on multiplayer support.
 
 ---
