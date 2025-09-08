@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane fx:id="rootAnchorPane"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.GameAreaController"
+            prefHeight="600.0" prefWidth="800.0"
+            stylesheets="@/style/GameAreaView_Styles.css">
+
+    <VBox fx:id="settingsBtnVbox" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <Button fx:id="settingsBtn">
+            <graphic>
+                <ImageView fitWidth="35" fitHeight="35">
+                    <Image url="/image/buttonimage/settings.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <StackPane fx:id="settingsOuterStackPane" visible="false"
+               AnchorPane.topAnchor="0"
+               AnchorPane.rightAnchor="0"
+               AnchorPane.leftAnchor="0"
+               AnchorPane.bottomAnchor="0">
+
+        <StackPane fx:id="settingsInnerStackPane"
+                   prefHeight="400"
+                   prefWidth="300"
+                   maxHeight="400"
+                   maxWidth="300">
+
+            <VBox fx:id="settingsVbox"
+                  alignment="CENTER">
+                <GridPane fx:id="settingsGridPane" alignment="CENTER">
+
+                    <!-- First Row -->
+                    <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Options"/>
+                    </StackPane>
+
+                    <!-- Second Row -->
+                    <VBox GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Button fx:id="rulesBtn" text="Rules"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+
+                        <Button fx:id="interfaceBtn" text="Interface"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="keybindingsBtn" text="Keybindings"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                    </VBox>
+
+                    <!-- Third Row -->
+                    <VBox GridPane.rowIndex="2" GridPane.columnIndex="0">
+                        <Button fx:id="newGameBtn" text="New Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="loadGameBtn" text="Load Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="saveGameBtn" text="Save Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                    </VBox>
+
+                    <!-- Fourth Row -->
+                    <VBox GridPane.rowIndex="3" GridPane.columnIndex="0">
+                        <Button fx:id="mainMenuBtn" text="Quit to Main Menu"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="exitBtn" text="Exit Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                        <Button fx:id="returnBtn" text="Return to Game"
+                                prefWidth="140"
+                                alignment="CENTER"/>
+                    </VBox>
+                </GridPane>
+            </VBox>
+        </StackPane>
+    </StackPane>
+
+    <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="100"
+               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <GridPane fx:id="centerGridPane" alignment="CENTER">
+            <!-- First Row -->
+            <HBox fx:id="playDirectionHbox"
+                  alignment="CENTER"
+                  GridPane.rowIndex="0"
+                  GridPane.columnIndex="0"
+                  GridPane.valignment="CENTER"
+                  GridPane.halignment="CENTER">
+                <Label fx:id="playDirectionLbl" alignment="CENTER">
+                    <graphic>
+                        <ImageView fitWidth="100" fitHeight="100">
+                            <Image url="/image/buttonimage/direction_button.png"/>
+                        </ImageView>
+                    </graphic>
+                </Label>
+            </HBox>
+
+            <!-- Second Row -->
+            <FlowPane fx:id="opponentPlayerFlowPane"
+                      GridPane.hgrow="ALWAYS"
+                      alignment="CENTER"
+                      GridPane.rowIndex="1"
+                      GridPane.columnIndex="0"
+                      GridPane.valignment="CENTER"
+                      GridPane.halignment="CENTER"/>
+
+            <!-- Third Row -->
+            <HBox fx:id="pilesHbox"
+                  alignment="CENTER"
+                  GridPane.rowIndex="2"
+                  GridPane.columnIndex="0"
+                  GridPane.valignment="CENTER"
+                  GridPane.halignment="CENTER">
+
+                <Button fx:id="drawPileBtn">
+                    <graphic>
+                        <ImageView fitWidth="100" fitHeight="100">
+                            <Image url="/image/cardimage/deck.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="discardPileBtn"/>
+            </HBox>
+
+            <!-- Fourth Row -->
+            <FlowPane fx:id="playerCardsFlowPane"
+                      GridPane.hgrow="ALWAYS"
+                      alignment="CENTER"
+                      GridPane.rowIndex="3"
+                      GridPane.columnIndex="0"
+                      GridPane.valignment="CENTER"
+                      GridPane.halignment="CENTER"/>
+
+            <!-- Fifth Row -->
+            <FlowPane fx:id="suitColorSelectionFlowPane"
+                      alignment="CENTER"
+                      GridPane.rowIndex="4"
+                      GridPane.columnIndex="0"
+                      GridPane.valignment="CENTER"
+                      GridPane.halignment="CENTER">
+                <Label fx:id="yellowCardLbl" userData="YELLOW">
+                    <graphic>
+                        <ImageView fitWidth="60" fitHeight="60">
+                            <Image url="/image/cardimage/yellow_card.png"/>
+                        </ImageView>
+                    </graphic>
+                </Label>
+
+                <Label fx:id="redCardLbl" userData="RED">
+                    <graphic>
+                        <ImageView fitWidth="60" fitHeight="60">
+                            <Image url="/image/cardimage/red_card.png"/>
+                        </ImageView>
+                    </graphic>
+                </Label>
+
+                <Label fx:id="blueCardLbl" userData="BLUE">
+                    <graphic>
+                        <ImageView fitWidth="60" fitHeight="60">
+                            <Image url="/image/cardimage/blue_card.png"/>
+                        </ImageView>
+                    </graphic>
+                </Label>
+
+                <Label fx:id="greenCardLbl" userData="GREEN">
+                    <graphic>
+                        <ImageView fitWidth="60" fitHeight="60">
+                            <Image url="/image/cardimage/green_card.png"/>
+                        </ImageView>
+                    </graphic>
+                </Label>
+            </FlowPane>
+        </GridPane>
+    </StackPane>
+
+    <StackPane fx:id="playerControlsStackPane" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="0"
+               AnchorPane.leftAnchor="0">
+        <HBox fx:id="controlsHBox" alignment="CENTER">
+            <Button fx:id="sayUnoBtn" alignment="CENTER">
+                <graphic>
+                    <ImageView fitWidth="100" fitHeight="60">
+                        <Image url="/image/buttonimage/uno_button.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <Button fx:id="passTurnBtn" alignment="CENTER" text="2">
+                <graphic>
+                    <ImageView fitWidth="100" fitHeight="60">
+                        <Image url="/image/buttonimage/pass_button.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </StackPane>
+
+    <VBox fx:id="localPlayerVbox" alignment="CENTER" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20">
+        <Label fx:id="localPlayerCardNumberLbl"/>
+        <Label fx:id="localPlayerImageLbl"/>
+        <Label fx:id="localPlayerNameLbl"/>
+    </VBox>
+
+</AnchorPane>

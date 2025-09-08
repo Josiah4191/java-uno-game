@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.GameSelectionController"
+            stylesheets="@/style/GameSelectionView_Styles.css"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox fx:id="settingsBox" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <Button fx:id="settingsBtn">
+            <graphic>
+                <ImageView fitWidth="35" fitHeight="35">
+                    <Image url="/image/buttonimage/settings.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <VBox alignment="CENTER"
+            AnchorPane.bottomAnchor="0"
+            AnchorPane.leftAnchor="0"
+            AnchorPane.rightAnchor="0"
+            AnchorPane.topAnchor="0">
+
+        <Label fx:id="titleLbl" alignment="CENTER" text="Select a Game"/>
+
+        <HBox alignment="CENTER">
+            <ToggleButton fx:id="unoBtn">
+                <graphic>
+                    <ImageView fitHeight="100" fitWidth="100">
+                        <Image url="/image/cardimage/deck.png"/>
+                    </ImageView>
+                </graphic>
+            </ToggleButton>
+        </HBox>
+
+        <VBox fx:id="gameModeBox" alignment="CENTER">
+            <Label fx:id="gameModeLbl" text="Select Game Mode" alignment="CENTER"/>
+            <HBox fx:id="gameModeBtnBox" alignment="CENTER">
+                <ToggleButton fx:id="onlineBtn" userData="ONLINE" text="Online" disable="true"/>
+                <ToggleButton fx:id="offlineBtn" userData="OFFLINE" text="Offline"/>
+            </HBox>
+        </VBox>
+
+        <HBox fx:id="playBtnBox" alignment="CENTER">
+            <Button fx:id="playBtn" text="Play" onMouseClicked="#launchGame"/>
+        </HBox>
+
+    </VBox>
+
+</AnchorPane>

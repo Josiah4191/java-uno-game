@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane
+        fx:id="centerBox"
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="controller.OfflineController"
+        prefHeight="400.0" prefWidth="600.0"
+        stylesheets="@/style/OfflineView_Styles.css">
+
+    <VBox fx:id="backBox" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20">
+        <Button fx:id="backBtn" onMouseClicked="#goBack">
+            <graphic>
+                <ImageView fitWidth="25" fitHeight="25">
+                    <Image url="/image/buttonimage/back_button.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <VBox fx:id="settingsBox" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <Button fx:id="settingsBtn" onMouseClicked="#openSettings">
+            <graphic>
+                <ImageView fitWidth="35" fitHeight="35">
+                    <Image url="/image/buttonimage/settings.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <StackPane fx:id="centerPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <GridPane alignment="CENTER" fx:id="centerGrid">
+
+            <VBox fx:id="avatarImageBox"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="0" GridPane.columnIndex="0"
+                  GridPane.columnSpan="2">
+                <Label fx:id="avatarImageLbl" text="Select Avatar"/>
+                <FlowPane fx:id="avatarImagePane" alignment="CENTER"/>
+                <HBox fx:id="playerNameBox" alignment="CENTER">
+                    <Label fx:id="playerNameLbl" alignment="CENTER" text="Enter Name"/>
+                    <TextField fx:id="playerNameTextField"/>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="separationBox1"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="1" GridPane.columnIndex="0"
+                  GridPane.columnSpan="2"/>
+
+            <VBox fx:id="editionBox"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="2"
+                  GridPane.columnIndex="0">
+                <Label fx:id="editionLbl" alignment="CENTER" text="Select Edition"/>
+                <HBox fx:id="editionSelection" alignment="CENTER">
+                    <ToggleButton fx:id="classicEditionBtn" userData="CLASSIC" onMouseClicked="#setSelectedEdition"
+                                  onMouseEntered="#playClick1">
+                        <graphic>
+                            <ImageView fitWidth="50" fitHeight="50">
+                                <Image url="/image/cardimage/deck.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="themeBox"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="2"
+                  GridPane.columnIndex="1">
+                <Label fx:id="themeLbl" alignment="CENTER" text="Select Theme"/>
+                <HBox fx:id="cardThemeSelection" alignment="CENTER">
+                    <ToggleButton fx:id="classicThemeBtn" userData="CLASSIC"
+                                  onAction="#setSelectedTheme"
+                                  onMouseEntered="#playClick1">
+                        <graphic>
+                            <ImageView fitWidth="50" fitHeight="50">
+                                <Image url="/image/cardimage/deck.png"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="separationBox2"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="3" GridPane.columnIndex="0"
+                  GridPane.columnSpan="2"/>
+
+            <VBox fx:id="difficultyVBox"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="4"
+                  GridPane.columnIndex="0">
+                <Label fx:id="difficultyLbl" alignment="CENTER" text="Select Difficulty"/>
+                <HBox fx:id="difficultyHBox" alignment="CENTER">
+                    <ToggleButton fx:id="easyBtn" userData="EASY" text="Easy" onAction="#setSelectedDifficulty"
+                                  onMouseEntered="#playClick1"/>
+                    <ToggleButton fx:id="mediumBtn" userData="MEDIUM" text="Medium"
+                                  onAction="#setSelectedDifficulty" onMouseDragOver="#playClick1"/>
+                    <ToggleButton fx:id="hardBtn" userData="HARD" text="Hard" onAction="#setSelectedDifficulty"
+                                  onMouseEntered="#playClick1"/>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="numberOfOpponentsBox"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="4"
+                  GridPane.columnIndex="1">
+                <Label fx:id="numberOfOpponentsLbl" alignment="CENTER" text="Number of Opponents"/>
+                <Spinner initialValue="1" min="1" max="9" fx:id="numberOfOpponentsSpinner" />
+            </VBox>
+
+            <VBox fx:id="playBtnBox"
+                  alignment="CENTER"
+                  GridPane.halignment="CENTER"
+                  GridPane.valignment="CENTER"
+                  GridPane.rowIndex="6"
+                  GridPane.columnIndex="0"
+                  GridPane.columnSpan="2">
+                <Button fx:id="playBtn" alignment="CENTER" text="PLAY" onAction="#setupGame"
+                        onMouseEntered="#playClick1">
+                </Button>
+            </VBox>
+
+        </GridPane>
+    </StackPane>
+
+
+</AnchorPane>

@@ -1,0 +1,226 @@
+.root {
+    -fx-background-image: url("/image/cardimage/table1.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-opacity: 0.9;
+    -fx-spacing: 20;
+}
+
+#settingsOuterStackPane {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+#settingsInnerStackPane, #rulesInnerStackPane {
+    -fx-border-radius: 15;
+    -fx-border-width: 3;
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(250, 235, 215, 0.9);
+    -fx-background-color: rgba(0, 0, 0, 1);
+}
+
+#rulesGridPane {
+
+}
+
+#settingsGridPane > VBox {
+    -fx-spacing: 2;
+    -fx-padding: 10;
+}
+
+#settingsGridPane > VBox > .button {
+    -fx-background-insets: 0;
+    -fx-background-color: steelblue;
+    -fx-border-color: black;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-family: "Comic Sans MS";
+    -fx-text-fill: antiquewhite;
+}
+
+#settingsGridPane > VBox > .button:hover {
+    -fx-background-color: #ff9144;
+    -fx-text-fill: black;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+#settingsGridPane > VBox > .button:pressed {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+#centerGridPane {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+}
+
+#playerCardsFlowPane {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-padding: 10px 10px 10px 10px;
+}
+
+#playerCardsFlowPane > .button {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-opacity: 0.9;
+    -fx-background-color: transparent;
+}
+
+#playerCardsFlowPane > .button:hover {
+    -fx-opacity: 1;
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+}
+
+#playerCardsFlowPane > .button:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+#localPlayerVbox {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-padding: 5px;
+}
+
+#localPlayerVbox > .label:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+#opponentPlayerFlowPane {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+}
+
+#opponentPlayerFlowPane > VBox {
+    -fx-opacity: 0.9;
+    -fx-pref-width: 150px;
+}
+
+#opponentPlayerFlowPane > VBox > .label {
+    -fx-padding: 5px;
+}
+
+#opponentPlayerFlowPane > VBox:hover {
+    -fx-opacity: 1;
+}
+
+#opponentPlayerFlowPane > VBox > .label:hover {
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+    -fx-opacity: 1;
+}
+
+#opponentPlayerFlowPane > VBox > .label:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+#pilesHbox {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-spacing: 5;
+    -fx-padding: 5;
+}
+
+#drawPileBtn, #discardPileBtn{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-opacity: 0.9;
+    -fx-background-color: transparent;
+}
+
+#drawPileBtn:hover, #discardPileBtn:hover {
+    -fx-opacity: 1;
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+}
+
+#drawPileBtn:pressed, #discardPileBtn:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+#playDirectionHbox {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+}
+
+#playDirectionLbl {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-opacity: 0.9;
+}
+
+.label {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-family: "Comic Sans MS";
+}
+
+#suitColorSelectionBox {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+    -fx-padding: 10;
+}
+
+#suitColorSelectionFlowPane > .label {
+    -fx-opacity: 0.8;
+}
+
+#suitColorSelectionFlowPane > .label:hover {
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+    -fx-opacity: 1;
+}
+
+#suitColorSelectionFlowPane > .label:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+#passTurnHbox, #sayUnoBtnHbox {
+    -padding: 5;
+}
+
+#passTurnBtn {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.5, 0, 0);
+    -fx-background-color: transparent;
+}
+
+#passTurnBtn:hover {
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+}
+
+#passTurnBtn:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+#sayUnoBtn {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.5, 0, 0);
+    -fx-background-color: transparent;
+}
+
+#sayUnoBtn:hover {
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+}
+
+#sayUnoBtn:pressed {
+    -fx-scale-x: 0.99;
+    -fx-scale-y: 0.99;
+}
+
+#settingsBtnVbox {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0.3, 0, 0);
+}
+
+#settingsBtn {
+    -fx-background-color: transparent;
+}
+
+#settingsBtn:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+#settingsBtn:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
