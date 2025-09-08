@@ -9,7 +9,7 @@
         fx:id="centerBox"
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
-        fx:controller="controller.OfflineController"
+        fx:controller="com.josiah.uno.controller.OfflineController"
         prefHeight="400.0" prefWidth="600.0"
         stylesheets="@/style/OfflineView_Styles.css">
 

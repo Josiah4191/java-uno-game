@@ -1,0 +1,23 @@
+package com.josiah.uno.model.cardgame.card.unocard;
+
+/*
+This enum contains the suits for an Uno card deck.
+ */
+
+import java.io.Serializable;
+
+public enum UnoSuit implements Serializable {
+    RED("red"), GREEN("limegreen"), BLUE("deepskyblue"), YELLOW("yellow"), WILD("white"), GENERAL("white");
+
+    private String color;
+
+    UnoSuit(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
+}
+
+

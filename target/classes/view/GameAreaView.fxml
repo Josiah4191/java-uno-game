@@ -8,7 +8,7 @@
 <AnchorPane fx:id="rootAnchorPane"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.GameAreaController"
+            fx:controller="com.josiah.uno.controller.GameAreaController"
             prefHeight="600.0" prefWidth="800.0"
             stylesheets="@/style/GameAreaView_Styles.css">
 
