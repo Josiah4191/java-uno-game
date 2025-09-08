@@ -47,12 +47,25 @@ It was originally developed as a **group project**, and while the core functiona
 
 ## Getting Started
 
-### 1. Prerequisites
-Before running the project, make sure you have:
-- **Java JDK 17+** installed ([Download here](https://adoptium.net/) if needed).  
-- **JavaFX SDK** installed ([Download here](https://openjfx.io/)).  
-- An IDE such as **IntelliJ IDEA**, **Eclipse**, or **NetBeans**.  
+1. Install Java 17+ and the JavaFX SDK.
 
-### 2. Clone the Repository
-```bash
-git clone https://github.com/your-username/java-uno-game.git
+2. Clone this repository.
+
+3. Open the project in your preferred IDE (IntelliJ, Eclipse, NetBeans).
+
+4. Add the following VM options in your Run/Debug configuration: --module-path /path/to/javafx/lib --add-modules javafx.controls,javafx.fxml,javafx.media
+
+5. Run the main class to start the application.
+
+---
+
+## Possible Improvements
+I coded the majority of this project myself, and if I were to revisit it, several areas could be improved:
+
+- Refactoring for SOLID principles: While I aimed to follow SOLID, there are clear violations. Some packages and classes would benefit from restructuring, and certain code should be extracted into interfaces to better support dependency inversion.
+
+- Client/Server architecture: The networking code was rushed, and much of it could be refactored into smaller methods to better follow the Single Responsibility Principle.
+
+- Exception handling: There are still some handled exceptions being thrown occasionally in the server class that would need investigation.
+
+Overall, this application isn’t highly polished, but it was a valuable learning experience. The key takeaway for me is how I can apply what I’ve learned here to future projects.
