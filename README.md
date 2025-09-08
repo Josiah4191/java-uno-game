@@ -1,5 +1,5 @@
 # Java UNO Game
-
+## Project Overview
 A semi functional UNO card game built in **Java** with a **JavaFX** interface.  
 It was originally developed as a **group project**, and while the core functionality is complete, it remains a **work in progress** with ongoing improvements focused on multiplayer support.
 
@@ -22,16 +22,12 @@ It was originally developed as a **group project**, and while the core functiona
 - **Customization**
   - Code structured to allow future customization (e.g., multiple card themes, colors, and styles) — not implemented yet, but designed with expansion in mind
 
----
-
 ## Technologies Used
 
 - **Java** — Core logic, networking, and data handling
 - **JavaFX** — User interface and game rendering
 - **Object-Oriented Design** — Flexible class hierarchy for cards, decks, and players
 - **Sockets/Multithreading** — Networking and multiplayer functionality
-
----
 
 ## Project Structure
 
@@ -40,8 +36,6 @@ It was originally developed as a **group project**, and while the core functiona
 - `Player`, `HumanPlayer`, `ComputerPlayer` — Player hierarchy
 - `Menu` and UI Classes — JavaFX-based menus and overlays
 - `Multiplayer` — Networking code for server and client connections
-
----
 
 ## Setup
 
@@ -56,8 +50,6 @@ It was originally developed as a **group project**, and while the core functiona
 
 6. Run the main class to start the application.
 
----
-
 ## Possible Improvements
 I coded the majority of this project myself, and if I were to revisit it, several areas could be improved:
 
@@ -68,3 +60,5 @@ I coded the majority of this project myself, and if I were to revisit it, severa
 - Exception handling: There are still some handled exceptions being thrown occasionally in the server class that would need investigation.
 
 Overall, this application isn’t highly polished, but it was a valuable learning experience. The key takeaway for me is how I can apply what I’ve learned here to future projects.
+
+---
