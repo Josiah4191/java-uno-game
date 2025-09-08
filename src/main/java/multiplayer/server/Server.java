@@ -297,39 +297,39 @@ public class Server implements GameEventListener {
 
         // This statement will switch on the type of GameAction and execute the appropriate method based on the GameActionType
         switch (type) {
-            case GameActionType.SETUP_GAME:
+            case SETUP_GAME:
                 handleSetupGame(message, playerID);
                 break;
-            case GameActionType.JOIN_GAME:
+            case JOIN_GAME:
                 handleJoinGame(message, playerID);
                 break;
-            case GameActionType.CHANGE_NAME:
+            case CHANGE_NAME:
                 handleChangeName(message, playerID);
                 break;
-            case GameActionType.CHANGE_IMAGE:
+            case CHANGE_IMAGE:
                 handleChangeImage(message, playerID);
                 break;
-            case GameActionType.PASS_TURN:
+            case PASS_TURN:
                 handlePassTurn();
                 break;
-            case GameActionType.SAY_UNO:
+            case SAY_UNO:
                 handleSayUno(message, playerID);
                 break;
-            case GameActionType.CALL_UNO:
+            case CALL_UNO:
                 handleCallUno(message);
                 break;
-            case GameActionType.PLAY_CARD:
+            case PLAY_CARD:
                 handlePlayCard(message, playerID);
                 //gameManager.printDeckInformation(); // for debugging
                 break;
-            case GameActionType.DRAW_CARD:
+            case DRAW_CARD:
                 handleDrawCard(message, playerID);
                 //gameManager.printDeckInformation(); // for debugging
                 break;
-            case GameActionType.CHANGE_SUIT:
+            case CHANGE_SUIT:
                 handleSuitChange(message, playerID);
                 break;
-            case GameActionType.DISCONNECT:
+            case DISCONNECT:
                 System.out.println("Client Disconnected");
                 break;
             default:

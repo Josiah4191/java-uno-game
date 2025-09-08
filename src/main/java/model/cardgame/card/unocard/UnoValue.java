@@ -26,7 +26,7 @@ public enum UnoValue implements Serializable {
     // Receives an enum value and checks if it is a WILD card.
     public static boolean isWild(UnoValue value) {
         return switch (value) {
-            case UnoValue.WILD, UnoValue.WILD_DRAW_FOUR -> true;
+            case WILD, WILD_DRAW_FOUR -> true;
             default -> false;
         };
     }
@@ -34,7 +34,7 @@ public enum UnoValue implements Serializable {
     // Receives an enum value and checks if it is an ACTION card.
     public static boolean isAction(UnoValue value) {
         return switch (value) {
-            case UnoValue.REVERSE, UnoValue.SKIP, UnoValue.DRAW_TWO -> true;
+            case REVERSE, SKIP, DRAW_TWO -> true;
             default -> false;
         };
     }
@@ -42,8 +42,8 @@ public enum UnoValue implements Serializable {
     // Receives an enum value and checks if it is a NUMBER card.
     public static boolean isNumber(UnoValue value) {
         return switch (value) {
-            case UnoValue.ZERO, UnoValue.ONE, UnoValue.TWO, UnoValue.THREE, UnoValue.FOUR, UnoValue.FIVE, UnoValue.SIX,
-                 UnoValue.SEVEN, UnoValue.EIGHT, UnoValue.NINE -> true;
+            case ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX,
+                 SEVEN, EIGHT, NINE -> true;
             default -> false;
         };
     }

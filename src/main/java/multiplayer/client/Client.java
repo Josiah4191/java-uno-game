@@ -52,49 +52,49 @@ public class Client implements GameActionListener {
     public synchronized void handleMessage(String message) {
         GameEventType type = getEventType(message);
             switch (type) {
-                case GameEventType.SETUP_GAME:
+                case SETUP_GAME:
                     handleSetupGame(message);
                     break;
-                case GameEventType.ADD_LOCAL_PLAYER:
+                case ADD_LOCAL_PLAYER:
                     handleAddLocalPlayer(message);
                     break;
-                case GameEventType.NAME_CHANGED:
+                case NAME_CHANGED:
                     handleNameChanged(message);
                     break;
-                case GameEventType.IMAGE_CHANGED:
+                case IMAGE_CHANGED:
                     handleImageChanged(message);
                     break;
-                case GameEventType.TURN_PASSED:
+                case TURN_PASSED:
                     handleTurnPassed(message);
                     break;
-                case GameEventType.SAID_UNO:
+                case SAID_UNO:
                     handleSaidUno(message);
                     break;
-                case GameEventType.APPLY_PENALTY:
+                case APPLY_PENALTY:
                     handleApplyPenalty(message);
                     break;
-                case GameEventType.CARD_DRAWN:
+                case CARD_DRAWN:
                     handleCardDrawn(message);
                     break;
-                case GameEventType.CARD_PLAYED:
+                case CARD_PLAYED:
                     handleCardPlayed(message);
                     break;
-                case GameEventType.LAST_CARD_PLAYED:
+                case LAST_CARD_PLAYED:
                     handleLastCardPlayed(message);
                     break;
-                case GameEventType.ANNOUNCE_WINNER:
+                case ANNOUNCE_WINNER:
                     handleAnnounceWinner(message);
                     break;
-                case GameEventType.SUIT_CHANGED:
+                case SUIT_CHANGED:
                     handleSuitChanged(message);
                     break;
-                case GameEventType.NO_OP:
+                case NO_OP:
                     handleNoOP(message);
                     break;
-                case GameEventType.SET_PLAYABLE_CARDS:
+                case SET_PLAYABLE_CARDS:
                     handleSetPlayableCards(message);
                     break;
-                case GameEventType.SHUT_DOWN:
+                case SHUT_DOWN:
                     shutDown();
                     break;
                 default:

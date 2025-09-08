@@ -581,7 +581,7 @@ public class ServerUnoGameManager {
 
         // switch on the value of the UnoCard
         switch (card.getValue()) {
-            case UnoValue.REVERSE: // if the value is REVERSE
+            case REVERSE: // if the value is REVERSE
                 reversePlayDirection(); // reverse the play direction
                 int numberOfPlayers = gameState.getPlayers().size(); // get the number of players in the game
 
@@ -591,18 +591,18 @@ public class ServerUnoGameManager {
                 } else { // if it is greater than 2 players
                     return moveToNextPlayer(1); // move to the next player and return the new player index
                 }
-            case UnoValue.SKIP: // if the value is SKIP
+            case SKIP: // if the value is SKIP
                 return moveToNextPlayer(2); // skip the next player and return the new player index
-            case UnoValue.DRAW_TWO: // if the value is DRAW TWO
+            case DRAW_TWO: // if the value is DRAW TWO
                 applyPenalty(nextPlayerIndex, 2); // apply a penalty to the next player index
                 return moveToNextPlayer(2); // skip the next player and return the new player index
-            case UnoValue.WILD_DRAW_FOUR:
+            case WILD_DRAW_FOUR:
                 applyPenalty(nextPlayerIndex, 4); // apply a penalty to the next player index
                 return moveToNextPlayer(2); // skip the next player and return the new player index
-            case UnoValue.DRAW_TW0_STACK:
+            case DRAW_TW0_STACK:
                 gameState.addStackPenalty(2); // update the stack penalty (for different rule sets)
                 return moveToNextPlayer(1); // move to next player and return the new player index
-            case UnoValue.WILD_DRAW_FOUR_STACK:
+            case WILD_DRAW_FOUR_STACK:
                 gameState.addStackPenalty(4); // update the stack penalty (for different rule sets)
                 return moveToNextPlayer(1); // move to next player and return the new player index
             default:

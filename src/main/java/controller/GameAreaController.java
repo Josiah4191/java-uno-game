@@ -271,29 +271,29 @@ public class GameAreaController implements GameAreaListener {
                 GameEventType type = event.getType();
 
                 switch (type) {
-                    case GameEventType.CARD_DRAWN, GameEventType.TURN_PASSED, GameEventType.CARD_PLAYED,
-                         GameEventType.ANNOUNCE_WINNER, GameEventType.APPLY_PENALTY, GameEventType.SUIT_CHANGED:
+                    case CARD_DRAWN, TURN_PASSED, CARD_PLAYED,
+                         ANNOUNCE_WINNER, APPLY_PENALTY, SUIT_CHANGED:
                         updateAll();
                         break;
-                    case GameEventType.NAME_CHANGED:
+                    case NAME_CHANGED:
                         updateLocalPlayerCards();
                         updateOpponentPlayers();
                         break;
-                    case GameEventType.IMAGE_CHANGED:
+                    case IMAGE_CHANGED:
                         updateLocalPlayer();
                         updateOpponentPlayers();
                         break;
-                    case GameEventType.SAID_UNO:
+                    case SAID_UNO:
                         System.out.println("Controller updating SAY UNO");
                         break;
-                    case GameEventType.NO_OP:
+                    case NO_OP:
                         NoOpEvent noOpEvent = (NoOpEvent) event;
                         switch (noOpEvent.getEventType()) {
-                            case NoOpEventType.INVALID_CARD, NoOpEventType.INVALID_TURN:
+                            case INVALID_CARD, INVALID_TURN:
                                 //playError1();
                                 System.out.println("Game Area Controller received NoOpEvent. Not playing Error1");
                                 break;
-                            case NoOpEventType.INVALID_CALL_UNO:
+                            case INVALID_CALL_UNO:
                                 //playError1();
                                 break;
                         }
