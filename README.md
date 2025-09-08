@@ -20,9 +20,7 @@ It was originally developed as a **group project**, and while the core functiona
   - Displays your hand of cards, other players’ card counts, and turn indicators
   - Menus for New Game, Save, Load, Options, and Rules
 - **Customization**
-  - Multiple card themes (e.g., Classic, City, Jungle, Space)
-  - Color themes for the UI
-  - Customizable key bindings
+  - Code structured to allow future customization (e.g., multiple card themes, colors, and styles) — not implemented yet, but designed with expansion in mind
 
 ---
 
