@@ -23,9 +23,6 @@ It was originally developed as a **group project**, and while the core functiona
   - Multiple card themes (e.g., Classic, City, Jungle, Space)
   - Color themes for the UI
   - Customizable key bindings
-- **Persistence**
-  - Save and load games from disk
-  - Manage saved games with a custom load/delete window
 
 ---
 
