@@ -17540,3 +17540,7 @@ Sep 08, 2025 6:27:13 PM com.josiah.uno.model.image.playerimage.PlayerImageManage
 INFO: [Player Image Log]: Loading images
 Sep 08, 2025 6:27:15 PM com.josiah.uno.model.image.cardimage.UnoCardImageManager <clinit>
 INFO: [Card Image Log]: Loading images
+Sep 08, 2025 9:42:36 PM com.josiah.uno.model.image.playerimage.PlayerImageManager <clinit>
+INFO: [Player Image Log]: Loading images
+Sep 08, 2025 9:42:38 PM com.josiah.uno.model.image.cardimage.UnoCardImageManager <clinit>
+INFO: [Card Image Log]: Loading images
