@@ -35,7 +35,7 @@ It was originally developed as a **group project**, and while the core functiona
 - `GameManager` — Handles players, rules, and turn flow
 - `Player`, `HumanPlayer`, `ComputerPlayer` — Player hierarchy
 - `Multiplayer` — Networking code for server and client connections
-- Menu and UI Classes — JavaFX-based menus and overlays
+- `Menu and UI Classes` — JavaFX-based menus and overlays
 
 ## Setup
 
