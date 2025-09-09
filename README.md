@@ -34,8 +34,8 @@ It was originally developed as a **group project**, and while the core functiona
 - `UnoCard`, `UnoDeck`, `UnoCardMachine` — Core card and deck logic
 - `GameManager` — Handles players, rules, and turn flow
 - `Player`, `HumanPlayer`, `ComputerPlayer` — Player hierarchy
-- `Menu` and UI Classes — JavaFX-based menus and overlays
 - `Multiplayer` — Networking code for server and client connections
+- Menu and UI Classes — JavaFX-based menus and overlays
 
 ## Setup
 
