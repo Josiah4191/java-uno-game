@@ -51,7 +51,7 @@ It was originally developed as a **group project**, and while the core functiona
 6. Run the main class to start the application.
 
 ## Possible Improvements
-I coded the majority of this project myself, and if I were to revisit it, several areas could be improved:
+If I were to revisit this project, several areas could be improved:
 
 - **Refactoring for SOLID principles:** While I aimed to follow SOLID, there are clear violations. Some packages and classes would benefit from restructuring, and certain code should be extracted into interfaces to better support dependency inversion.
 
