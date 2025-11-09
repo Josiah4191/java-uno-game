@@ -15,4 +15,4 @@ Group class project where we built a full UNO game in JavaFX with working rules,
 - Java
 - JavaFX
 - JSON
-- TCP Sockets (experimental)
+- TCP Sockets
