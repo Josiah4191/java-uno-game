@@ -8,7 +8,7 @@ Group class project where we built a full UNO game in JavaFX with working rules,
 - Playable UNO ruleset (draw, skip, reverse, wild, and number cards)
 - Turn-based system with color and number matching
 - Deck and discard pile management
-- Visual interface using JavaFX
+- UI using JavaFX
 - Basic socket structure for testing networked interactions
 
 ## Tools
