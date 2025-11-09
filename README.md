@@ -1,7 +1,6 @@
 # UNO Game (JavaFX)
 
-A JavaFX-based UNO card game implementing full UNO rules and turn management.  
-Built to explore game logic, card handling, and state updates using Java, JSON, and TCP sockets.
+Group class project where we built a full UNO game in JavaFX with working rules, turns, and multiplayer using TCP sockets and JSON.
 
 ---
 
