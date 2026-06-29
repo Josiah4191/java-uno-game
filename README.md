@@ -1,18 +1,16 @@
-# UNO Game (JavaFX)
+# Java Console UNO (Archived)
 
-Group class project where we built a full UNO game in JavaFX with working rules, turns, and multiplayer using TCP sockets and JSON.
+A Java desktop application built while learning object-oriented programming and Java application development.
+
+This project is preserved as an archive of my early work and is no longer maintained.
+
+## Technologies
+
+- Java
+- JavaFX
 
 ---
 
-## Overview
-- Playable UNO ruleset (draw, skip, reverse, wild, and number cards)
-- Turn-based system with color and number matching
-- Deck and discard pile management
-- UI using JavaFX
-- Basic socket structure for testing networked interactions
+**Status:** Archived
 
-## Tools
-- Java
-- JavaFX
-- JSON
-- TCP Sockets
+This project was built for learning and does not reflect my current development practices.
